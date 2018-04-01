@@ -16,5 +16,4 @@ profileRoute.get("/", (req, res) => {
     })
 });
 
-
 module.exports = profileRoute;

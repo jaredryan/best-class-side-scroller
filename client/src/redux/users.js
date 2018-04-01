@@ -6,22 +6,23 @@ axios.interceptors.request.use(config => {
     return config;
 })
 
-const scoreUrl = "/api/score/";
+const userUrl = "/api/user/";
+
 ///////////////////////////
-// Scores Action Creators //
+// Users Action Creators //
 ///////////////////////////
-function setScores(scores) {
+function setUsers(users) {
     return {
-        type: "SET_SCORES",
-        scores
+        type: "SET_USERS",
+        users
     }
 }
 
-export function loadScores() {
+export function loadUsers() {
     return dispatch => {
-        axios.get(scoreUrl)
+        axios.get(userUrl)
             .then(response => {
-                dispatch(setScores(response.data));
+                dispatch(setUsers(response.data));
             })
             .catch(err => {
                 console.error(err);
@@ -29,11 +30,11 @@ export function loadScores() {
     }
 }
 
-export function addScore(score) {
+export function addUser(user) {
     return dispatch => {
-        axios.post(scoreUrl, score)
+        axios.post(userUrl, user)
             .then(response => {
-                dispatch(loadScores());
+                dispatch(loadUsers());
             })
             .catch(err => {
                 console.error(err);
@@ -41,11 +42,11 @@ export function addScore(score) {
     }
 }
 
-export function editScore(id, score) {
+export function editUser(id, user) {
     return dispatch => {
-        axios.put(scoreUrl + id, score)
+        axios.put(userUrl + id, user)
             .then(response => {
-                dispatch(loadScores());
+                dispatch(loadUsers());
             })
             .catch(err => {
                 console.error(err);
@@ -53,11 +54,11 @@ export function editScore(id, score) {
     }
 }
 
-export function deleteScore(id){
+export function deleteUser(id){
     return dispatch => {
-        axios.delete(scoreUrl + id)
+        axios.delete(userUrl + id)
             .then(response => {
-                dispatch(loadScores());
+                dispatch(loadUsers());
             })
             .catch(err => {
                 console.error(err);
@@ -67,17 +68,17 @@ export function deleteScore(id){
 
 
 ///////////////////
-// Scores Reducer //
+// Users Reducer //
 ///////////////////
-const initialScores = [];
+const initialUsers = [];
 
-export default function scoresReducer(scores = initialScores, action) {
+export default function usersReducer(users = initialUsers, action) {
     switch (action.type) {
-        case "SET_SCORES":
-            return [...action.scores]
+        case "SET_USERS":
+            return [...action.users]
         case "LOGOUT":
-            return initialScores;
+            return initialUsers;
         default:
-            return scores
+            return users
     }
 }

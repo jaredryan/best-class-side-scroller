@@ -31,7 +31,7 @@ class App extends Component {
                             <Login {...this.props}/>
                     }}/>
                 <ProtectedRoute path="/game" component={ScoreList}/>
-                    <ProtectedRoute path="/profile" component={Profile}/>
+                <ProtectedRoute path="/profile" component={Profile}/>
                 </Switch>
             </div>
         )

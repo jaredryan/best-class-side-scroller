@@ -11,28 +11,14 @@ userRouter.get('/all', (req, res) => {
 })
 
 userRouter.get('/', (req, res) => {
-    User.findById(req.params.id, (err, user) => {  // Use findOne() to add user search criteria
+    User.findById(req.user._id, (err, users) => {  // add user: req.user._id to filter out only users linked to the logged in user.
         if (err) return res.status(500).send(err);
-        if (!user) return res.status(404).send("No user item found");
-        return res.send(user);
+        return res.send(users);
     })
 })
-
-userRouter.post('/', (req, res) => {
-    const user = new User(req.body);
-    user.save((err, newUser) => {
-        if (err) return res.status(500).send(err);
-        return res.status(201).send(newUser);
-    })
-})
-
-
 
 userRouter.put('/:id', (req, res) => {
-    User.findByIdAndUpdate( // Use findOneAndUpdate() to include user.
-        req.params.id,
-        req.body,
-        {new: true},
+    User.findByIdAndUpdate(req.user._id, req.body, {new: true},
         (err, updatedUser) => {
             if (err) return res.status(500).send(err);
             return res.send(updatedUser);
@@ -40,8 +26,7 @@ userRouter.put('/:id', (req, res) => {
 })
 
 userRouter.delete('/:id', (req, res) => {
-    User.findByIdAndRemove( // change to findeOneAndRemove() to add user criteria
-        req.params.id, (err, deletedUser) => {
+    User.findByIdAndRemove(req.user._id, (err, deletedUser) => {
         if (err) return res.status(500).send(err);
         return res.send(deletedUser);
     })

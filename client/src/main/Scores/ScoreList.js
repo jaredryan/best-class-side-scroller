@@ -6,6 +6,7 @@ function ScoreList(props) {
         return (
             <ScoreContainer
                 key={score._id}
+                id={score._id}
                 score={score}/>
         )
     })

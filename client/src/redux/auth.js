@@ -5,13 +5,13 @@ const initialState = {
         username: "",
         admin: false,
         _id: "",
-        email: ""
+        email: "",
+        status: ""
     },
     authErrCode: {
         signup: "",
         signin: ""
     },
-    status: "",
     isAuthenticated: false
 }
 

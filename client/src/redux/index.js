@@ -2,11 +2,13 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 
 import users from "./users";
-import user from './auth'
+import user from './auth';
+import scores from "./scores";
 
 const reducer = combineReducers({
+    users,
     user,
-    auth
+    scores
 });
 
 export default createStore(

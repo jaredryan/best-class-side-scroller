@@ -1,28 +1,37 @@
 import React from 'react';
 import Score from "./Score";
 import { connect } from "react-redux";
-import { editScoreList, deleteScoreList } from "../../redux/scores";
+import { editScore, deleteScore } from "../../redux/scores";
 
 class ScoreContainer extends React.Component {
-    handleCompleted(e){
-        this.props.editScoreList(this.props.score._id, {completed: e.target.checked})
+    constructor() {
+        super()
+
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
+
+    }
+
+    handleEdit(e){
+        // Edit this later to actually work
+        this.props.editScore(this.props.score._id, {})
     }
 
     handleRemove(){
         console.log(this.props)
-        this.props.deleteScoreList(this.props.score._id);
+        this.props.deleteScore(this.props.score._id);
     }
 
     render() {
         return (
             <Score
-                handleCompleted={this.handleCompleted.bind(this)}
+                handleEdit={this.handleEdit.bind(this)}
                 handleRemove={this.handleRemove.bind(this)}
                 score={this.props.score}
-                id={this.props.key}
+                id={this.props.id}
                 {...this.state}/>
         )
     }
 }
 
-export default connect(null,{ editScoreList, deleteScoreList })(ScoreContainer);
+export default connect(null,{ editScore, deleteScore })(ScoreContainer);
