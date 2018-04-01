@@ -7,13 +7,15 @@ const jwt = require('jsonwebtoken');
 // Post a new user (sign-up);
 authRouter.post('/signup', (req, res) => {
     User.findOne({username: req.body.username}, (err, existingUser) => {
+        console.error(err);
         if (err) return res.status(500).send({success: false, err});
         if (existingUser !== null){
             return res.status(400).send({success: false, err: "That username has already been taken"})
         }
         const newUser = new User(req.body);
+        console.error(newUser);
         newUser.save((err, user) => {
-            if (err) return res.statuf(500).send({success: false, err});
+            if (err) return res.status(500).send({success: false, err});
             const token = jwt.sign(user.toObject(), process.env.SECRET, {expiresIn: "24h"});
             res.send({user: user.withoutPassword(),token: token, success: true, message: "Here's your token!"});
         });

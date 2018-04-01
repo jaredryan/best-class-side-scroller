@@ -8,9 +8,9 @@ class SignupFormContainer extends Component {
         super();
         this.state = {
             inputs: {
-                name: "",
                 username: "",
-                password: ""
+                password: "",
+                email: ""
             }
         }
     }
@@ -30,9 +30,9 @@ class SignupFormContainer extends Component {
     clearInputs() {
         this.setState({
             inputs: {
-                name: "",
                 username: "",
-                password: ""
+                password: "",
+                email: ""
             }
         })
     }

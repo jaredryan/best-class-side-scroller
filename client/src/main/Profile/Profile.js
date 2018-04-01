@@ -18,7 +18,7 @@ function Profile(props) {
                             value={props.newPassword}/>
                         </label>
                     </div>
-                    <div class="form-group">
+                    <div>
                         <label>Repeat New Password
                         <input
                             type="password"
