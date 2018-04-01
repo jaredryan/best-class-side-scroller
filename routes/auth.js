@@ -23,7 +23,7 @@ authRouter.post('/signup', (req, res) => {
 });
 
 authRouter.post("/login", function (req, res) {
-    User.findOne({username: req.body.username}, function (err, user) {
+    User.findOne({email: req.body.email}, function (err, user) {
         if (err) res.status(500).send(err);
         if (!user) {
             res.status(401).send({success: false, message: "User with the provided username was not found"})

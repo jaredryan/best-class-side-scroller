@@ -8,7 +8,7 @@ class LoginFormContainer extends React.Component {
         super();
         this.state = {
             inputs: {
-                username: '',
+                email: '',
                 password: ''
             }
         }
@@ -31,7 +31,7 @@ class LoginFormContainer extends React.Component {
     clearInputs(){
         this.setState({
             inputs: {
-                username: '',
+                email: '',
                 password: ''
             }
         })

@@ -7,17 +7,17 @@ function LoginForm(props){
                 <h3>Log In</h3>
                 <input
                     onChange={props.handleChange}
-                    value={props.username}
-                    name="username"
-                    type="text"
-                    placeholder="@Username"
+                    value={props.email}
+                    name="email"
+                    type="email"
+                    placeholder="Email Address"
                 />
                 <input
                     onChange={props.handleChange}
                     value={props.password}
                     name="password"
                     type="password"
-                    placeholder="#"
+                    placeholder="Password"
                 />
                 <button type="submit">Submit</button>
             </form>
