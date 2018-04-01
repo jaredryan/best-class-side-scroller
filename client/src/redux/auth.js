@@ -4,12 +4,14 @@ const initialState = {
     user: {
         username: "",
         admin: false,
-        _id: ""
+        _id: "",
+        email: ""
     },
     authErrCode: {
         signup: "",
         signin: ""
     },
+    status: "",
     isAuthenticated: false
 }
 

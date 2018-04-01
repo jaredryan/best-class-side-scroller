@@ -21,12 +21,13 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/gamers', (err) 
 );
 
 app.use('/api', expressJwt({secret: process.env.SECRET}));  // makes it so we can access the user as req.user in our routes.
-app.use('/api/todo', require('./routes/todo'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/score', require('./routes/score'));
 app.use("/auth/change-password", expressJwt({secret: process.env.SECRET}));
 app.use('/auth', require('./routes/auth'));
 app.use('/profile', require('./routes/profile'));
 
-app.get("*", (req, res) => {  
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 

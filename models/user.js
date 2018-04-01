@@ -1,24 +1,33 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-var bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
+require('mongoose-type-email');
 
-var userSchema = new Schema({
-    name: String,
+const userSchema = new Schema({
     username: {
         type: String,
-        required: true,
         unique: true,
+        required: true,
         lowercase: true
+    },
+    email: {
+        type: mongoose.SchemaTypes.Email,
+        unique: true,
+        required: true
     },
     password: {
         type: String,
         required: true
     },
+    status: {
+        type: Number,
+        enum: ["1", "2", "3"]
+    },
     admin: {
         type: Boolean,
         default: false
     }
-});
+})
 
 userSchema.pre("save", function (next) {
     var user = this;

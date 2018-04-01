@@ -9,7 +9,7 @@ function Navbar(props){
         <div className="navbar-wrapper">
             { isAuthenticated ? null : <div className="nav-link"><Link to="/">Sign Up</Link></div> }
             { isAuthenticated ? null : <div className="nav-link"><Link to="/login">Log In</Link></div> }
-            { isAuthenticated ? <div className="nav-link"><Link to="/profile">Game</Link></div> : null }
+            { isAuthenticated ? <div className="nav-link"><Link to="/game">Game</Link></div> : null }
             { isAuthenticated ? <div className="nav-link"><Link to="/profile">Profile</Link></div> : null }
             { isAuthenticated ?
             <div className="nav-link">

@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {verify} from "../redux/auth";
 import Signup from './Signup';
 import Login from './Login';
-import TodoList from './Todos';
+import ScoreList from './Scores';
 import Profile from './Profile';
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -30,7 +30,7 @@ class App extends Component {
                             <Redirect to= "/profile"/> :
                             <Login {...this.props}/>
                     }}/>
-                    <ProtectedRoute path="/todos" component={TodoList}/>
+                <ProtectedRoute path="/game" component={ScoreList}/>
                     <ProtectedRoute path="/profile" component={Profile}/>
                 </Switch>
             </div>
