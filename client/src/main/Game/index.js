@@ -19,7 +19,7 @@ class Canvas extends Component {
 
         this.renderEnemies = this.renderEnemies.bind(this);
         this.renderPlayerBullets = this.renderPlayerBullets.bind(this);
-        this.renderEnemyBullets = this.renderPlayerBullets.bind(this);
+        this.renderEnemyBullets = this.renderEnemyBullets.bind(this);
         this.handleUpStroke = this.handleUpStroke.bind(this);
         this.handleDownStroke = this.handleDownStroke.bind(this);
         this.handleShoot = this.handleShoot.bind(this);
@@ -43,7 +43,7 @@ class Canvas extends Component {
                     newBullet.left -= 15
                     return newBullet
                 }).filter(item => {
-                    return item.left > this.state.horizontalSize;
+                    return item.left > 0;
                 })
                 return {
                     playerBullets,
@@ -83,7 +83,6 @@ class Canvas extends Component {
             for (let enemy of this.state.currentEnemies) {
                 enemyBullets.push({height: 10, width: 10, left: enemy.left - 10, top: enemy.top + enemy.height / 2 - 5})
             }
-
             return {enemyBullets}
         });
     }
@@ -96,7 +95,8 @@ class Canvas extends Component {
 
     renderEnemyBullets() {
         return this.state.enemyBullets.map((bullet, index) => {
-            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="playerBullet"></div>
+            console.log(bullet);
+            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="enemyBullet"></div>
         })
     }
 
