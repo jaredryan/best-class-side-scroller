@@ -8,6 +8,7 @@ import Login from './Login';
 import ScoreList from './Scores';
 import Profile from './Profile';
 import ProtectedRoute from "./ProtectedRoute";
+import Game from './Game';
 
 class App extends Component {
     componentDidMount(){
@@ -30,7 +31,7 @@ class App extends Component {
                             <Redirect to= "/profile"/> :
                             <Login {...this.props}/>
                     }}/>
-                <ProtectedRoute path="/game" component={ScoreList}/>
+                <ProtectedRoute path="/game" component={Game}/>
                 <ProtectedRoute path="/profile" component={Profile}/>
                 </Switch>
             </div>

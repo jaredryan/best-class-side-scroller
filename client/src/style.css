@@ -16,3 +16,27 @@
 form p {
     color: firebrick;
 }
+
+.canvas {
+    border: 1px solid purple;
+    position: relative;
+}
+
+.player {
+    border: 1px solid black;
+    background-color: red;
+    position: absolute;
+    left: 10px;
+}
+
+.enemy {
+    position: absolute;
+    border: 1px solid black;
+    /* background-color: blue; */
+}
+
+.playerBullet {
+    position: absolute;
+    border: 1px solid black;
+    background-color: green;
+}
