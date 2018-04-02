@@ -81,7 +81,7 @@ class Canvas extends Component {
         this.setState(prevState => {
             const enemyBullets = prevState.enemyBullets.slice();
             for (let enemy of this.state.currentEnemies) {
-                enemyBullets.push({height: 10, width: 10, left: enemy.left - 10, top: enemy.top + enemy.height / 2 - 5})
+                enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5})
             }
             return {enemyBullets}
         });
