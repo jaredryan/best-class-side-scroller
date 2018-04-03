@@ -19,7 +19,7 @@ class Canvas extends Component {
 
         this.renderEnemies = this.renderEnemies.bind(this);
         this.renderPlayerBullets = this.renderPlayerBullets.bind(this);
-        this.renderEnemyBullets = this.renderPlayerBullets.bind(this);
+        this.renderEnemyBullets = this.renderEnemyBullets.bind(this);
         this.handleUpStroke = this.handleUpStroke.bind(this);
         this.handleDownStroke = this.handleDownStroke.bind(this);
         this.handleShoot = this.handleShoot.bind(this);
@@ -30,20 +30,52 @@ class Canvas extends Component {
         setInterval(() => {
             this.setState(prevState => {
                 // PUT HERE EVERYTHING THAT WILL CHANGE OVER TIME
-                const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                //     let newBullet = {...bullet}
+                //     newBullet.left += 15
+                //     return newBullet
+                // }).filter(item => {
+                //     return item.left < this.state.horizontalSize;
+                // })
+
+                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                //     let newBullet = {...bullet}
+                //     newBullet.left += 15
+                //     return newBullet
+                // }).filter(item => {
+                //     return item.left < this.state.horizontalSize;
+                // })
+
+                const playerBullets = []
+                for (let bullet of prevState.playerBullets) {
                     let newBullet = {...bullet}
                     newBullet.left += 15
-                    return newBullet
-                }).filter(item => {
-                    return item.left < this.state.horizontalSize;
-                })
+                    let hit = false;
+                    console.log(this.state.currentEnemies);
+                    for (let enemy of this.state.currentEnemies) {
+                        console.log(enemy);
+                        console.log(newBullet);
+                        if (newBullet.left >= enemy.left &&
+                            newBullet.left <= enemy.left + enemy.width &&
+                            newBullet.top >= enemy.top &&
+                            newBullet.top <= enemy.top + enemy.length) {
+                            enemy.health -= 1
+                            hit = true;
+                            break;
+                        }
+                    }
+                    if (!hit && newBullet.left < this.state.horizontalSize) {
+                        playerBullets.push(newBullet)
+                    }
+                }
+
 
                 const enemyBullets = prevState.enemyBullets.map((bullet, index) => {
                     let newBullet = {...bullet}
                     newBullet.left -= 15
                     return newBullet
                 }).filter(item => {
-                    return item.left > this.state.horizontalSize;
+                    return item.left >= 0;
                 })
                 return {
                     playerBullets,
@@ -81,9 +113,8 @@ class Canvas extends Component {
         this.setState(prevState => {
             const enemyBullets = prevState.enemyBullets.slice();
             for (let enemy of this.state.currentEnemies) {
-                enemyBullets.push({height: 10, width: 10, left: enemy.left - 10, top: enemy.top + enemy.height / 2 - 5})
+                enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5})
             }
-
             return {enemyBullets}
         });
     }
@@ -96,7 +127,8 @@ class Canvas extends Component {
 
     renderEnemyBullets() {
         return this.state.enemyBullets.map((bullet, index) => {
-            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="playerBullet"></div>
+            console.log(bullet);
+            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="enemyBullet"></div>
         })
     }
 
