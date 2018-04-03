@@ -3,8 +3,68 @@
     text-align: center;
 }
 
+body {
+    background-color: aliceblue;
+}
+
+form p {
+    color: firebrick;
+}
+
+link > h3{
+    text-decoration: none;
+    list-style: none;
+}
+
+/* ************************************************************ */
+
 .app-wrapper{
     height: 100vh;
+}
+
+.canvas {
+    border: 1px solid purple;
+    position: relative;
+    background-color: white;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.centerSignup {
+    display: flex;
+    justify-content: center;
+}
+
+.enemy {
+    position: absolute;
+    border: 1px solid black;
+    /* background-color: blue; */
+}
+
+.gameDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hoverH3:hover {
+    cursor: pointer;
+}
+
+.nav-link a {
+    text-decoration: none;
+}
+
+.nav-link h3 {
+    background-color: #384966;
+    padding: 5px;
+    border: .5px solid black;
+    border-radius: 15px;
+}
+
+.nav-links {
+    color: white;
 }
 
 .navbar-wrapper{
@@ -12,14 +72,7 @@
     margin: auto;
     display: flex;
     justify-content: space-around;
-}
-form p {
-    color: firebrick;
-}
-
-.canvas {
-    border: 1px solid purple;
-    position: relative;
+    background-color: aliceblue;
 }
 
 .player {
@@ -29,14 +82,36 @@ form p {
     left: 10px;
 }
 
-.enemy {
-    position: absolute;
-    border: 1px solid black;
-    /* background-color: blue; */
-}
-
 .playerBullet {
     position: absolute;
     border: 1px solid black;
-    background-color: green;
+    background-color: grey;
+}
+
+.signUpDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 32%;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.signUpDiv > input {
+    margin-top: 10px;
+    border: .5px solid black;
+    padding: 4px;
+    width: 170px;
+}
+
+.signUpDiv > button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #384966;
+    padding: 5px;
+    border: .5px solid black;
+    border-radius: 15px;
+    color: white;
 }

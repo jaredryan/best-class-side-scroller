@@ -108,17 +108,19 @@ class Canvas extends Component {
 
     render() {
         return (
-            <div>
+            <div className="gameDiv">
                 <div className="canvas" style={{height: `${this.state.verticalSize}px`, width: `${this.state.horizontalSize}px`}}>
                     <div className="player" style={{top: `${this.state.playerLocation}px`, height: `${this.state.playerHeight - 1}px`, width: `${this.state.playerLength - 1}px`}}></div>
                     {this.renderEnemies()}
                     {this.renderPlayerBullets()}
                     {this.renderEnemyBullets()}
                 </div>
-                <button onClick={this.handleUpStroke}>Up</button>
-                <button onClick={this.handleDownStroke}>Down</button>
-                <button onClick={this.handleShoot}>Shoot</button>
-                <button onClick={this.handleEnemyShoot}>Enemy Shoot</button>
+                <div>
+                    <button onClick={this.handleUpStroke}>Up</button>
+                    <button onClick={this.handleDownStroke}>Down</button>
+                    <button onClick={this.handleShoot}>Shoot</button>
+                    <button onClick={this.handleEnemyShoot}>Enemy Shoot</button>
+                </div>
             </div>
         )
     }

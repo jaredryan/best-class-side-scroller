@@ -9,25 +9,25 @@ function Profile(props) {
             <div>
                 <h3>Change Password</h3>
                 <form onSubmit={props.handleSubmit}>
-                    <div>
-                        <label>New Password
-                        <input
-                            type="password"
-                            name="newPassword"
-                            onChange={props.handleChange}
-                            value={props.newPassword}/>
-                        </label>
+                    <div className="centerSignup">
+                        <div className="signUpDiv">
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    onChange={props.handleChange}
+                                    value={props.newPassword}
+                                    placeholder="New Password"
+                                />
+                                <input
+                                    type="password"
+                                    name="newPasswordRepeat"
+                                    onChange={props.handleChange}
+                                    value={props.newPasswordRepeat}
+                                    placeholder="Repeat New Password"
+                                />
+                            <button>Change Password</button>
+                        </div>
                     </div>
-                    <div>
-                        <label>Repeat New Password
-                        <input
-                            type="password"
-                            name="newPasswordRepeat"
-                            onChange={props.handleChange}
-                            value={props.newPasswordRepeat}/>
-                        </label>
-                    </div>
-                    <button>Change Password</button>
                 </form>
             </div>
         </div>

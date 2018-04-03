@@ -7,13 +7,13 @@ function Navbar(props){
     const isAuthenticated = props.isAuthenticated;
     return (
         <div className="navbar-wrapper">
-            { isAuthenticated ? null : <div className="nav-link"><Link to="/">Sign Up</Link></div> }
-            { isAuthenticated ? null : <div className="nav-link"><Link to="/login">Log In</Link></div> }
-            { isAuthenticated ? <div className="nav-link"><Link to="/game">Game</Link></div> : null }
-            { isAuthenticated ? <div className="nav-link"><Link to="/profile">Profile</Link></div> : null }
+            { isAuthenticated ? null : <div className="nav-link"><Link to="/" className="nav-links"><h3>Sign Up</h3></Link></div> }
+            { isAuthenticated ? null : <div className="nav-link"><Link to="/login" className="nav-links"><h3>Log In</h3></Link></div> }
+            { isAuthenticated ? <div className="nav-link"><Link to="/game" className="nav-links"><h3>Game</h3></Link></div> : null }
+            { isAuthenticated ? <div className="nav-link"><Link to="/profile" className="nav-links"><h3>Profile</h3></Link></div> : null }
             { isAuthenticated ?
             <div className="nav-link">
-                <button onClick={props.logout}>Logout</button>
+                <h3 onClick={props.logout} className="nav-links hoverH3">Logout</h3>
             </div>
             : null }
         </div>
