@@ -7,7 +7,7 @@ import './style.css';
 import App from './main/App';
 
 store.subscribe(() => {
-    console.log(store.getState());
+    // console.log(store.getState());
 })
 
 ReactDOM.render(

@@ -51,7 +51,6 @@ export function verify() {
     return (dispatch) => {
         axios.get("/profile/")
             .then((response) => {
-                console.log(response.data);
                 let { user } = response.data;
                 dispatch(authenticate(user));
             })

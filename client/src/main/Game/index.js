@@ -51,14 +51,11 @@ class Canvas extends Component {
                     let newBullet = {...bullet}
                     newBullet.left += 15
                     let hit = false;
-                    console.log(this.state.currentEnemies);
                     for (let enemy of this.state.currentEnemies) {
-                        console.log(enemy);
-                        console.log(newBullet);
-                        if (newBullet.left >= enemy.left &&
+                        if (newBullet.left + 9 >= enemy.left &&
                             newBullet.left <= enemy.left + enemy.width &&
-                            newBullet.top >= enemy.top &&
-                            newBullet.top <= enemy.top + enemy.length) {
+                            newBullet.top + 9 >= enemy.top &&
+                            newBullet.top <= enemy.top + enemy.height - 1) {
                             enemy.health -= 1
                             hit = true;
                             break;
