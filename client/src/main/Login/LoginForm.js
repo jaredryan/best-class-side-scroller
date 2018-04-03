@@ -2,7 +2,7 @@ import React from 'react';
 
 function LoginForm(props){
     return (
-        <div className="form-wrapper">
+        <div className="form-wrapper top-spacing">
             <form onSubmit={props.handleSubmit}>
                 <h3>Log In</h3>
                 <div className="centerSignup">

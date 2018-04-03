@@ -2,7 +2,7 @@ import React from 'react'
 
 function SignupForm(props) {
     return (
-        <div className="form-wrapper">
+        <div className="form-wrapper top-spacing">
             <form onSubmit={props.handleSubmit}>
                 <h3>Sign Up</h3>
                 <div className="centerSignup">

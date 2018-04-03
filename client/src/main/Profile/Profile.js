@@ -2,9 +2,8 @@ import React from "react";
 
 function Profile(props) {
     return (
-        <div>
+        <div className="top-spacing">
             <h1>{props.username}</h1>
-            <img src="http://placekitten.com/g/100/100" alt="Kittens"/>
             <hr/>
             <div>
                 <h3>Change Password</h3>
