@@ -30,20 +30,52 @@ class Canvas extends Component {
         setInterval(() => {
             this.setState(prevState => {
                 // PUT HERE EVERYTHING THAT WILL CHANGE OVER TIME
-                const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                //     let newBullet = {...bullet}
+                //     newBullet.left += 15
+                //     return newBullet
+                // }).filter(item => {
+                //     return item.left < this.state.horizontalSize;
+                // })
+
+                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
+                //     let newBullet = {...bullet}
+                //     newBullet.left += 15
+                //     return newBullet
+                // }).filter(item => {
+                //     return item.left < this.state.horizontalSize;
+                // })
+
+                const playerBullets = []
+                for (let bullet of prevState.playerBullets) {
                     let newBullet = {...bullet}
                     newBullet.left += 15
-                    return newBullet
-                }).filter(item => {
-                    return item.left < this.state.horizontalSize;
-                })
+                    let hit = false;
+                    console.log(this.state.currentEnemies);
+                    for (let enemy of this.state.currentEnemies) {
+                        console.log(enemy);
+                        console.log(newBullet);
+                        if (newBullet.left >= enemy.left &&
+                            newBullet.left <= enemy.left + enemy.width &&
+                            newBullet.top >= enemy.top &&
+                            newBullet.top <= enemy.top + enemy.length) {
+                            enemy.health -= 1
+                            hit = true;
+                            break;
+                        }
+                    }
+                    if (!hit && newBullet.left < this.state.horizontalSize) {
+                        playerBullets.push(newBullet)
+                    }
+                }
+
 
                 const enemyBullets = prevState.enemyBullets.map((bullet, index) => {
                     let newBullet = {...bullet}
                     newBullet.left -= 15
                     return newBullet
                 }).filter(item => {
-                    return item.left > 0;
+                    return item.left >= 0;
                 })
                 return {
                     playerBullets,
