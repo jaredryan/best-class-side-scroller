@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 
 class Canvas extends Component {
     constructor() {
@@ -8,13 +9,15 @@ class Canvas extends Component {
             verticalSize: 400,
             horizontalSize: 400,
             playerHeight: 50,
-            playerLength: 50,
+            playerWidth: 50,
             playerHealth: 10,
-            currentEnemies: [{height: 50, width: 50, left: 200, top: 200, health: 2, color: "blue"},
-            {height: 50, width: 50, left: 300, top: 300, health: 2, color: "blue"}],
+            currentEnemies: [{height: 50, width: 50, left: 200, top: 200, health: 2, color: "blue", id: 1},
+            {height: 50, width: 50, left: 300, top: 300, health: 2, color: "blue", id: 2}],
             waves: [],
             playerBullets: [],
-            enemyBullets: []
+            enemyBullets: [],
+            isRunning: "unstarted",
+            message: ""
         }
 
         this.renderEnemies = this.renderEnemies.bind(this);
@@ -24,6 +27,9 @@ class Canvas extends Component {
         this.handleDownStroke = this.handleDownStroke.bind(this);
         this.handleShoot = this.handleShoot.bind(this);
         this.handleEnemyShoot = this.handleEnemyShoot.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.startGame = this.startGame.bind(this);
+        this.focusDiv = this.focusDiv.bind(this);
     }
 
     componentDidMount() {
@@ -45,7 +51,6 @@ class Canvas extends Component {
                 // }).filter(item => {
                 //     return item.left < this.state.horizontalSize;
                 // })
-
                 const playerBullets = []
                 for (let bullet of prevState.playerBullets) {
                     let newBullet = {...bullet}
@@ -67,19 +72,54 @@ class Canvas extends Component {
                 }
 
 
-                const enemyBullets = prevState.enemyBullets.map((bullet, index) => {
+                // const enemyBullets = prevState.enemyBullets.map((bullet, index) => {
+                //     let newBullet = {...bullet}
+                //     newBullet.left -= 15
+                //     return newBullet
+                // }).filter(item => {
+                //     return item.left >= 0;
+                // })
+
+                let playerHealth = prevState.playerHealth
+                const enemyBullets = []
+                for (let bullet of prevState.enemyBullets) {
                     let newBullet = {...bullet}
                     newBullet.left -= 15
-                    return newBullet
-                }).filter(item => {
-                    return item.left >= 0;
-                })
+                    if (newBullet.left + 9 >= 10 &&
+                        newBullet.left <= 10 + this.state.playerWidth &&
+                        newBullet.top + 9 >= this.state.playerLocation &&
+                        newBullet.top <= this.state.playerLocation + this.state.playerHeight - 1) {
+                        playerHealth -= 1
+                        if (this.state.playerHealth <= 0) {
+                            return {isRunning: false}
+                        }
+                    } else if (newBullet.left > 0) {
+                        enemyBullets.push(newBullet)
+                    }
+                }
+
+
+                const currentEnemies = prevState.currentEnemies.filter(enemy => enemy.health > 0);
+
                 return {
                     playerBullets,
-                    enemyBullets
+                    enemyBullets,
+                    currentEnemies,
+                    playerHealth
                 }
             })
         }, 30)
+        this.focusDiv();
+    }
+
+    componentDidUpdate() {
+        if (this.state.isRunning === true) this.focusDiv();
+    }
+
+    focusDiv() {
+        if (Object.keys(this.refs).length !== 0) {
+            ReactDOM.findDOMNode(this.refs.game).focus();
+        }
     }
 
     handleDownStroke() {
@@ -101,7 +141,7 @@ class Canvas extends Component {
     handleShoot() {
         this.setState(prevState => {
             const playerBullets = prevState.playerBullets.slice();
-            playerBullets.push({height: 10, width: 10, left: 9 + this.state.playerLength, top: this.state.playerLocation + this.state.playerHeight / 2 - 5})
+            playerBullets.push({height: 10, width: 10, left: 9 + this.state.playerWidth, top: this.state.playerLocation + this.state.playerHeight / 2 - 5})
             return {playerBullets}
         });
     }
@@ -135,21 +175,45 @@ class Canvas extends Component {
         })
     }
 
+    handleKeyDown(e) {
+        if (e.key === " ") {
+            this.handleShoot()
+        } else if (e.key === "ArrowUp") {
+            this.handleUpStroke()
+        } else if (e.key === "ArrowDown") {
+            this.handleDownStroke()
+        }
+    }
+
+    startGame() {
+        this.setState({isRunning: true})
+    }
+
     render() {
         return (
-            <div className="gameDiv">
-                <div className="canvas" style={{height: `${this.state.verticalSize}px`, width: `${this.state.horizontalSize}px`}}>
-                    <div className="player" style={{top: `${this.state.playerLocation}px`, height: `${this.state.playerHeight - 1}px`, width: `${this.state.playerLength - 1}px`}}></div>
-                    {this.renderEnemies()}
-                    {this.renderPlayerBullets()}
-                    {this.renderEnemyBullets()}
-                </div>
-                <div>
-                    <button onClick={this.handleUpStroke}>Up</button>
-                    <button onClick={this.handleDownStroke}>Down</button>
-                    <button onClick={this.handleShoot}>Shoot</button>
-                    <button onClick={this.handleEnemyShoot}>Enemy Shoot</button>
-                </div>
+            <div>
+                {this.state.isRunning === true ?
+                    <div className="gameDiv" onKeyDown={this.handleKeyDown} tabIndex="0" ref="game">
+                        <div className="canvas" style={{height: `${this.state.verticalSize}px`, width: `${this.state.horizontalSize}px`}}>
+                            <div className="player" style={{top: `${this.state.playerLocation}px`, height: `${this.state.playerHeight - 1}px`, width: `${this.state.playerWidth - 1}px`}}></div>
+                            {this.renderEnemies()}
+                            {this.renderPlayerBullets()}
+                            {this.renderEnemyBullets()}
+                        </div>
+                        <div>
+
+                            <button onClick={this.handleUpStroke}>Up</button>
+                            <button onClick={this.handleDownStroke}>Down</button>
+                            <button onClick={this.handleShoot}>Shoot</button>
+                            <button onClick={this.handleEnemyShoot}>Enemy Shoot</button>
+                        </div>
+                    </div>
+                    :
+                    this.state.isRunning === false ?
+                        <h1>Game Over</h1>
+                        :
+                        <button onClick={this.startGame}>Start Game</button>
+                }
             </div>
         )
     }
