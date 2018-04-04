@@ -63,12 +63,13 @@ button,
     color: white;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-weight: 300;
 }
 
 .nav-link h3 {
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 120px;
+    width: 130px;
 }
 
 button:hover,
