@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import ScoreList from '../Scores';
 
 class Canvas extends Component {
     constructor() {
@@ -212,7 +213,9 @@ class Canvas extends Component {
                     this.state.isRunning === false ?
                         <h1>Game Over</h1>
                         :
-                        <button onClick={this.startGame}>Start Game</button>
+                        <ScoreList
+                            startGame={this.startGame}
+                        />
                 }
             </div>
         )

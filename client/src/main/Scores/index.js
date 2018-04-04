@@ -11,7 +11,7 @@ class ScoreListContainer extends React.Component {
     render() {
         return (
             <div>
-                <button>Start Game</button>
+                <button onClick={this.props.startGame}>Start Game</button>
                 <h2>Current High Scores</h2>
                 <ScoreList
                     scores={this.props.scores}/>

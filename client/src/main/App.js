@@ -5,7 +5,6 @@ import {connect} from "react-redux";
 import {verify} from "../redux/auth";
 import Signup from './Signup';
 import Login from './Login';
-import ScoreList from './Scores';
 import Profile from './Profile';
 import ProtectedRoute from "./ProtectedRoute";
 import Game from './Game';
