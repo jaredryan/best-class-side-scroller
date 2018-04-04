@@ -201,13 +201,6 @@ class Canvas extends Component {
                             {this.renderPlayerBullets()}
                             {this.renderEnemyBullets()}
                         </div>
-                        <div>
-
-                            <button onClick={this.handleUpStroke}>Up</button>
-                            <button onClick={this.handleDownStroke}>Down</button>
-                            <button onClick={this.handleShoot}>Shoot</button>
-                            <button onClick={this.handleEnemyShoot}>Enemy Shoot</button>
-                        </div>
                     </div>
                     :
                     this.state.isRunning === false ?
