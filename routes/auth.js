@@ -4,8 +4,6 @@ const authRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const async = require("async");
 const crypto = require("crypto");
-const sendgrid = require("@sendgrid/mail");
-
 
 // Post a new user (sign-up);
 authRouter.post('/signup', (req, res) => {
