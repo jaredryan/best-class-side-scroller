@@ -9,6 +9,13 @@ scoreRouter.get('/', (req, res) => {
     })
 })
 
+scoreRouter.get('/all', (req, res) => {
+    Score.find((err, scores) => {
+        if (err) return res.status(500).send(err);
+        return res.send(scores);
+    })
+})
+
 scoreRouter.post('/', (req, res) => {
     const score = new Score(req.body);
     score.username = req.user.username;  // sets the user property of a score to the req.user._id so the score and user are connected.

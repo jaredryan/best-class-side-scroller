@@ -37,21 +37,6 @@ class Canvas extends Component {
         setInterval(() => {
             this.setState(prevState => {
                 // PUT HERE EVERYTHING THAT WILL CHANGE OVER TIME
-                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
-                //     let newBullet = {...bullet}
-                //     newBullet.left += 15
-                //     return newBullet
-                // }).filter(item => {
-                //     return item.left < this.state.horizontalSize;
-                // })
-
-                // const playerBullets = prevState.playerBullets.map((bullet, index) => {
-                //     let newBullet = {...bullet}
-                //     newBullet.left += 15
-                //     return newBullet
-                // }).filter(item => {
-                //     return item.left < this.state.horizontalSize;
-                // })
                 const playerBullets = []
                 for (let bullet of prevState.playerBullets) {
                     let newBullet = {...bullet}
@@ -71,15 +56,6 @@ class Canvas extends Component {
                         playerBullets.push(newBullet)
                     }
                 }
-
-
-                // const enemyBullets = prevState.enemyBullets.map((bullet, index) => {
-                //     let newBullet = {...bullet}
-                //     newBullet.left -= 15
-                //     return newBullet
-                // }).filter(item => {
-                //     return item.left >= 0;
-                // })
 
                 let playerHealth = prevState.playerHealth
                 const enemyBullets = []

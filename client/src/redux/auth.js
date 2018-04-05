@@ -53,14 +53,11 @@ export function verify() {
     return (dispatch) => {
         axios.get("/profile/")
             .then((response) => {
-                console.log(response.data);
                 let { user } = response.data;
                 dispatch(authenticate(user));
             })
             .catch((err) => {
                 console.error(err);
-                dispatch(signupError("signin", err.response.status));
-                dispatch(signupError("signup", err.response.status));
             })
     }
 }
