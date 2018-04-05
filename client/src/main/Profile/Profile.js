@@ -3,7 +3,7 @@ import React from "react";
 function Profile(props) {
     return (
         <div className="top-spacing">
-            <h1>{props.username}</h1>
+            <h1 className="font-username">{props.username}</h1>
             <hr/>
             <div>
                 <h3>Change Password</h3>

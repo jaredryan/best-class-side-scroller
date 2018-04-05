@@ -32,9 +32,27 @@ form p {
 
 .enemy {
     position: absolute;
-    border: 1px solid black;
-    /* background-color: blue; */
+    background-image: url("images/ufo.gif");
+    background-size: 1200%;
+    animation: ufoMove .8s steps(12) infinite;
 }
+
+@keyframes ufoMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 8232.6px 0; }
+}
+
+/* .enemy {
+    position: absolute;
+    background-image: url("images/enemyGirl.png");
+    background-size: 470%;
+    animation: girlMove .2s steps(4) infinite;
+}
+
+@keyframes girlMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1034.8px 0; }
+} */
 
 .enemyBullet {
     position: absolute;
@@ -42,8 +60,12 @@ form p {
     background-color: orange;
 }
 
+.font-username {
+    font-family: 'Bangers', serif;
+}
+
 .gameDiv {
-    margin-top: 200px;
+    margin-top: 100px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -88,10 +110,21 @@ form p {
 }
 
 .player {
-    border: 1px solid black;
-    background-color: red;
+    /* border: 1px solid black; */
+    /* background-color: red; */
     position: absolute;
+    background-image: url("images/birdSprite.png");
+    /* overflow: hidden; */
+    background-size: 100%;
+    width: 50px;
+    height: 35px;
+    animation: myMove .5s steps(8) infinite;
     left: 10px;
+}
+
+@keyframes myMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 0 284px; }
 }
 
 .playerBullet {
