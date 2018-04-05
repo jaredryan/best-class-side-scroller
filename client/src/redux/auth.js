@@ -10,7 +10,9 @@ const initialState = {
     },
     authErrCode: {
         signup: "",
-        signin: ""
+        signin: "",
+        changePassword: "",
+        forgotPassword: ""
     },
     isAuthenticated: false
 }
@@ -42,7 +44,7 @@ export function login(credentials){
             })
             .catch((err) => {
                 console.error(err);
-                dispatch(signupError("login", err.response.status));
+                dispatch(signupError("signin", err.response.status));
             });
     }
 }
@@ -51,11 +53,14 @@ export function verify() {
     return (dispatch) => {
         axios.get("/profile/")
             .then((response) => {
+                console.log(response.data);
                 let { user } = response.data;
                 dispatch(authenticate(user));
             })
             .catch((err) => {
                 console.error(err);
+                dispatch(signupError("signin", err.response.status));
+                dispatch(signupError("signup", err.response.status));
             })
     }
 }
@@ -83,6 +88,46 @@ function signupError(key, errCode) {
     }
 }
 
+export function changePassword(newPassword) {
+    return (dispatch) => {
+        axios.put("/auth/change-password", {newPassword})
+            .then((response) => {
+                dispatch(signupError("changePassword", ""));
+            })
+            .catch((err) => {
+                console.error(err);
+                dispatch(signupError("changePassword", err.response.status));
+            })
+    }
+}
+
+export function forgotPassword(email) {
+    return (dispatch) => {
+        axios.post("/auth/forgot", {email})
+            .then((response) => {
+                dispatch(signupError("forgotPassword", ""));
+            })
+            .catch((err) => {
+                console.error(err);
+                dispatch(signupError("forgotPassword", err.response.status));
+            })
+    }
+}
+
+export function resetPassword(password, resetToken) {
+    return (dispatch) => {
+        console.log(password);
+        axios.post(`/auth/reset/${resetToken}`, {password})
+            .then((response) => {
+                dispatch(signupError("changePassword", ""));
+            })
+            .catch((err) => {
+                console.error(err);
+                dispatch(signupError("changePassword", err.response.status));
+            })
+    }
+}
+
 
 function reducer(state = initialState, action){
     switch(action.type){
@@ -93,7 +138,8 @@ function reducer(state = initialState, action){
                 isAuthenticated: true,
                 authErrCode: {
                     signup: "",
-                    signin: ""
+                    signin: "",
+                    changePassword: ""
                 }
             }
         case "LOGOUT":

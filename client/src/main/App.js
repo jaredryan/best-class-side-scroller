@@ -6,8 +6,10 @@ import {verify} from "../redux/auth";
 import Signup from './Signup';
 import Login from './Login';
 import Profile from './Profile';
-import ProtectedRoute from "./ProtectedRoute";
+import Reset from './Reset';
+import ForgotPassword from "./ForgotPassword";
 import Game from './Game';
+import ProtectedRoute from "./ProtectedRoute";
 
 class App extends Component {
     componentDidMount(){
@@ -30,8 +32,18 @@ class App extends Component {
                             <Redirect to= "/profile"/> :
                             <Login {...this.props}/>
                     }}/>
-                <ProtectedRoute path="/game" component={Game}/>
-                <ProtectedRoute path="/profile" component={Profile}/>
+                    <Route path="/forgot" render={()=>{
+                        return isAuthenticated ?
+                            <Redirect to= "/profile"/> :
+                            <ForgotPassword {...this.props}/>
+                    }}/>
+                    <Route path="/reset" render={()=>{
+                        return isAuthenticated ?
+                            <Redirect to= "/profile"/> :
+                            <Reset {...this.props}/>
+                    }}/>
+                    <ProtectedRoute path="/game" component={Game}/>
+                    <ProtectedRoute path="/profile" component={Profile}/>
                 </Switch>
             </div>
         )
