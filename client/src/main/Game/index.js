@@ -10,8 +10,8 @@ class Canvas extends Component {
             playerHeight: 35,
             playerLength: 50,
             playerHealth: 10,
-            currentEnemies: [{height: 29, width: 50, left: 200, top: 200, health: 2, color: "blue"} ,
-            {height: 29, width: 50, left: 300, top: 300, health: 2, color: "blue"}],
+            currentEnemies: [{type: "ufo", height: 29, width: 50, left: 200, top: 200, health: 2, color: "blue"} ,
+            {type: "girl", height: 50, width: 35, left: 300, top: 300, health: 2, color: "blue"}],
             waves: [],
             playerBullets: [],
             enemyBullets: []
@@ -128,13 +128,13 @@ class Canvas extends Component {
     renderEnemyBullets() {
         return this.state.enemyBullets.map((bullet, index) => {
             console.log(bullet);
-            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="enemyBullet"></div>
+            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className={`enemyBullet ${bullet.type}`}></div>
         })
     }
 
     renderEnemies() {
         return this.state.currentEnemies.map((enemy, index) => {
-            return <div style={{height: `${enemy.height - 1}px`, width: `${enemy.width - 1}px`, left: `${enemy.left}px`, top: `${enemy.top}px`}} className="enemy" key={index + enemy.left.toString()}></div>
+            return <div style={{height: `${enemy.height - 1}px`, width: `${enemy.width - 1}px`, left: `${enemy.left}px`, top: `${enemy.top}px`}} className={`enemy ${enemy.type}`} key={index + enemy.left.toString()}></div>
         })
     }
 
