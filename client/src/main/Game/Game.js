@@ -59,7 +59,15 @@ class Game extends Component {
                 const enemyBullets = []
                 for (let bullet of prevState.enemyBullets) {
                     let newBullet = {...bullet}
-                    newBullet.left -= 15 // This part will depend on the enemy or bullet type
+                    if (newBullet.type === "ufo") {
+                        newBullet.left -= 15
+                    } else if (newBullet.type === "girl") {
+                        newBullet.left -= 10
+                        newBullet.top -= 5
+                    } else {
+                        newBullet.left -= 10
+                        newBullet.top += 5
+                    }
                     if (newBullet.left + 9 >= 10 &&
                         newBullet.left <= 10 + this.state.playerWidth &&
                         newBullet.top + 9 >= this.state.playerLocation &&
@@ -68,7 +76,7 @@ class Game extends Component {
                         if (this.state.playerHealth <= 0) {
                             this.props.hasLost();
                         }
-                    } else if (newBullet.left > 0) {
+                    } else if (newBullet.left > 0 && newBullet.top > 0 && newBullet.top < prevState.verticalSize - newBullet.height) {
                         enemyBullets.push(newBullet)
                     }
                 }
@@ -101,9 +109,40 @@ class Game extends Component {
                 }
 
                 // Enemies fire in regular intervals
+                let chance;
+                let enemyLeft;
                 for (let enemy of currentEnemies) {
                     if (this.props.timer % 1000 === 0) {
-                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5})
+                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+                    }
+                    console.log(this.props.timer + 500);
+                    if (this.props.timer % 1000 === 500) {
+                        chance = Math.random();
+                        if (enemy.type === "ufo") {
+                            if (chance < 0.3333) {
+                                enemy.top -= 20;
+                                if (enemy.top < 0) {
+                                    enemy.top = 0
+                                }
+                            } else if (chance < 0.6666) {
+                                enemy.top += 20
+                                if (enemy.top > prevState.verticalSize - enemy.height) {
+                                    enemy.top = prevState.verticalSize - enemy.height
+                                }
+                            }
+                        } else {
+                            if (chance < 0.3333) {
+                                enemy.left -= 20;
+                                if (enemy.left < 0) {
+                                    enemy.left = 0
+                                }
+                            } else if (chance < 0.6666) {
+                                enemy.left += 20
+                                if (enemy.left > prevState.horizontalSize - enemy.width) {
+                                    enemy.left = prevState.horizontalSize - enemy.width
+                                }
+                            }
+                        }
                     }
                 }
 

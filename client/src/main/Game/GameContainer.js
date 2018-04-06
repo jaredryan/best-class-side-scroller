@@ -10,25 +10,6 @@ class GameContainer extends Component {
             timer: 0,
             isRunning: "unstarted",
             hasWon: false,
-            waves1: [
-                [
-                    {height: 50, width: 50, left: 580, top: 35, health: 1, color: "green"},
-                    {height: 50, width: 50, left: 580, top: 155, health: 1, color: "green"},
-                    {height: 50, width: 50, left: 580, top: 275, health: 1, color: "green"}
-                ],
-                [
-                    {height: 50, width: 50, left: 555, top: 35, health: 2, color: "yellow"},
-                    {height: 50, width: 50, left: 555, top: 155, health: 2, color: "yellow"},
-                    {height: 50, width: 50, left: 555, top: 275, health: 2, color: "yellow"}
-                ],
-                [
-                    {height: 50, width: 50, left: 530, top: 35, health: 3, color: "red"},
-                    {height: 50, width: 50, left: 530, top: 155, health: 3, color: "red"},
-                    {height: 50, width: 50, left: 530, top: 275, health: 3, color: "red"}
-                ],
-            ],
-            waves2: [],
-            waves3: []
         }
 
         this.hasWon = this.hasWon.bind(this);
