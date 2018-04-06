@@ -1,3 +1,7 @@
+/* ************************************************************ */
+/* ************************** elements ************************ */
+/* ************************************************************ */
+
 * {
     box-sizing: border-box;
     text-align: center;
@@ -10,6 +14,72 @@ body {
 form p {
     color: firebrick;
 }
+/* ************************************************************ */
+/* ************************** enemies ************************* */
+/* ************************************************************ */
+
+.enemy {
+    position: absolute;
+}
+
+.ufo {
+    background-image: url("images/ufo.gif");
+    background-size: 1200%;
+    animation: ufoMove .8s steps(12) infinite;
+}
+
+@keyframes ufoMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 8232.6px 0; }
+}
+
+.girl {
+    background-image: url("images/enemyGirl.png");
+    background-size: 470%;
+    animation: girlMove .4s steps(4) infinite;
+}
+
+@keyframes girlMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1119.2px 0; }
+}
+
+.iron {
+    /* background-color: blue; */
+    background-image: url("images/ironman.png");
+    background-size: 674%;
+    animation: ironMove 1s steps(6) infinite;
+}
+
+@keyframes ironMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1115px 0; }
+}
+/* ************************************************************ */
+/* ************************** player ************************** */
+/* ************************************************************ */
+
+.player {
+    /* border: 1px solid black; */
+    /* background-color: red; */
+    position: absolute;
+    background-image: url("images/birdSprite.png");
+    /* overflow: hidden; */
+    background-size: 100%;
+    width: 50px;
+    height: 35px;
+    animation: myMove .5s steps(8) infinite;
+    left: 10px;
+}
+
+@keyframes myMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 0 284px; }
+}
+
+/* ************************************************************ */
+/* ************************** classes ************************* */
+/* ************************************************************ */
 
 .app-wrapper{
     height: 100vh;
@@ -21,6 +91,7 @@ form p {
     background-color: white;
     margin-top: 50px;
     margin-bottom: 50px;
+    background-color: black;
 }
 
 .centerSignup {
@@ -28,16 +99,14 @@ form p {
     justify-content: center;
 }
 
-.enemy {
-    position: absolute;
-    border: 1px solid black;
-    /* background-color: blue; */
-}
-
 .enemyBullet {
     position: absolute;
     border: 1px solid black;
     background-color: orange;
+}
+
+.font-username {
+    font-family: 'Bangers', serif;
 }
 
 .gameDiv {
@@ -113,12 +182,7 @@ button.start {
     border-bottom: 1px solid black;
 }
 
-.player {
-    border: 1px solid black;
-    background-color: red;
-    position: absolute;
-    left: 10px;
-}
+
 
 .playerBullet {
     position: absolute;
