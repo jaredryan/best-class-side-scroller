@@ -10,8 +10,11 @@ class Canvas extends Component {
             playerHeight: 35,
             playerLength: 50,
             playerHealth: 10,
-            currentEnemies: [{type: "ufo", height: 29, width: 50, left: 200, top: 200, health: 2, color: "blue"} ,
-            {type: "girl", height: 50, width: 35, left: 300, top: 300, health: 2, color: "blue"}],
+            currentEnemies: [
+                {type: "ufo", height: 29, width: 50, left: 200, top: 200, health: 2, color: "blue"} ,
+                {type: "girl", height: 50, width: 35, left: 300, top: 300, health: 2, color: "blue"},
+                {type: "iron", height: 50, width: 34, left: 300, top: 100, health: 2, color: "blue"}
+            ],
             waves: [],
             playerBullets: [],
             enemyBullets: []

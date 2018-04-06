@@ -43,6 +43,18 @@ form p {
     from{ background-position: 0 0; }
     to{ background-position: 1119.2px 0; }
 }
+
+.iron {
+    /* background-color: blue; */
+    background-image: url("images/ironman.png");
+    background-size: 674%;
+    animation: ironMove 1s steps(6) infinite;
+}
+
+@keyframes ironMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1115px 0; }
+}
 /* ************************************************************ */
 /* ************************** player ************************** */
 /* ************************************************************ */
