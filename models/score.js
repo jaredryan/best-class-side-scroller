@@ -6,14 +6,8 @@ const scoreSchema = new Schema({
         type: Number,
         required: true
     },
-    level: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        required: true
-    }
+    level: String,
+    username: String
 })
 
 module.exports = mongoose.model("Score", scoreSchema);

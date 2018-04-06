@@ -48,13 +48,17 @@ export function loadMyScores() {
     }
 }
 
-export function addScore(score) {
+export function addScore(number) {
     return dispatch => {
-        axios.post(scoreUrl, score)
+        console.log("I'm in redux");
+        axios.post(scoreUrl, {number})
             .then(response => {
+                console.log("Okay");
                 dispatch(loadScores());
+                dispatch(loadMyScores());
             })
             .catch(err => {
+                console.log("Not Okay");
                 console.error(err);
             })
     }

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import ScoreList from '../Scores';
 
 class Game extends Component {
     constructor() {
@@ -102,14 +101,13 @@ class Game extends Component {
                 }
 
                 // The player wins if there are no enemies left after the final wave
-                if (currentEnemies.length === 0 && this.props.timer > 20000) {
+                if (currentEnemies.length === 0 && this.props.timer > 0) {
                     this.props.calculateScore(this.state.playerHealth);
                     this.props.hasWon();
                 }
 
                 // Enemies fire in regular intervals
                 let chance;
-                let enemyLeft;
                 for (let enemy of currentEnemies) {
                     if (this.props.timer % 1000 === 0) {
                         enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})

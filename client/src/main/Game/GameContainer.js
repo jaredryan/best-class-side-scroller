@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import ScoreList from '../Scores';
 import Game from './Game';
+import { addScore } from '../../redux/scores';
+import { connect } from 'react-redux';
 
 class GameContainer extends Component {
     constructor() {
@@ -65,7 +66,8 @@ class GameContainer extends Component {
         let score = 50000 - this.state.timer;
         if (score < 0) score = 0;
         score += 20000 + (1000 * health) - (10 * this.state.shotsFired)
-        this.setState({score})
+        this.props.addScore(score);
+        this.setState({score});
     }
 
     render() {
@@ -102,4 +104,4 @@ class GameContainer extends Component {
     }
 }
 
-export default GameContainer;
+export default connect(null, { addScore })(GameContainer);
