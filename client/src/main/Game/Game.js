@@ -6,7 +6,7 @@ class Game extends Component {
     constructor() {
         super();
         this.state = {
-            playerLocation: 170,
+            playerLocation: 155,
             verticalSize: 360,
             horizontalSize: 640,
             playerHeight: 50,
@@ -32,6 +32,8 @@ class Game extends Component {
         setInterval(() => {
             this.setState(prevState => {
                 // PUT HERE EVERYTHING THAT WILL CHANGE OVER TIME
+
+                // Player bullets are moved right and hit targets
                 const playerBullets = []
                 for (let bullet of prevState.playerBullets) {
                     let newBullet = {...bullet}
@@ -52,11 +54,12 @@ class Game extends Component {
                     }
                 }
 
+                // Enemy bullets move left and hit player
                 let playerHealth = prevState.playerHealth
                 const enemyBullets = []
                 for (let bullet of prevState.enemyBullets) {
                     let newBullet = {...bullet}
-                    newBullet.left -= 15
+                    newBullet.left -= 15 // This part will depend on the enemy or bullet type
                     if (newBullet.left + 9 >= 10 &&
                         newBullet.left <= 10 + this.state.playerWidth &&
                         newBullet.top + 9 >= this.state.playerLocation &&
@@ -70,19 +73,38 @@ class Game extends Component {
                     }
                 }
 
+                // Remove enemies that are dead
                 const currentEnemies = prevState.currentEnemies.length !== 0 ? prevState.currentEnemies.filter(enemy => enemy.health > 0) : [];
 
-                if (this.props.timer === 0) {
-                    currentEnemies.push(...this.props.waves[0])
-                } else if (this.props.timer === 10) {
-                    currentEnemies.push(...this.props.waves[1])
-                } else if (this.props.timer === 20) {
-                    currentEnemies.push(...this.props.waves[2])
+                // Add enemies as specified by the waves
+
+                console.log(this.props.timer);
+                let wave;
+                if (this.props.timer >= 0) {
+                    wave = this.props.useWave(0);
+                    if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (currentEnemies.length === 0 && this.props.timer > 20) {
+                if (this.props.timer >= 10000) {
+                    wave = this.props.useWave(1);
+                    if (wave !== false) currentEnemies.push(...wave)
+                }
+
+                if (this.props.timer >= 20000) {
+                    wave = this.props.useWave(2);
+                    if (wave !== false) currentEnemies.push(...wave)
+                }
+
+                // The player wins if there are no enemies left after the final wave
+                if (currentEnemies.length === 0 && this.props.timer > 20000) {
                     this.props.hasWon();
-                    console.log("YES");
+                }
+
+                // Enemies fire in regular intervals
+                for (let enemy of currentEnemies) {
+                    if (this.props.timer % 1000 === 0) {
+                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5})
+                    }
                 }
 
                 return {
@@ -108,17 +130,21 @@ class Game extends Component {
 
     handleDownStroke() {
         this.setState(prevState => {
-            if (prevState.playerLocation < this.state.verticalSize - this.state.playerHeight) {
-                return {playerLocation: prevState.playerLocation + 10}
+            const playerLocation = prevState.playerLocation + 20;
+            if (playerLocation > this.state.verticalSize - this.state.playerHeight) {
+                return {playerLocation: this.state.verticalSize - this.state.playerHeight}
             }
+            return {playerLocation}
         });
     }
 
     handleUpStroke() {
         this.setState(prevState => {
-            if (prevState.playerLocation > 0) {
-                return {playerLocation: prevState.playerLocation - 10}
+            const playerLocation = prevState.playerLocation - 20;
+            if (playerLocation < 0) {
+                return {playerLocation: 0}
             }
+            return {playerLocation}
         });
     }
 
@@ -148,7 +174,6 @@ class Game extends Component {
 
     renderEnemyBullets() {
         return this.state.enemyBullets.map((bullet, index) => {
-            console.log(bullet);
             return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="enemyBullet"></div>
         })
     }
