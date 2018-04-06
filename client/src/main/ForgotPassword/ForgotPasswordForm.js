@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-function LoginForm(props){
+function ForgotPasswordForm(props){
     return (
         <div className="form-wrapper top-spacing">
             <form onSubmit={props.handleSubmit}>
-                <h3>Log In</h3>
+                <h3>Forgot Your Password?</h3>
+                <p>Type in your email address here, and a link to
+                reset your password will be sent to your email.</p>
                 <div className="centerSignup">
                     <div className="signUpDiv">
                         <input
@@ -15,15 +16,7 @@ function LoginForm(props){
                             type="email"
                             placeholder="Email Address"
                         />
-                        <input
-                            onChange={props.handleChange}
-                            value={props.password}
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                        />
                         <button type="submit">Submit</button>
-                        <Link to="/forgot">Forgot your password?</Link>
                     </div>
                 </div>
             </form>
@@ -32,4 +25,4 @@ function LoginForm(props){
     )
 }
 
-export default LoginForm;
+export default ForgotPasswordForm;

@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import Profile from "./Profile"
+import Reset from "./Reset"
 import {connect} from "react-redux";
-import { changePassword } from '../../redux/auth';
+// import { Route, Switch, withRouter, Redirect } from "react-router-dom";
+import { resetPassword } from '../../redux/auth';
 
-class ProfileContainer extends Component {
+class ResetContainer extends Component {
     constructor() {
         super()
         this.state = {
@@ -33,13 +34,12 @@ class ProfileContainer extends Component {
     handleSubmit(e){
         e.preventDefault();
         if (this.state.newPassword === this.state.newPasswordRepeat) {
-            this.props.changePassword(this.state.newPassword);
-            this.setState({message: "Your password was successfully changed."})
+            this.props.resetPassword(this.state.newPassword, this.props.location.pathname.slice(7));
+            alert("Your password was successfully changed.");
+            this.props.history.push("/login");
         } else {
             this.setState({message: "Passwords did not match."})
         }
-        // this.props.login(this.state.inputs);
-        this.clearState();
     }
 
     render() {
@@ -50,7 +50,7 @@ class ProfileContainer extends Component {
         }
 
         return (
-            <Profile
+            <Reset
                 username={this.props.user.username}
                 newPassword={this.state.newPassword}
                 newPasswordRepeat={this.state.newPasswordRepeat}
@@ -66,4 +66,4 @@ const mapStateToProps = (state) => {
     return state;
 }
 
-export default connect(mapStateToProps, { changePassword })(ProfileContainer);
+export default connect(mapStateToProps, { resetPassword })(ResetContainer);

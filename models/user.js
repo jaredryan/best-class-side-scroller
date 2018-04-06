@@ -26,7 +26,9 @@ const userSchema = new Schema({
     admin: {
         type: Boolean,
         default: false
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 })
 
 userSchema.pre("save", function (next) {

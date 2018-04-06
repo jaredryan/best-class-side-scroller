@@ -10,14 +10,14 @@ function Profile(props) {
                 <form onSubmit={props.handleSubmit}>
                     <div className="centerSignup">
                         <div className="signUpDiv">
-                                <input
+                            <input
                                     type="password"
                                     name="newPassword"
                                     onChange={props.handleChange}
                                     value={props.newPassword}
                                     placeholder="New Password"
                                 />
-                                <input
+                            <input
                                     type="password"
                                     name="newPasswordRepeat"
                                     onChange={props.handleChange}
@@ -29,6 +29,7 @@ function Profile(props) {
                     </div>
                 </form>
             </div>
+            <p>{props.message}</p>
         </div>
     )
 }

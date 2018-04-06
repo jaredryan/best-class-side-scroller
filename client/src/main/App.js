@@ -5,10 +5,11 @@ import {connect} from "react-redux";
 import {verify} from "../redux/auth";
 import Signup from './Signup';
 import Login from './Login';
-import ScoreList from './Scores';
 import Profile from './Profile';
-import ProtectedRoute from "./ProtectedRoute";
+import Reset from './Reset';
+import ForgotPassword from "./ForgotPassword";
 import Game from './Game';
+import ProtectedRoute from "./ProtectedRoute";
 
 class App extends Component {
     componentDidMount(){
@@ -23,16 +24,26 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/profile"/> :
+                            <Redirect to= "/game"/> :
                             <Signup {...this.props}/>
                     }}/>
                     <Route path="/login" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/profile"/> :
+                            <Redirect to= "/game"/> :
                             <Login {...this.props}/>
                     }}/>
-                <ProtectedRoute path="/game" component={Game}/>
-                <ProtectedRoute path="/profile" component={Profile}/>
+                    <Route path="/forgot" render={()=>{
+                        return isAuthenticated ?
+                            <Redirect to= "/game"/> :
+                            <ForgotPassword {...this.props}/>
+                    }}/>
+                    <Route path="/reset" render={()=>{
+                        return isAuthenticated ?
+                            <Redirect to= "/game"/> :
+                            <Reset {...this.props}/>
+                    }}/>
+                    <ProtectedRoute path="/game" component={Game}/>
+                    <ProtectedRoute path="/profile" component={Profile}/>
                 </Switch>
             </div>
         )
