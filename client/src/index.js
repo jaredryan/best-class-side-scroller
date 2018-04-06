@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import store from './redux';
 import './style.css';
 import App from './main/App';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 store.subscribe(() => {
     // console.log(store.getState());
@@ -13,7 +14,9 @@ store.subscribe(() => {
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <App/>
+            <MuiThemeProvider>
+                <App/>
+            </MuiThemeProvider>
         </Router>
     </Provider>,
     document.getElementById('root')

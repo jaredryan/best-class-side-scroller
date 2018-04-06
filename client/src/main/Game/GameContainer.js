@@ -18,6 +18,7 @@ class GameContainer extends Component {
         this.hasWon = this.hasWon.bind(this);
         this.hasLost = this.hasLost.bind(this);
         this.startGame = this.startGame.bind(this);
+        this.restartGame = this.restartGame.bind(this);
         this.calculateScore = this.calculateScore.bind(this);
         this.shoot = this.shoot.bind(this);
     }
@@ -56,6 +57,17 @@ class GameContainer extends Component {
         this.setState({isRunning: true})
     }
 
+    restartGame() {
+        this.props.resetLevel();
+        this.setState({
+            timer: 0,
+            isRunning: true,
+            hasWon: false,
+            shotsFired: 0,
+            score: 0
+        })
+    }
+
     shoot() {
         this.setState(prevState => {
             return {shotsFired: prevState.shotsFired + 1}
@@ -92,6 +104,7 @@ class GameContainer extends Component {
                                 <h1>You Won!</h1>
                                 <h2>Score</h2>
                                 <h3>{this.state.score}</h3>
+                                <button onClick={this.restartGame} className="start">Play Again</button>
                             </div>)
                         :
                         (<ScoreList
