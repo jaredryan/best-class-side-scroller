@@ -85,8 +85,6 @@ class Game extends Component {
                 const currentEnemies = prevState.currentEnemies.length !== 0 ? prevState.currentEnemies.filter(enemy => enemy.health > 0) : [];
 
                 // Add enemies as specified by the waves
-
-                console.log(this.props.timer);
                 let wave;
                 if (this.props.timer >= 0) {
                     wave = this.props.useWave(0);
@@ -105,6 +103,7 @@ class Game extends Component {
 
                 // The player wins if there are no enemies left after the final wave
                 if (currentEnemies.length === 0 && this.props.timer > 20000) {
+                    this.props.calculateScore(this.state.playerHealth);
                     this.props.hasWon();
                 }
 
@@ -115,7 +114,6 @@ class Game extends Component {
                     if (this.props.timer % 1000 === 0) {
                         enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
                     }
-                    console.log(this.props.timer + 500);
                     if (this.props.timer % 1000 === 500) {
                         chance = Math.random();
                         if (enemy.type === "ufo") {
@@ -188,6 +186,7 @@ class Game extends Component {
     }
 
     handleShoot() {
+        this.props.shoot();
         this.setState(prevState => {
             const playerBullets = prevState.playerBullets.slice();
             playerBullets.push({height: 10, width: 10, left: 9 + this.state.playerWidth, top: this.state.playerLocation + this.state.playerHeight / 2 - 5})

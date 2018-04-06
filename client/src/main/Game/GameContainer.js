@@ -10,11 +10,15 @@ class GameContainer extends Component {
             timer: 0,
             isRunning: "unstarted",
             hasWon: false,
+            shotsFired: 0,
+            score: 0
         }
 
         this.hasWon = this.hasWon.bind(this);
         this.hasLost = this.hasLost.bind(this);
         this.startGame = this.startGame.bind(this);
+        this.calculateScore = this.calculateScore.bind(this);
+        this.shoot = this.shoot.bind(this);
     }
 
     componentDidMount() {
@@ -51,6 +55,19 @@ class GameContainer extends Component {
         this.setState({isRunning: true})
     }
 
+    shoot() {
+        this.setState(prevState => {
+            return {shotsFired: prevState.shotsFired + 1}
+        })
+    }
+
+    calculateScore(health) {
+        let score = 50000 - this.state.timer;
+        if (score < 0) score = 0;
+        score += 20000 + (1000 * health) - (10 * this.state.shotsFired)
+        this.setState({score})
+    }
+
     render() {
         return (
             <div className="gamePage top-spacing">
@@ -61,13 +78,19 @@ class GameContainer extends Component {
                         hasWon={this.hasWon}
                         hasLost={this.hasLost}
                         startGame={this.startGame}
-                        useWave={this.props.useWave}/>
+                        useWave={this.props.useWave}
+                        shoot={this.shoot}
+                        calculateScore={this.calculateScore}/>
                     :
                     (this.state.isRunning === false ?
                         (this.state.hasWon === false ?
                             <h1>Game Over</h1>
                             :
-                            <h1>You Won!</h1>)
+                            <div>
+                                <h1>You Won!</h1>
+                                <h2>Score</h2>
+                                <h3>{this.state.score}</h3>
+                            </div>)
                         :
                         (<ScoreList
                             startGame={this.startGame}
