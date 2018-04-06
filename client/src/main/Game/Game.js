@@ -9,7 +9,7 @@ class Game extends Component {
             playerLocation: 155,
             verticalSize: 360,
             horizontalSize: 640,
-            playerHeight: 50,
+            playerHeight: 35,
             playerWidth: 50,
             playerHealth: 10,
             currentEnemies: [],
@@ -213,13 +213,13 @@ class Game extends Component {
 
     renderEnemyBullets() {
         return this.state.enemyBullets.map((bullet, index) => {
-            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className="enemyBullet"></div>
+            return <div key={index + bullet.top.toString()} style={{height: `${bullet.height - 1}px`, width: `${bullet.width - 1}px`, left: `${bullet.left}px`, top: `${bullet.top}px`}} className={`enemyBullet ${bullet.type}`}></div>
         })
     }
 
     renderEnemies() {
         return this.state.currentEnemies.map((enemy, index) => {
-            return <div style={{height: `${enemy.height - 1}px`, width: `${enemy.width - 1}px`, left: `${enemy.left}px`, top: `${enemy.top}px`, backgroundColor: `${enemy.color}`}} className="enemy" key={index + enemy.left.toString()}></div>
+            return <div style={{height: `${enemy.height - 1}px`, width: `${enemy.width - 1}px`, left: `${enemy.left}px`, top: `${enemy.top}px`, }} className={`enemy ${enemy.type}`} key={index + enemy.left.toString()}></div>
         })
     }
 
