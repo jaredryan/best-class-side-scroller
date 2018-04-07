@@ -43,8 +43,8 @@ class Navbar extends Component {
                         : null }
                     </div>
                 </div>
-                <div className="widthSetter mobile">
-                    <i class="fa fa-bars dropbtn" onClick={this.handleClick}></i>
+                <div className="widthSetter mobile" onClick={this.handleClick}>
+                    <i class="fa fa-bars dropbtn"></i>
                     <div className="dropdown-content" style={show}>
                         { isAuthenticated ? null : <div className="nav-link"><Link to="/" className="nav-links"><h3>SIGN UP</h3></Link></div> }
                         { isAuthenticated ? null : <div className="nav-link"><Link to="/login" className="nav-links"><h3>LOG IN</h3></Link></div> }
