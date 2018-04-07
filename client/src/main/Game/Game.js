@@ -101,7 +101,7 @@ class Game extends Component {
                 }
 
                 // The player wins if there are no enemies left after the final wave
-                if (currentEnemies.length === 0 && this.props.timer > 0) {
+                if (currentEnemies.length === 0 && this.props.timer > 20000) {
                     this.props.calculateScore(this.state.playerHealth);
                     this.props.hasWon();
                 }
