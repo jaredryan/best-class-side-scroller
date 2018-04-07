@@ -4,6 +4,10 @@
 
 * {
     box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
@@ -94,11 +98,6 @@ form p {
     background-color: black;
 }
 
-.centerSignup {
-    display: flex;
-    justify-content: center;
-}
-
 .enemyBullet {
     position: absolute;
     border: 1px solid black;
@@ -109,6 +108,36 @@ form p {
     font-family: 'Bangers', serif;
 }
 
+.formBox {
+    text-align: center;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    margin: auto;
+}
+
+.formDescription {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.formHeader {
+    margin-top: 0;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+.formLink {
+    margin-top: 10px;
+    margin-bottom: 0;
+    color: black;
+}
+
+.formLink a {
+    color: rgb(50, 50, 50);
+}
+
 .gameDiv {
     margin-top: 100px;
     display: flex;
@@ -117,7 +146,7 @@ form p {
     align-items: center;
 }
 
-button,
+button.start,
 .nav-link h3 {
     font-size: 20px;
     background-color: rgb(50, 50, 50);
@@ -138,10 +167,10 @@ button,
 .nav-link h3 {
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 130px;
+    width: 140px;
 }
 
-button:hover,
+button.start:hover,
 .nav-link h3:hover {
     cursor: pointer;
     background-color: rgb(100, 100, 255);
@@ -150,6 +179,13 @@ button:hover,
 
 button.start {
     font-size: 30px;
+}
+
+.errorMessage {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+    color: rgb(200, 0, 0);
 }
 
 .hoverH3:hover {
