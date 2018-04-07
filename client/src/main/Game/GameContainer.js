@@ -98,13 +98,16 @@ class GameContainer extends Component {
                     :
                     (this.state.isRunning === false ?
                         (this.state.hasWon === false ?
-                            <h1>Game Over</h1>
+                            <div className="gameResults">
+                                <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
+                                <h1>Game Over</h1>
+                            </div>
                             :
-                            <div>
+                            <div className="gameResults">
+                                <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
                                 <h1>You Won!</h1>
                                 <h2>Score</h2>
                                 <h3>{this.state.score}</h3>
-                                <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
                             </div>)
                         :
                         (<ScoreList

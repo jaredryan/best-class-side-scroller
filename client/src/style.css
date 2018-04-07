@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-    background-color: aliceblue;
+    background-color: #D5E1DD;
 }
 
 form p {
@@ -92,7 +92,6 @@ form p {
 .canvas {
     border: 1px solid purple;
     position: relative;
-    background-color: white;
     margin-top: 50px;
     margin-bottom: 50px;
     background-color: black;
@@ -114,6 +113,7 @@ form p {
     max-width: 400px;
     width: 90%;
     margin: auto;
+    background-color: #F7F3E8;
 }
 
 .formDescription {
@@ -156,12 +156,11 @@ form p {
 button.start,
 .nav-link h3 {
     font-size: 20px;
-    background-color: rgb(50, 50, 50);
     color: white;
     padding: 5px 30px;
     border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
-    background-color: #384966;
+    background-color: rgb(0, 188, 212);
     color: white;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -177,13 +176,16 @@ button.start,
 button.start:hover,
 .nav-link h3:hover {
     cursor: pointer;
-    background-color: rgb(100, 100, 255);
+    opacity: 0.65;
+    transition-duration: 300ms;
 }
 
 button.start {
     font-size: 30px;
     display: block;
-    margin: 20px auto;
+    margin: 50px auto;
+    margin-top: 130px;
+    border: none;
 }
 
 .errorMessage {
@@ -193,25 +195,67 @@ button.start {
     color: rgb(200, 0, 0);
 }
 
+.gameResults h1 {
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.gameResults h2 {
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.gameResults h3 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-top: 0px;
+}
+
 .hoverH3:hover {
     cursor: pointer;
+}
+
+.instructionHeading {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #F2583E;
+}
+
+.instructionText {
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.nav-link {
+    background-color: white;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .nav-link a {
     text-decoration: none;
 }
 
+.nav-link h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 .nav-links {
     color: white;
 }
 
-.navbar-wrapper{
-    width: 75%;
+.navbar-wrapper {
     margin: auto;
     display: flex;
     justify-content: space-around;
-    background-color: white;
-
 }
 
 .navbar-wrapper-wrapper {
@@ -220,11 +264,29 @@ button.start {
     z-index: 9999;
     left: 0;
     top: 0;
-    background-color: white;
-    border-bottom: 1px solid black;
+    background-color: #2B3E42;
+    display: flex;
+    align-items: center;
+    height: 65px;
 }
 
+.navbar-wrapper-wrapper h1 {
+    color: white;
+    width: 50%;
+    text-align: left;
+    display: inline-block;
+    font-weight: 500;
+    padding-left: 5%;
+    line-height: 24px;
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
+.widthSetter {
+    display: inline-block;
+    width: 50%;
+}
 
 .playerBullet {
     position: absolute;
@@ -234,6 +296,30 @@ button.start {
 
 .profileEdit {
     margin-bottom: 20px;
+}
+
+.score h3 {
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.score span.numberScore {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 6px;
+}
+
+.score span.userScore {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 10px;
+    color: #F2583E;
 }
 
 .scoreDiv {
@@ -264,4 +350,73 @@ button.start {
 
 .top-spacing {
     margin-top: 100px;
+}
+
+.fa-bars,
+.dropdown-content,
+.dropdown-content * {
+    display: none;
+}
+
+@media (max-width: 1200px) {
+    .navbar-wrapper-wrapper h1 {
+        width: 25%;
+    }
+
+    .widthSetter {
+        width: 75%;
+    }
+}
+
+@media (max-width: 700px) {
+    .navbar-wrapper-wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .navbar-wrapper-wrapper h1 {
+        width: 200px;
+    }
+
+    .widthSetter {
+        width: 150px;
+        text-align: center;
+        height: 65px;
+    }
+
+    .widthSetter:hover {
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .widthSetter:hover .fa-bars {
+        color: #2B3E42;
+    }
+
+    .navbar-wrapper {
+        display: none;
+    }
+
+    .fa-bars {
+        display: inline-block;
+        color: white;
+        font-size: 40px;
+        height: 65px;
+        padding-top: 13px;
+    }
+
+    .dropdown-content * {
+        display: block;
+    }
+
+    .nav-links h3,
+    .nav-link .hoverH3 {
+        margin-right: 0;
+        width: 150px;
+    }
+
+    .nav-link {
+        margin-top: 5px;
+        margin-bottom: 0px;
+    }
 }

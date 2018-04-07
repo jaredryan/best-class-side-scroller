@@ -29,6 +29,7 @@ class ScoreContainer extends React.Component {
                 handleRemove={this.handleRemove.bind(this)}
                 score={this.props.score}
                 id={this.props.id}
+                place={this.props.place}
                 {...this.state}/>
         )
     }

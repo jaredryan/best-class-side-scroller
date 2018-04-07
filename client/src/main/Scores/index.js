@@ -53,6 +53,7 @@ class ScoreListContainer extends React.Component {
     render() {
         const allScores = this.props.scores.allScores ? this.props.scores.allScores.sort((a, b) => b.number - a.number) : []
         const myScores = this.props.scores.myScores ? this.props.scores.myScores.sort((a, b) => b.number - a.number) : []
+        const headerStyle = {fontSize: "22px"}
 
         return (
             <div className="scoreDiv">
@@ -62,14 +63,15 @@ class ScoreListContainer extends React.Component {
                       title="Instructions"
                       actAsExpander={true}
                       showExpandableButton={true}
+                      titleStyle={headerStyle}
                     />
                     <CardText expandable={true}>
-                        <h5>Objective</h5>
-                        <p>Protect your nest from all of the enemies.</p>
-                        <h5>Controls</h5>
-                        <p>Fly up and down with the arrow keys.</p>
-                        <p>Shoot seeds using the space bar to send the invaders packing.</p>
-                        <h4>Good Luck!</h4>
+                        <h4 className="instructionHeading">Objective</h4>
+                        <p className="instructionText">Protect your nest from all of the enemies.</p>
+                        <h4 className="instructionHeading">Controls</h4>
+                        <p className="instructionText">Fly up and down with the arrow keys.</p>
+                        <p className="instructionText">Shoot seeds using the space bar to send the invaders packing.</p>
+                        <h4 className="instructionHeading">Good Luck!</h4>
                     </CardText>
                 </Card>
                 <Card className="myScores">
@@ -77,6 +79,7 @@ class ScoreListContainer extends React.Component {
                       title="Your Top Scores"
                       actAsExpander={true}
                       showExpandableButton={true}
+                      titleStyle={headerStyle}
                     />
                     <CardText expandable={true}>
                         <ScoreList
@@ -88,6 +91,7 @@ class ScoreListContainer extends React.Component {
                       title="High Scores"
                       actAsExpander={true}
                       showExpandableButton={true}
+                      titleStyle={headerStyle}
                     />
                     <CardText expandable={true}>
                         <ScoreList
