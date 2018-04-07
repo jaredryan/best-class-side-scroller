@@ -354,7 +354,8 @@ button.start {
 
 .fa-bars,
 .dropdown-content,
-.dropdown-content * {
+.dropdown-content *,
+.widthSetter.mobile {
     display: none;
 }
 
@@ -382,6 +383,7 @@ button.start {
         width: 150px;
         text-align: center;
         height: 65px;
+        display: none;
     }
 
     .widthSetter:hover {
@@ -418,5 +420,9 @@ button.start {
     .nav-link {
         margin-top: 5px;
         margin-bottom: 0px;
+    }
+
+    .widthSetter.mobile {
+        display: inline-block;
     }
 }
