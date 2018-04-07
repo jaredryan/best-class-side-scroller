@@ -17,7 +17,7 @@ userRouter.get('/', (req, res) => {
     })
 })
 
-userRouter.put('/:id', (req, res) => {
+userRouter.put('/', (req, res) => {
     User.findByIdAndUpdate(req.user._id, req.body, {new: true},
         (err, updatedUser) => {
             if (err) return res.status(500).send(err);
@@ -25,7 +25,7 @@ userRouter.put('/:id', (req, res) => {
     })
 })
 
-userRouter.delete('/:id', (req, res) => {
+userRouter.delete('/', (req, res) => {
     User.findByIdAndRemove(req.user._id, (err, deletedUser) => {
         if (err) return res.status(500).send(err);
         return res.send(deletedUser);

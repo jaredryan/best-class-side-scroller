@@ -104,7 +104,7 @@ class GameContainer extends Component {
                                 <h1>You Won!</h1>
                                 <h2>Score</h2>
                                 <h3>{this.state.score}</h3>
-                                <button onClick={this.restartGame} className="start">Play Again</button>
+                                <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
                             </div>)
                         :
                         (<ScoreList

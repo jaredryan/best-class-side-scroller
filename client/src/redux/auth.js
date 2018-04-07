@@ -12,7 +12,8 @@ const initialState = {
         signup: "",
         signin: "",
         changePassword: "",
-        forgotPassword: ""
+        forgotPassword: "",
+        edit: ""
     },
     isAuthenticated: false
 }
@@ -125,6 +126,19 @@ export function resetPassword(password, resetToken) {
     }
 }
 
+export function editUser(user) {
+    return dispatch => {
+        axios.put("api/user/", user)
+            .then(response => {
+                dispatch(authenticate(response.data))
+            })
+            .catch(err => {
+                console.error(err);
+                dispatch(signupError("edit", err.response.status));
+            })
+    }
+}
+
 
 function reducer(state = initialState, action){
     switch(action.type){
@@ -136,7 +150,9 @@ function reducer(state = initialState, action){
                 authErrCode: {
                     signup: "",
                     signin: "",
-                    changePassword: ""
+                    changePassword: "",
+                    forgotPassword: "",
+                    edit: ""
                 }
             }
         case "LOGOUT":

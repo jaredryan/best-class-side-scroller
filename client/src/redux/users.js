@@ -42,9 +42,9 @@ export function addUser(user) {
     }
 }
 
-export function editUser(id, user) {
+export function editUser(user) {
     return dispatch => {
-        axios.put(userUrl + id, user)
+        axios.put(userUrl, user)
             .then(response => {
                 dispatch(loadUsers());
             })
@@ -54,9 +54,9 @@ export function editUser(id, user) {
     }
 }
 
-export function deleteUser(id){
+export function deleteUser(){
     return dispatch => {
-        axios.delete(userUrl + id)
+        axios.delete(userUrl)
             .then(response => {
                 dispatch(loadUsers());
             })

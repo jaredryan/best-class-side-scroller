@@ -51,13 +51,12 @@ class ScoreListContainer extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         const allScores = this.props.scores.allScores ? this.props.scores.allScores.sort((a, b) => b.number - a.number) : []
         const myScores = this.props.scores.myScores ? this.props.scores.myScores.sort((a, b) => b.number - a.number) : []
 
         return (
             <div className="scoreDiv">
-                <button onClick={this.props.startGame} className="start">Start Game</button>
+                <button onClick={this.props.startGame} className="start">START GAME</button>
                 <Card className="instructions">
                     <CardHeader
                       title="Instructions"

@@ -9,7 +9,8 @@ class LoginFormContainer extends React.Component {
         this.state = {
             inputs: {
                 email: '',
-                password: ''
+                password: '',
+                message: ''
             }
         }
         this.handleChange = this.handleChange.bind(this);
@@ -32,7 +33,8 @@ class LoginFormContainer extends React.Component {
         this.setState({
             inputs: {
                 email: '',
-                password: ''
+                password: '',
+                message: ''
             }
         })
     }
@@ -44,6 +46,14 @@ class LoginFormContainer extends React.Component {
     }
 
     render(){
+        let authErrCode = this.props.user.authErrCode.signin;
+        let errMsg = this.state.message;
+        if (authErrCode < 500 && authErrCode > 399) {
+            errMsg = "Invalid email or password!";
+        } else if (authErrCode > 499) {
+            errMsg = "Server error!";
+        }
+
         return (
             <LoginForm
                 handleChange={this.handleChange}
