@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ScoreListContainer from '../Scores';
 import Game from './Game';
 import { addScore } from '../../redux/scores';
+import { editUser } from '../../redux/auth';
 import { connect } from 'react-redux';
 
 class GameContainer extends Component {
@@ -75,6 +76,10 @@ class GameContainer extends Component {
     }
 
     calculateScore(health) {
+        if (this.props.level > this.props.user.status) {
+            this.props.editUser(this.props.level);
+        }
+
         let score = 50000 - this.state.timer;
         if (score < 0) score = 0;
         score += 30000 + (1000 * health) - (100 * this.state.shotsFired)
@@ -122,4 +127,8 @@ class GameContainer extends Component {
     }
 }
 
-export default connect(null, { addScore })(GameContainer);
+const mapStateToProps = state => {
+    return state;
+}
+
+export default connect(mapStateToProps, { addScore, editUser })(GameContainer);

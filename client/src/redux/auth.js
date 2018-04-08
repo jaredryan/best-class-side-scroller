@@ -139,6 +139,19 @@ export function editUser(user) {
     }
 }
 
+export function changeLevel(level) {
+    return dispatch => {
+        axios.put("api/user/changeLevel", {status: level})
+            .then(response => {
+                dispatch(authenticate(response.data))
+            })
+            .catch(err => {
+                console.error(err);
+                dispatch(signupError("edit", err.response.status));
+            })
+    }
+}
+
 
 function reducer(state = initialState, action){
     switch(action.type){

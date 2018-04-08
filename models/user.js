@@ -21,7 +21,8 @@ const userSchema = new Schema({
     },
     status: {
         type: Number,
-        enum: ["1", "2", "3"]
+        enum: [1, 2, 3],
+        default: 1
     },
     admin: {
         type: Boolean,

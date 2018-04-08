@@ -26,7 +26,13 @@ class Level2Container extends Component {
                 {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl"},
                 {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman"}
             ],
-            wave3: false,
+            wave3: [
+                {height: 29, width: 50, left: 530, top: 35, health: 4, type: "ufo"},
+                {height: 29, width: 50, left: 530, top: 155, health: 4, type: "ufo"},
+                {height: 29, width: 50, left: 530, top: 275, health: 4, type: "ufo"},
+                {height: 50, width: 35, left: 530, top: 295, health: 4, type: "girl"},
+                {height: 50, width: 34, left: 530, top: 15, health: 4, type: "ironman"}
+            ],
             wave4: false
         }
 

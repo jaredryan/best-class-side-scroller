@@ -58,6 +58,7 @@ class LoginFormContainer extends React.Component {
             <LoginForm
                 handleChange={this.handleChange}
                 handleSubmit={this.handleSubmit}
+                errMsg={errMsg}
                 {...this.state.inputs}
             />
         )

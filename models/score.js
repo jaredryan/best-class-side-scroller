@@ -6,7 +6,7 @@ const scoreSchema = new Schema({
         type: Number,
         required: true
     },
-    level: String,
+    level: Number,
     username: String
 })
 
