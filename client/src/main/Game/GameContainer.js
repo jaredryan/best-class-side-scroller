@@ -112,7 +112,10 @@ class GameContainer extends Component {
                         :
                         (<ScoreList
                             startGame={this.startGame}
-                        />)
+                            setLevel1={this.props.setLevel1}
+                            setLevel2={this.props.setLevel2}
+                            setLevel3={this.props.setLevel3}
+                            level={this.props.level}/>)
                     )
                 }
             </div>

@@ -203,6 +203,20 @@ button.start,
     font-weight: 300;
 }
 
+.buttons {
+    padding-bottom: 0px !important;
+}
+
+.buttons:hover {
+    cursor: pointer;
+}
+
+.levelButtons {
+    display: block;
+    text-align: center;
+    margin: 50px auto;
+}
+
 .nav-links {
     border-radius: 2px;
     height: 40px;
