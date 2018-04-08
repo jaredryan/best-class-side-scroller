@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Level1Container from './Level1Container';
 import Level2Container from './Level2Container';
 import Level3Container from './Level3Container';
+import { loadScores, loadMyScores } from "../../redux/scores";
+import { connect } from "react-redux";
 
 class LevelSetter extends Component {
     constructor() {
@@ -13,6 +15,11 @@ class LevelSetter extends Component {
         this.setLevel1 = this.setLevel1.bind(this);
         this.setLevel2 = this.setLevel2.bind(this);
         this.setLevel3 = this.setLevel3.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.loadScores();
+        this.props.loadMyScores();
     }
 
     setLevel1() {
@@ -56,4 +63,8 @@ class LevelSetter extends Component {
     }
 }
 
-export default LevelSetter;
+const mapStateToProps = state => {
+    return state;
+}
+
+export default connect(mapStateToProps, {loadScores, loadMyScores})(LevelSetter)

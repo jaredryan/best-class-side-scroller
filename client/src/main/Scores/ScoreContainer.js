@@ -9,7 +9,6 @@ class ScoreContainer extends React.Component {
 
         this.handleEdit = this.handleEdit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
-
     }
 
     handleEdit(e){

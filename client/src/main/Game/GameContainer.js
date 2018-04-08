@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ScoreList from '../Scores';
+import ScoreListContainer from '../Scores';
 import Game from './Game';
 import { addScore } from '../../redux/scores';
 import { connect } from 'react-redux';
@@ -88,7 +88,6 @@ class GameContainer extends Component {
                 {this.state.isRunning === true ?
                     <Game
                         timer={this.state.timer}
-                        waves={this.state.waves1}
                         hasWon={this.hasWon}
                         hasLost={this.hasLost}
                         startGame={this.startGame}
@@ -110,7 +109,7 @@ class GameContainer extends Component {
                                 <h3>{this.state.score}</h3>
                             </div>)
                         :
-                        (<ScoreList
+                        (<ScoreListContainer
                             startGame={this.startGame}
                             setLevel1={this.props.setLevel1}
                             setLevel2={this.props.setLevel2}

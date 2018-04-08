@@ -2,7 +2,6 @@ import React from 'react';
 import ScoreList from "./ScoreList";
 import { connect } from "react-redux";
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import { loadScores, loadMyScores } from "../../redux/scores";
 
 class ScoreListContainer extends React.Component {
     constructor() {
@@ -45,20 +44,17 @@ class ScoreListContainer extends React.Component {
         this.setState({allScoresAreOpen: false});
     }
 
-    componentDidMount() {
-        this.props.loadScores();
-        this.props.loadMyScores();
-    }
-
     render() {
-        const allScores = this.props.scores.allScores ?
-            this.props.scores.allScores
-                .filter(score => score.level === this.props.level)
-                .sort((a, b) => b.number - a.number) : []
-        const myScores = this.props.scores.myScores ?
-            this.props.scores.myScores
-                .filter(score => score.level === this.props.level)
-                .sort((a, b) => b.number - a.number) : []
+        console.log(this.props);
+        console.log(this.props.scores);
+        console.log(this.props.scores.allScores);
+        console.log(this.props.scores.myScores);
+        const allScores = this.props.scores.allScores ? this.props.scores.allScores
+            .filter(score => score.level == this.props.level)
+            .sort((a, b) => b.number - a.number) : []
+        const myScores = this.props.scores.myScores ? this.props.scores.myScores
+            .filter(score => score.level == this.props.level)
+            .sort((a, b) => b.number - a.number) : []
         const headerStyle = {fontSize: "22px"}
         const style1 =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: this.props.level === 1 ? "#747E80" : "white"}
         const style2 =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: this.props.level === 2 ? "#747E80" : "white"}
@@ -132,4 +128,4 @@ const mapStateToProps = state => {
     return state;
 }
 
-export default connect(mapStateToProps, {loadScores, loadMyScores})(ScoreListContainer)
+export default connect(mapStateToProps, {})(ScoreListContainer)
