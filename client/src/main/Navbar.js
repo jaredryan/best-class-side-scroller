@@ -29,10 +29,10 @@ class Navbar extends Component {
         const show = this.state.clicked ? {display: "block"} : {display: "none"}
         return (
             <div className="navbar-wrapper-wrapper">
-                <h1 style={styleOverride}>NEST<br/>INVADERS</h1>
+                <Link style={styleOverride} to="/" className="theTitle">NEST<br/>INVADERS</Link>
                 <div className="widthSetter" style={styleOverride}>
                     <div className="navbar-wrapper">
-                        { isAuthenticated ? null : <div className="nav-link"><Link to="/" className="nav-links"><h3>SIGN UP</h3></Link></div> }
+                        { isAuthenticated ? null : <div className="nav-link"><Link to="/signup" className="nav-links"><h3>SIGN UP</h3></Link></div> }
                         { isAuthenticated ? null : <div className="nav-link"><Link to="/login" className="nav-links"><h3>LOG IN</h3></Link></div> }
                         { isAuthenticated ? <div className="nav-link"><Link to="/game" className="nav-links"><h3>GAME</h3></Link></div> : null }
                         { isAuthenticated ? <div className="nav-link"><Link to="/profile" className="nav-links"><h3>PROFILE</h3></Link></div> : null }
@@ -46,7 +46,7 @@ class Navbar extends Component {
                 <div className="widthSetter mobile" onClick={this.handleClick}>
                     <i class="fa fa-bars dropbtn"></i>
                     <div className="dropdown-content" style={show}>
-                        { isAuthenticated ? null : <div className="nav-link"><Link to="/" className="nav-links"><h3>SIGN UP</h3></Link></div> }
+                        { isAuthenticated ? null : <div className="nav-link"><Link to="/signup" className="nav-links"><h3>SIGN UP</h3></Link></div> }
                         { isAuthenticated ? null : <div className="nav-link"><Link to="/login" className="nav-links"><h3>LOG IN</h3></Link></div> }
                         { isAuthenticated ? <div className="nav-link"><Link to="/game" className="nav-links"><h3>GAME</h3></Link></div> : null }
                         { isAuthenticated ? <div className="nav-link"><Link to="/profile" className="nav-links"><h3>PROFILE</h3></Link></div> : null }

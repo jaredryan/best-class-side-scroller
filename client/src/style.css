@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 
 body {
     background-color: #D5E1DD;
+    margin: 0;
 }
 
 form p {
@@ -167,10 +168,35 @@ button.start,
     font-weight: 300;
 }
 
-.nav-link h3 {
-    margin-top: 20px;
-    margin-bottom: 20px;
+.nav-links {
+    border-radius: 2px;
+    height: 40px;
     width: 140px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.nav-link h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 40px;
+    width: 140px;
+    margin: 0;
+}
+
+.nav-link {
+    background-color: white;
+    margin-top: 12.5px;
+    margin-bottom: 12.5px;
+    border-radius: 2px;
+    height: 40px;
+    width: 140px;
+    position: relative;
 }
 
 button.start:hover,
@@ -233,23 +259,9 @@ button.start {
     margin-bottom: 4px;
 }
 
-.nav-link {
-    background-color: white;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.nav-link a {
-    text-decoration: none;
-}
-
-.nav-link h3 {
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-
 .nav-links {
     color: white;
+    text-decoration: none;
 }
 
 .navbar-wrapper {
@@ -268,9 +280,10 @@ button.start {
     display: flex;
     align-items: center;
     height: 65px;
+    box-shadow: 0px 0px 2px 2px black;
 }
 
-.navbar-wrapper-wrapper h1 {
+.navbar-wrapper-wrapper .theTitle {
     color: white;
     width: 50%;
     text-align: left;
@@ -281,6 +294,15 @@ button.start {
     font-size: 28px;
     margin-top: 0;
     margin-bottom: 0;
+    height: 65px;
+    padding-top: 10px;
+    text-decoration: none;
+}
+
+.navbar-wrapper-wrapper .theTitle:hover {
+    background-color: white;
+    cursor: pointer;
+    color: #2B3E42;
 }
 
 .widthSetter {
@@ -348,6 +370,114 @@ button.start {
     width: 170px;
 }
 
+.titlePage {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+}
+
+.titleImage,
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 600px;
+    height: 100vh;
+    width: 100%;
+}
+
+.titleImage {
+    background: url("./images/space.png") no-repeat center center;
+    background-size: cover;
+    opacity: 0.6;
+    z-index: 3;
+}
+
+.titlePage {
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.titleText {
+    color: white;
+    z-index: 4;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+}
+
+.titleText h1 {
+    font-size: 70px;
+    font-weight: 300;
+    text-shadow: 0px 6px 8px black;
+    line-height: 90px;
+}
+
+.titleText h2 {
+    font-size: 30px;
+    font-weight: 500;
+    text-shadow: 0px 3px 4px black;
+}
+
+.titleText h3 {
+    font-size: 26px;
+    font-weight: 300;
+    text-shadow: 0px 2px 3px black;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.titleDescription {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleDescription div {
+    background-color: white;
+    width: 120px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    height: 40px;
+    text-align: center;
+}
+
+.titleText a {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
+    background-color: #F2583E;
+    color: white;
+    font-weight: 300;
+    width: 120px;
+    text-decoration: none;
+    height: 40px;
+}
+
+.titleText a:hover {
+    cursor: pointer;
+    opacity: 0.65;
+    transition-duration: 300ms;
+}
+
+.overlay {
+    background-color: black;
+    z-index: 2;
+}
+
 .top-spacing {
     margin-top: 100px;
 }
@@ -360,7 +490,7 @@ button.start {
 }
 
 @media (max-width: 1200px) {
-    .navbar-wrapper-wrapper h1 {
+    .navbar-wrapper-wrapper .theTitle {
         width: 25%;
     }
 
@@ -375,7 +505,7 @@ button.start {
         justify-content: space-between;
     }
 
-    .navbar-wrapper-wrapper h1 {
+    .navbar-wrapper-wrapper .theTitle {
         width: 200px;
     }
 
@@ -412,7 +542,8 @@ button.start {
     }
 
     .nav-links h3,
-    .nav-link .hoverH3 {
+    .nav-link .hoverH3,
+    .nav-links {
         margin-right: 0;
         width: 150px;
     }
@@ -420,9 +551,27 @@ button.start {
     .nav-link {
         margin-top: 5px;
         margin-bottom: 0px;
+        margin-right: 0;
+        width: 150px;
     }
 
     .widthSetter.mobile {
         display: inline-block;
+    }
+}
+
+@media (max-width: 555px) {
+    .titleText h1 {
+        font-size: 50px;
+        font-weight: 300;
+        text-shadow: 0px 6px 8px black;
+        line-height: 60px;
+    }
+
+    .titleText h2 {
+        font-size: 25px;
+        font-weight: 500;
+        text-shadow: 0px 3px 4px black;
+        /* line-height: 90px; */
     }
 }

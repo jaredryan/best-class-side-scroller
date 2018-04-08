@@ -9,6 +9,7 @@ import Profile from './Profile';
 import Reset from './Reset';
 import ForgotPassword from "./ForgotPassword";
 import Game from './Game';
+import Title from './Title';
 import ProtectedRoute from "./ProtectedRoute";
 
 class App extends Component {
@@ -22,7 +23,8 @@ class App extends Component {
             <div>
                 <Navbar/>
                 <Switch>
-                    <Route exact path="/" render={()=>{
+                    <Route exact path="/" component={Title}/>
+                    <Route path="/signup" render={()=>{
                         return isAuthenticated ?
                             <Redirect to= "/game"/> :
                             <Signup {...this.props}/>
