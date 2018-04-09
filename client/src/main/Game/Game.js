@@ -241,6 +241,8 @@ class Game extends Component {
     }
 
     handleKeyDown(e) {
+        e.preventDefault()
+        e.stopPropagation()
         if (e.key === " ") {
             this.handleShoot()
         } else if (e.key === "ArrowUp") {
