@@ -100,10 +100,28 @@ class Game extends Component {
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
+                if (this.props.timer >= 30000 && this.props.level === 2) {
+                    wave = this.props.useWave(3);
+                    if (wave !== false) currentEnemies.push(...wave)
+                }
+
+                if (this.props.timer >= 40000 && this.props.level === 3) {
+                    wave = this.props.useWave(4);
+                    if (wave !== false) currentEnemies.push(...wave)
+                }
+
                 // The player wins if there are no enemies left after the final wave
-                if (currentEnemies.length === 0 && this.props.timer > 20000) {
-                    this.props.calculateScore(this.state.playerHealth);
-                    this.props.hasWon();
+                if (currentEnemies.length === 0) {
+                    if (this.props.timer > 20000 && this.props.level === 1) {
+                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.hasWon();
+                    } else if (this.props.timer > 30000 && this.props.level === 2) {
+                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.hasWon();
+                    } else if (this.props.timer > 40000 && this.props.level === 3) {
+                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.hasWon();
+                    }
                 }
 
                 // Enemies fire in regular intervals

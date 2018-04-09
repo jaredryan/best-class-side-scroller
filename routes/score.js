@@ -17,7 +17,7 @@ scoreRouter.get('/all', (req, res) => {
 })
 
 scoreRouter.post('/', (req, res) => {
-    const score = new Score({number: Number(req.body.number), level: 1});
+    const score = new Score(req.body);
     score.username = req.user.username;  // sets the user property of a score to the req.user._id so the score and user are connected.
     score.save((err, newScore) => {
         if (err) return res.status(500).send(err);

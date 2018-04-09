@@ -55,9 +55,9 @@ class ScoreListContainer extends React.Component {
         const headerStyle = {fontSize: "22px"}
 
         let backgroundColor2;
-        if (this.props.user.user.status >= 2) {
+        if (this.props.user.status >= 2) {
             if (this.props.level === 2) {
-                backgroundColor2 = "747E80"
+                backgroundColor2 = "#747E80"
             } else {
                 backgroundColor2 = "white"
             }
@@ -66,9 +66,9 @@ class ScoreListContainer extends React.Component {
         }
 
         let backgroundColor3;
-        if (this.props.user.user.status >= 3) {
+        if (this.props.user.status >= 3) {
             if (this.props.level === 3) {
-                backgroundColor3 = "747E80"
+                backgroundColor3 = "#747E80"
             } else {
                 backgroundColor3 = "white"
             }
@@ -80,11 +80,11 @@ class ScoreListContainer extends React.Component {
         const style2 =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: backgroundColor2}
         const style3 =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: backgroundColor3}
 
-        const text2 = {color: this.props.user.user.status >= 2 ? "black" : "silver", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
-        const text3 = {color: this.props.user.user.status >= 3 ? "black" : "silver", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
+        const text2 = {color: this.props.user.status >= 2 ? "black" : "silver", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
+        const text3 = {color: this.props.user.status >= 3 ? "black" : "silver", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
 
-        const setLevel2 = this.props.user.user.status >= 2 ? this.props.setLevel2 : () => {}
-        const setLevel3 = this.props.user.user.status >= 3 ? this.props.setLevel3 : () => {}
+        const setLevel2 = this.props.user.status >= 2 ? this.props.setLevel2 : () => {}
+        const setLevel3 = this.props.user.status >= 3 ? this.props.setLevel3 : () => {}
 
         return (
             <div className="scoreDiv">

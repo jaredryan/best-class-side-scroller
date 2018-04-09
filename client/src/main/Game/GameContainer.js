@@ -76,14 +76,14 @@ class GameContainer extends Component {
     }
 
     calculateScore(health) {
-        if (this.props.level > this.props.user.status) {
-            this.props.editUser(this.props.level);
+        if (this.props.level === this.props.user.status && this.props.level !== 3) {
+            this.props.editUser({status: this.props.level + 1});
         }
 
         let score = 50000 - this.state.timer;
         if (score < 0) score = 0;
         score += 30000 + (1000 * health) - (100 * this.state.shotsFired)
-        this.props.addScore(score);
+        this.props.addScore(score, this.props.level);
         this.setState({score});
     }
 
@@ -98,7 +98,8 @@ class GameContainer extends Component {
                         startGame={this.startGame}
                         useWave={this.props.useWave}
                         shoot={this.shoot}
-                        calculateScore={this.calculateScore}/>
+                        calculateScore={this.calculateScore}
+                        level={this.props.level}/>
                     :
                     (this.state.isRunning === false ?
                         (this.state.hasWon === false ?

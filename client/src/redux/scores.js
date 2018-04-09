@@ -48,9 +48,9 @@ export function loadMyScores() {
     }
 }
 
-export function addScore(number) {
+export function addScore(number, level) {
     return dispatch => {
-        axios.post(scoreUrl, {number})
+        axios.post(scoreUrl, {number, level})
             .then(response => {
                 dispatch(loadScores());
                 dispatch(loadMyScores());
