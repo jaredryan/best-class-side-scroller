@@ -47,10 +47,12 @@ class ScoreListContainer extends React.Component {
     render() {
         const allScores = this.props.scores.allScores ? this.props.scores.allScores
             .filter(score => score.level === this.props.level)
-            .sort((a, b) => b.number - a.number) : []
+            .sort((a, b) => b.number - a.number)
+            .slice(0, 10) : []
         const myScores = this.props.scores.myScores ? this.props.scores.myScores
             .filter(score => score.level === this.props.level)
-            .sort((a, b) => b.number - a.number) : []
+            .sort((a, b) => b.number - a.number)
+            .slice(0, 5) : []
 
         const headerStyle = {fontSize: "22px"}
 
