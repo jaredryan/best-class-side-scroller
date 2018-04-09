@@ -90,22 +90,22 @@ class Game extends Component {
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (this.props.timer >= 10000) {
+                if (currentEnemies.length === 0 || this.props.timer >= 10000) {
                     wave = this.props.useWave(1);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (this.props.timer >= 20000) {
+                if (currentEnemies.length === 0 || this.props.timer >= 20000) {
                     wave = this.props.useWave(2);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (this.props.timer >= 30000 && this.props.level === 2) {
+                if (currentEnemies.length === 0 || this.props.timer >= 30000 && this.props.level === 2) {
                     wave = this.props.useWave(3);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (this.props.timer >= 40000 && this.props.level === 3) {
+                if (currentEnemies.length === 0 || this.props.timer >= 40000 && this.props.level === 3) {
                     wave = this.props.useWave(4);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
@@ -128,9 +128,16 @@ class Game extends Component {
                 let chance;
                 for (let enemy of currentEnemies) {
                     if (this.props.timer % 1000 === 0) {
-                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+                        enemy.moveTimer = Math.random() * 1000
+                        enemy.shootTimer = Math.random() * 1000
                     }
-                    if (this.props.timer % 1000 === 500) {
+                    if (this.props.timer % 1000 >= enemy.shootTimer) {
+                        enemy.shootTimer = 1000
+                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+
+                    }
+                    if (this.props.timer % 1000 >= enemy.moveTimer) {
+                        enemy.moveTimer = 1000
                         chance = Math.random();
                         if (enemy.type === "ufo") {
                             if (chance < 0.3333) {

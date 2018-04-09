@@ -6,25 +6,25 @@ class Level1Container extends Component {
         super();
         this.state = {
             wave0: [
-                {height: 29, width: 50, left: 580, top: 35, health: 1, type: "ufo"},
-                {height: 29, width: 50, left: 580, top: 155, health: 1, type: "ufo"},
-                {height: 29, width: 50, left: 580, top: 275, health: 1, type: "ufo"},
-                {height: 50, width: 35, left: 530, top: 295, health: 1, type: "girl"},
-                {height: 50, width: 34, left: 530, top: 15, health: 1, type: "ironman"}
+                {height: 29, width: 50, left: 580, top: 35, health: 1, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 580, top: 155, health: 1, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 580, top: 275, health: 1, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 35, left: 530, top: 295, health: 1, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 34, left: 530, top: 15, health: 1, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
             ],
             wave1: [
-                {height: 29, width: 50, left: 555, top: 35, health: 2, type: "ufo"},
-                {height: 29, width: 50, left: 555, top: 155, health: 2, type: "ufo"},
-                {height: 29, width: 50, left: 555, top: 275, health: 2, type: "ufo"},
-                {height: 50, width: 35, left: 530, top: 295, health: 2, type: "girl"},
-                {height: 50, width: 34, left: 530, top: 15, health: 2, type: "ironman"}
+                {height: 29, width: 50, left: 555, top: 35, health: 2, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 555, top: 155, health: 2, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 555, top: 275, health: 2, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 35, left: 530, top: 295, health: 2, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 34, left: 530, top: 15, health: 2, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
             ],
             wave2: [
-                {height: 29, width: 50, left: 530, top: 35, health: 3, type: "ufo"},
-                {height: 29, width: 50, left: 530, top: 155, health: 3, type: "ufo"},
-                {height: 29, width: 50, left: 530, top: 275, health: 3, type: "ufo"},
-                {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl"},
-                {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman"}
+                {height: 29, width: 50, left: 530, top: 35, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 530, top: 155, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 29, width: 50, left: 530, top: 275, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
+                {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
             ],
             wave3: false,
             wave4: false

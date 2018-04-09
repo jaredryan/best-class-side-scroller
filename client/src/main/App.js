@@ -26,22 +26,22 @@ class App extends Component {
                     <Route exact path="/" component={Title}/>
                     <Route path="/signup" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/game"/> :
+                            <Redirect to="/game"/> :
                             <Signup {...this.props}/>
                     }}/>
                     <Route path="/login" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/game"/> :
+                            <Redirect to="/game"/> :
                             <Login {...this.props}/>
                     }}/>
                     <Route path="/forgot" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/game"/> :
+                            <Redirect to="/game"/> :
                             <ForgotPassword {...this.props}/>
                     }}/>
                     <Route path="/reset" render={()=>{
                         return isAuthenticated ?
-                            <Redirect to= "/game"/> :
+                            <Redirect to="/game"/> :
                             <Reset {...this.props}/>
                     }}/>
                     <ProtectedRoute path="/game" component={Game}/>
