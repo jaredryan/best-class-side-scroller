@@ -72,7 +72,7 @@ class Game extends Component {
                         newBullet.top + 9 >= this.state.playerLocation &&
                         newBullet.top <= this.state.playerLocation + this.state.playerHeight - 1) {
                         playerHealth -= 1
-                        if (this.state.playerHealth <= 0) {
+                        if (this.state.playerHealth <= 1) {
                             this.props.hasLost();
                         }
                     } else if (newBullet.left > 0 && newBullet.top > 0 && newBullet.top < prevState.verticalSize - newBullet.height) {
@@ -113,13 +113,13 @@ class Game extends Component {
                 // The player wins if there are no enemies left after the final wave
                 if (currentEnemies.length === 0) {
                     if (this.props.timer > 20000 && this.props.level === 1) {
-                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.calculateAndPostScore(this.state.playerHealth);
                         this.props.hasWon();
                     } else if (this.props.timer > 30000 && this.props.level === 2) {
-                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.calculateAndPostScore(this.state.playerHealth);
                         this.props.hasWon();
                     } else if (this.props.timer > 40000 && this.props.level === 3) {
-                        this.props.calculateScore(this.state.playerHealth);
+                        this.props.calculateAndPostScore(this.state.playerHealth);
                         this.props.hasWon();
                     }
                 }
@@ -159,6 +159,8 @@ class Game extends Component {
                         }
                     }
                 }
+
+                this.props.calculateScore(this.state.playerHealth);
 
                 return {
                     playerBullets,
@@ -256,6 +258,8 @@ class Game extends Component {
                     {this.renderEnemies()}
                     {this.renderPlayerBullets()}
                     {this.renderEnemyBullets()}
+                    <div className="gameHealth">HP: {this.state.playerHealth}</div>
+                    <div className="gameScore">SCORE: {this.props.currentScore}</div>
                 </div>
             </div>
         )

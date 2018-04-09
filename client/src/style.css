@@ -188,6 +188,27 @@ form p {
             align-items: center;
 }
 
+.gameScore,
+.gameHealth {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    color: white;
+    width: 160px;
+    display: inline-block;
+    top: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.gameScore {
+    left: 160px;
+}
+
+.gameHealth {
+    left: 0px;
+}
+
 button.start,
 .nav-link h3 {
     font-size: 20px;
