@@ -100,12 +100,12 @@ class Game extends Component {
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (currentEnemies.length === 0 || this.props.timer >= 30000 && this.props.level === 2) {
+                if (currentEnemies.length === 0 || (this.props.timer >= 30000 && this.props.level === 2)) {
                     wave = this.props.useWave(3);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
 
-                if (currentEnemies.length === 0 || this.props.timer >= 40000 && this.props.level === 3) {
+                if (currentEnemies.length === 0 || (this.props.timer >= 40000 && this.props.level === 3)) {
                     wave = this.props.useWave(4);
                     if (wave !== false) currentEnemies.push(...wave)
                 }
@@ -133,8 +133,13 @@ class Game extends Component {
                     }
                     if (this.props.timer % 1000 >= enemy.shootTimer) {
                         enemy.shootTimer = 1000
-                        enemyBullets.push({height: 10, width: 10, left: enemy.left - 9, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
-
+                        if (enemy.type === "ufo") {
+                            enemyBullets.push({height: 8, width: 20, left: enemy.left - 15, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+                        } else if (enemy.type === "ironman") {
+                            enemyBullets.push({height: 8, width: 24, left: enemy.left - 23, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+                        } else {
+                            enemyBullets.push({height: 15, width: 15, left: enemy.left - 14, top: enemy.top + enemy.height / 2 - 5, type: enemy.type})
+                        }
                     }
                     if (this.props.timer % 1000 >= enemy.moveTimer) {
                         enemy.moveTimer = 1000
