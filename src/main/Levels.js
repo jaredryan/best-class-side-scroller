@@ -10,7 +10,7 @@ const Levels = (props) => {
     return (
         <div className="levelButtons">
             <Card style={{width: "204px", height: "136px", textAlign: "center", fontSize: "22px", fontWeight: 500, margin: "auto"}}>
-                <CardText style={{fontSize: "22px", height: "68px", paddingTop: "19px"}}>Select Level</CardText>
+                <CardText style={{fontSize: "22px", height: "68px", paddingTop: "19px", color: "#F2583E"}}>Select Difficulty</CardText>
                 <div className="buttons">
                     <Card onClick={() => props.setLevel(1)} style={props.level === 1 ? highlightedStyle : numberStyle}>
                         <CardText style={textStyle}>1</CardText>

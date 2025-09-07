@@ -352,11 +352,22 @@ button.start {
     color: #F2583E;
 }
 
+.instructionHeading.black {
+    color: black;
+}
+
 .instructionBody {
     font-size: 18px;
     font-weight: 300;
     margin-top: 4px;
     margin-bottom: 4px;
+}
+
+.instructionControl {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 50px;
 }
 
 .nav-links {
@@ -454,7 +465,7 @@ button.start {
 
 .instructionsContainer {
     width: 100%;
-    max-width: 700px;
+    max-width: 550px;
     display: flex;
     justify-content: center;
     align-items: center;
