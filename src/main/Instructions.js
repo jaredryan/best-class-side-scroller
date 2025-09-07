@@ -7,8 +7,8 @@ const Instructions = () => {
             <CardText className="instructionsText">
                 <h4 className="instructionHeading">Controls</h4>
                 <div>
-                    <p className="instructionBody">Fly up and down with the arrow keys.</p>
-                    <p className="instructionBody">Shoot seeds using the space bar to send the invaders packing.</p>
+                    <p className="instructionBody"><b>Up / Down Arrow Keys</b>: move the bird on the left</p>
+                    <p className="instructionBody"><b>Space Bar</b>: the bird shoots seeds to damage the invaders on the right</p>
                 </div>
                 <h4 className="instructionHeading">Good Luck!</h4>
             </CardText>
