@@ -1,0 +1,700 @@
+/* ************************************************************ */
+/* ************************** elements ************************ */
+/* ************************************************************ */
+
+* {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+    margin: 0;
+}
+
+body {
+    background-color: #D5E1DD;
+    margin: 0;
+}
+
+form p {
+    color: firebrick;
+}
+/* ************************************************************ */
+/* ************************** enemies ************************* */
+/* ************************************************************ */
+
+.enemy {
+    position: absolute;
+}
+
+.ufo {
+    background-image: url("images/ufo.gif");
+    background-size: 1200%;
+    -webkit-animation: ufoMove .8s steps(12) infinite;
+            animation: ufoMove .8s steps(12) infinite;
+}
+
+@-webkit-keyframes ufoMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 8232.6px 0; }
+}
+
+@keyframes ufoMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 8232.6px 0; }
+}
+
+.girl {
+    background-image: url("images/enemyGirl.png");
+    background-size: 470%;
+    -webkit-animation: girlMove .4s steps(4) infinite;
+            animation: girlMove .4s steps(4) infinite;
+}
+
+@-webkit-keyframes girlMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1119.2px 0; }
+}
+
+@keyframes girlMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1119.2px 0; }
+}
+
+.ironman {
+    /* background-color: blue; */
+    background-image: url("images/ironman.png");
+    background-size: 674%;
+    -webkit-animation: ironMove 1s steps(6) infinite;
+            animation: ironMove 1s steps(6) infinite;
+}
+
+@-webkit-keyframes ironMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1115px 0; }
+}
+
+@keyframes ironMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 1115px 0; }
+}
+/* ************************************************************ */
+/* ************************** player ************************** */
+/* ************************************************************ */
+
+.player {
+    /* border: 1px solid black; */
+    /* background-color: red; */
+    position: absolute;
+    background-image: url("images/birdSprite.png");
+    /* overflow: hidden; */
+    background-size: 100%;
+    width: 50px;
+    height: 35px;
+    -webkit-animation: myMove .5s steps(8) infinite;
+            animation: myMove .5s steps(8) infinite;
+    left: 10px;
+}
+
+@-webkit-keyframes myMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 0 284px; }
+}
+
+@keyframes myMove {
+    from{ background-position: 0 0; }
+    to{ background-position: 0 284px; }
+}
+
+/* ************************************************************ */
+/* ************************** classes ************************* */
+/* ************************************************************ */
+
+.app-wrapper{
+    height: 100vh;
+}
+
+.canvas {
+    border: 1px solid purple;
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: black;
+}
+
+.enemyBullet {
+    position: absolute;
+    border: 1px solid black;
+}
+
+.enemyBullet.ufo {
+    background-color: red;
+}
+
+.enemyBullet.ironman {
+    border-radius: 50px;
+    transform: rotate(-28deg);
+    background-color: gold;
+}
+
+.enemyBullet.girl {
+    border-radius: 50%;
+    background-color: black;
+}
+
+.formBox {
+    text-align: center;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    margin: auto;
+    background-color: #F7F3E8;
+}
+
+.formDescription {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.formHeader {
+    margin-top: 0;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+.formLink {
+    margin-top: 10px;
+    margin-bottom: 0;
+    color: black;
+}
+
+.formSubHeader {
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.formLink a {
+    color: rgb(50, 50, 50);
+}
+
+.gameWithInstructions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.gameDiv {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
+.gameScore,
+.gameHealth {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    color: white;
+    width: 160px;
+    display: inline-block;
+    top: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.gameScore {
+    left: 160px;
+}
+
+.gameHealth {
+    left: 0px;
+}
+
+button.start,
+.nav-link h3 {
+    font-size: 20px;
+    color: white;
+    padding: 5px 30px;
+    border-radius: 2px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
+    background-color: rgb(0, 188, 212);
+    color: white;
+    margin: 0;
+    font-weight: 300;
+}
+
+.buttons {
+    padding-bottom: 0px !important;
+}
+
+.buttons:hover {
+    cursor: pointer;
+}
+
+.levelButtons {
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+
+.nav-links {
+    border-radius: 2px;
+    height: 40px;
+    width: 140px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.nav-link h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    height: 40px;
+    width: 140px;
+    margin: 0;
+}
+
+.nav-link {
+    background-color: white;
+    margin-top: 12.5px;
+    margin-bottom: 12.5px;
+    border-radius: 2px;
+    height: 40px;
+    width: 140px;
+    position: relative;
+}
+
+button.start:hover,
+.nav-link h3:hover {
+    cursor: pointer;
+    background-color: rgb(89, 211, 227);
+    -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+}
+
+button.start {
+    font-size: 30px;
+    display: block;
+    border: none;
+}
+
+.errorMessage {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+    color: rgb(200, 0, 0);
+}
+
+.gameResults {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    color: white;
+}
+
+.gameResults h1 {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.gameResults h2 {
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.gameResults h3 {
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.hoverH3:hover {
+    cursor: pointer;
+}
+
+.instructionsText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.instructionHeading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #F2583E;
+}
+
+.instructionBody {
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.nav-links {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-wrapper {
+    margin: auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+}
+
+.navbar-wrapper-wrapper {
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    background-color: #2B3E42;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 65px;
+    -webkit-box-shadow: 0px 0px 2px 2px black;
+            box-shadow: 0px 0px 2px 2px black;
+}
+
+.navbar-wrapper-wrapper .theTitle {
+    color: white;
+    width: 50%;
+    text-align: left;
+    display: inline-block;
+    font-weight: 500;
+    padding-left: 5%;
+    line-height: 24px;
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 65px;
+    padding-top: 10px;
+    text-decoration: none;
+}
+
+.navbar-wrapper-wrapper .theTitle:hover {
+    background-color: white;
+    cursor: pointer;
+    color: #2B3E42;
+}
+
+.widthSetter {
+    display: inline-block;
+    width: 50%;
+}
+
+.playerBullet {
+    position: absolute;
+    border: 1px solid black;
+    background-color: grey;
+}
+
+.profileEdit {
+    margin-bottom: 20px;
+}
+
+.score h3 {
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.score span.numberScore {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 6px;
+}
+
+.score span.userScore {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 10px;
+    color: #F2583E;
+}
+
+.instructionsContainer {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.instructions {
+    padding: 20px;
+}
+
+.signUpDiv {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    width: 260px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.signUpDiv > input {
+    margin-top: 10px;
+    border: .5px solid black;
+    padding: 4px;
+    width: 170px;
+}
+
+.titlePage {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleImage,
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 600px;
+    height: 100vh;
+    width: 100%;
+}
+
+.titleImage {
+    background: url("./images/space.png") no-repeat center center;
+    background-size: cover;
+    opacity: 0.6;
+    z-index: 3;
+}
+
+.titlePage {
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.titleText {
+    color: white;
+    padding: 50px;
+    max-width: 1200px;
+}
+
+.titleText h1 {
+    font-size: 70px;
+    font-weight: 300;
+    text-shadow: 0px 6px 8px black;
+    line-height: 90px;
+    margin: 0 0 50px 0;
+}
+
+.titleText h2 {
+    font-size: 30px;
+    font-weight: 500;
+    text-shadow: 0px 3px 4px black;
+    margin: 0;
+}
+
+.titleText h3 {
+    font-size: 26px;
+    font-weight: 300;
+    text-shadow: 0px 2px 3px black;
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.titleDescription {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+
+.titleDescription div {
+    background-color: white;
+    width: 120px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    height: 40px;
+    text-align: center;
+}
+
+.titleText button {
+    background-color: #F2583E;
+    margin: 48px 0 0 0;
+}
+
+.titleText button:hover {
+    cursor: pointer;
+    background-color: #F79282;
+    -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+}
+
+.overlay {
+    background-color: black;
+    z-index: -1;
+}
+
+.top-spacing {
+    margin-top: 100px;
+}
+
+.fa-bars,
+.dropdown-content,
+.dropdown-content *,
+.widthSetter.mobile {
+    display: none;
+}
+
+@media (max-width: 1200px) {
+    .navbar-wrapper-wrapper .theTitle {
+        width: 25%;
+    }
+
+    .widthSetter {
+        width: 75%;
+    }
+}
+
+@media (max-width: 700px) {
+    .navbar-wrapper-wrapper {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+    }
+
+    .navbar-wrapper-wrapper .theTitle {
+        width: 200px;
+    }
+
+    .widthSetter {
+        width: 150px;
+        text-align: center;
+        height: 65px;
+        display: none;
+    }
+
+    .widthSetter:hover {
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .widthSetter:hover .fa-bars {
+        color: #2B3E42;
+    }
+
+    .navbar-wrapper {
+        display: none;
+    }
+
+    .fa-bars {
+        display: inline-block;
+        color: white;
+        font-size: 40px;
+        height: 65px;
+        padding-top: 13px;
+    }
+
+    .dropdown-content * {
+        display: block;
+    }
+
+    .nav-links h3,
+    .nav-link .hoverH3,
+    .nav-links {
+        margin-right: 0;
+        width: 150px;
+    }
+
+    .nav-link {
+        margin-top: 5px;
+        margin-bottom: 0px;
+        margin-right: 0;
+        width: 150px;
+    }
+
+    .widthSetter.mobile {
+        display: inline-block;
+    }
+}
+
+@media (max-width: 555px) {
+    .titleText h1 {
+        font-size: 50px;
+        font-weight: 300;
+        text-shadow: 0px 6px 8px black;
+        line-height: 60px;
+    }
+
+    .titleText h2 {
+        font-size: 25px;
+        font-weight: 500;
+        text-shadow: 0px 3px 4px black;
+        /* line-height: 90px; */
+    }
+}
