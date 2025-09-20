@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-    background-color: #D5E1DD;
+    background-color: black;
     margin: 0;
 }
 
@@ -117,12 +117,24 @@ form p {
 }
 
 .canvas {
-    border: 1px solid purple;
     position: relative;
     margin: 0;
     background-color: black;
     touch-action: none;
     user-select: none;  
+}
+
+.gamePage {
+    overflow: hidden;
+}
+
+/* Container fills screen, centers the game, fills unused space with black */
+.gameContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 100vh;
 }
 
 .enemyBullet {
@@ -206,6 +218,7 @@ form p {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
+    overflow: hidden;
 }
 
 .gameScore,
@@ -536,6 +549,7 @@ button.start {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .titleImage,

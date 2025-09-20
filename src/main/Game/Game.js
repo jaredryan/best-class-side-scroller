@@ -10,11 +10,17 @@ class Game extends Component {
       horizontalSize: 640,
       playerHeight: 35,
       playerWidth: 50,
-      playerHealth: 10,
+      playerHealth: 10000,
       currentEnemies: [],
       playerBullets: [],
       enemyBullets: [],
+      scale: 1,
+      gameContainerStyleWidth: {},
     };
+
+    const maxScale = 1.5
+    this.state.maxVerticalSize = this.state.verticalSize * maxScale
+    this.state.maxHorizontalSize = this.state.horizontalSize * maxScale
 
     this.isDragging = false;
     this.shootInterval = null;
@@ -23,8 +29,6 @@ class Game extends Component {
     this.renderEnemies = this.renderEnemies.bind(this);
     this.renderPlayerBullets = this.renderPlayerBullets.bind(this);
     this.renderEnemyBullets = this.renderEnemyBullets.bind(this);
-    this.handleUpStroke = this.handleUpStroke.bind(this);
-    this.handleDownStroke = this.handleDownStroke.bind(this);
     this.handleShoot = this.handleShoot.bind(this);
     this.handleEnemyShoot = this.handleEnemyShoot.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -38,9 +42,13 @@ class Game extends Component {
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.startAutoShoot = this.startAutoShoot.bind(this);
     this.stopAutoShoot = this.stopAutoShoot.bind(this);
+    this.updateScale = this.updateScale.bind(this);
   }
 
   componentDidMount() {
+    this.updateScale();
+    window.addEventListener("resize", this.updateScale);
+
     setInterval(() => {
       this.setState((prevState) => {
         // PUT HERE EVERYTHING THAT WILL CHANGE OVER TIME
@@ -210,6 +218,32 @@ class Game extends Component {
     this.focusDiv();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateScale);
+  }
+
+  updateScale = () => {
+    const { horizontalSize, verticalSize, maxHorizontalSize, maxVerticalSize } = this.state;
+
+    // max scale to fill screen
+    let scaleWidth = Math.min(window.innerWidth, maxHorizontalSize) / horizontalSize;
+    let scaleHeight = Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
+
+    const gameContainerStyleWidth = {
+      width: window.innerWidth < horizontalSize
+        ? `100%`
+        : `100vw`
+    }
+
+    // Now, need to handle situation where the height or width becomes less than 
+    // verticalSize or horizontalSize. 
+
+    this.setState({
+      scale: Math.min(scaleWidth, scaleHeight),
+      gameContainerStyleWidth,
+    });
+  };
+
   componentDidUpdate() {
     if (this.props.isRunning === true) this.focusDiv();
   }
@@ -218,28 +252,6 @@ class Game extends Component {
     if (Object.keys(this.refs).length !== 0) {
       ReactDOM.findDOMNode(this.refs.game).focus();
     }
-  }
-
-  handleDownStroke() {
-    this.setState((prevState) => {
-      const playerLocation = prevState.playerLocation + 20;
-      if (playerLocation > this.state.verticalSize - this.state.playerHeight) {
-        return {
-          playerLocation: this.state.verticalSize - this.state.playerHeight,
-        };
-      }
-      return { playerLocation };
-    });
-  }
-
-  handleUpStroke() {
-    this.setState((prevState) => {
-      const playerLocation = prevState.playerLocation - 20;
-      if (playerLocation < 0) {
-        return { playerLocation: 0 };
-      }
-      return { playerLocation };
-    });
   }
 
   handleShoot() {
@@ -350,19 +362,17 @@ class Game extends Component {
   handleTouch(e) {
     e.preventDefault();
 
-    const canvasRect = e.currentTarget.getBoundingClientRect();
-    const oneThirdPoint = this.state.horizontalSize / 3; // divide into thirds
+    const canvas = e.currentTarget.querySelector(".canvas");
+    const canvasRect = canvas.getBoundingClientRect();
+    const oneThirdPoint = this.state.horizontalSize / 3;
     const twoThirdsPoint = oneThirdPoint * 2;
 
     for (let i = 0; i < e.touches.length; i++) {
       const touch = e.touches[i];
-      const x = touch.clientX - canvasRect.left;
-      const y = touch.clientY - canvasRect.top;
+      const x = (touch.clientX - canvasRect.left) / this.state.scale;
+      const y = (touch.clientY - canvasRect.top) / this.state.scale;
 
-      if (x <= twoThirdsPoint) {
-        this.movePlayerTo(y);
-      }
-
+      if (x <= twoThirdsPoint) this.movePlayerTo(y);
       if (x >= oneThirdPoint) {
         this.handleShoot();
         this.startAutoShoot();
@@ -373,12 +383,13 @@ class Game extends Component {
   handleTouchEnd(e) {
     e.preventDefault();
 
-    const canvasRect = e.currentTarget.getBoundingClientRect();
+    const canvas = e.currentTarget.querySelector(".canvas");
+    const canvasRect = canvas.getBoundingClientRect();
     const oneThirdPoint = this.state.horizontalSize / 3; // divide into thirds
 
     for (let i = 0; i < e.touches.length; i++) {
       const touch = e.touches[i];
-      const x = touch.clientX - canvasRect.left;
+      const x = (touch.clientX - canvasRect.left) / this.state.scale;
 
       if (x > oneThirdPoint) return;
     }
@@ -412,12 +423,11 @@ class Game extends Component {
   }
 
   handleMouseMove(e) {
-    const canvasRect = e.currentTarget.getBoundingClientRect();
-    const y = e.clientY - canvasRect.top;
-
+    const canvas = e.currentTarget.querySelector(".canvas");
+    const canvasRect = canvas.getBoundingClientRect(); // get actual canvas position
+    const y = (e.clientY - canvasRect.top) / this.state.scale; // account for top + scale
     this.movePlayerTo(y);
 
-    // If dragging, keep shooting
     if (this.isDragging) {
       this.handleShoot();
     }
@@ -446,12 +456,15 @@ class Game extends Component {
           onTouchMove={this.handleTouch}
           onTouchEnd={this.handleTouchEnd}
           onClick={this.handleClick}
+          className="gameContainer"
+          style={this.state.gameContainerStyleWidth}
         >
           <div
             className="canvas"
             style={{
-              height: `${this.state.verticalSize}px`,
               width: `${this.state.horizontalSize}px`,
+              height: `${this.state.verticalSize}px`,
+              transform: `scale(${this.state.scale})`,
             }}
           >
             <div
