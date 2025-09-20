@@ -110,49 +110,25 @@ class Game extends Component {
 
         // Add enemies as specified by the waves
         let wave;
-        if (this.props.timer >= 0) {
+        if (this.props.timer > 3000) {
           wave = this.props.useWave(0);
           if (wave !== false) currentEnemies.push(...wave);
-        }
 
-        if (currentEnemies.length === 0 || this.props.timer >= 10000) {
-          wave = this.props.useWave(1);
-          if (wave !== false) currentEnemies.push(...wave);
-        }
+          if (currentEnemies.length === 0 || this.props.timer >= 13000) {
+            wave = this.props.useWave(1);
+            if (wave !== false) currentEnemies.push(...wave);
+          }
 
-        if (currentEnemies.length === 0 || this.props.timer >= 20000) {
-          wave = this.props.useWave(2);
-          if (wave !== false) currentEnemies.push(...wave);
-        }
-
-        if (
-          currentEnemies.length === 0 ||
-          (this.props.timer >= 30000 && this.props.level === 2)
-        ) {
-          wave = this.props.useWave(3);
-          if (wave !== false) currentEnemies.push(...wave);
-        }
-
-        if (
-          currentEnemies.length === 0 ||
-          (this.props.timer >= 40000 && this.props.level === 3)
-        ) {
-          wave = this.props.useWave(4);
-          if (wave !== false) currentEnemies.push(...wave);
+          if (currentEnemies.length === 0 || this.props.timer >= 23000) {
+            wave = this.props.useWave(2);
+            if (wave !== false) currentEnemies.push(...wave);
+          }
         }
 
         // The player wins if there are no enemies left after the final wave
-        if (currentEnemies.length === 0) {
-          if (this.props.timer > 20000 && this.props.level === 1) {
-            this.props.calculateScore(this.state.playerHealth);
-            this.props.hasWon();
-          } else if (this.props.timer > 30000 && this.props.level === 2) {
-            this.props.calculateScore(this.state.playerHealth);
-            this.props.hasWon();
-          } else if (this.props.timer > 40000 && this.props.level === 3) {
-            this.props.calculateScore(this.state.playerHealth);
-            this.props.hasWon();
-          }
+        if (currentEnemies.length === 0 && this.props.timer > 23000) {
+          this.props.calculateScore(this.state.playerHealth);
+          this.props.hasWon();
         }
 
         // Enemies fire in regular intervals

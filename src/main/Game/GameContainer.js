@@ -75,7 +75,7 @@ class GameContainer extends Component {
     }
 
     calculateScore(health) {
-        let score = 50000 - this.state.timer;
+        let score = 53000 - this.state.timer;
         if (score < 0) score = 0;
         score += 30000 + (1000 * health) - (100 * this.state.shotsFired)
         this.setState({score});
