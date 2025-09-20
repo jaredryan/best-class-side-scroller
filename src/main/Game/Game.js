@@ -10,7 +10,7 @@ class Game extends Component {
       horizontalSize: 640,
       playerHeight: 35,
       playerWidth: 50,
-      playerHealth: 10000,
+      playerHealth: 10,
       currentEnemies: [],
       playerBullets: [],
       enemyBullets: [],
