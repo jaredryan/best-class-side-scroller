@@ -119,9 +119,10 @@ form p {
 .canvas {
     border: 1px solid purple;
     position: relative;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin: 0;
     background-color: black;
+    touch-action: none;
+    user-select: none;  
 }
 
 .enemyBullet {
@@ -155,7 +156,7 @@ form p {
 
 .formDescription {
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .formHeader {
@@ -188,6 +189,7 @@ form p {
     justify-content: center;
     align-items: center;
     gap: 50px;
+    margin: 25px;
 }
 
 .gameDiv {
@@ -352,15 +354,36 @@ button.start {
     color: #F2583E;
 }
 
+.instructionsText h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 16px;
+}
+
 .instructionHeading.black {
     color: black;
 }
 
+.controlContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
 .instructionBody {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 300;
     margin-top: 4px;
     margin-bottom: 4px;
+}
+
+.instructionBody.standalone {
+    margin-top: 12px;
+}
+
+.instructionBody.standalone b {
+    margin-right: 8px;
 }
 
 .instructionControl {
@@ -506,8 +529,10 @@ button.start {
 
 .titlePage {
     position: relative;
-    height: 100vh;
-    min-height: 600px;
+    left: 0;
+    top: 0;
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -518,8 +543,8 @@ button.start {
     position: absolute;
     top: 0;
     left: 0;
-    min-height: 600px;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
@@ -528,13 +553,6 @@ button.start {
     background-size: cover;
     opacity: 0.6;
     z-index: 3;
-}
-
-.titlePage {
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: 100%;
 }
 
 .titleText {
