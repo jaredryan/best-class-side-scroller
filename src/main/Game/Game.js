@@ -86,8 +86,10 @@ const Game = (props) => {
     window.addEventListener("resize", updateScale);
 
     if (window.innerWidth <= maxHorizontalSize || window.innerHeight <= maxVerticalSize) {
-      enterFullscreen()
+      // enterFullscreen()
     }
+
+    enterFullscreen()
     
     return () => window.removeEventListener("resize", updateScale);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -285,6 +287,7 @@ const Game = (props) => {
 
       // call parent shoot via ref to ensure parent shot counter updates
       shootRef.current && shootRef.current();
+      const spawnTop = playerLocationRef.current + playerHeight / 2 - 5;
       setPlayerBullets((prev) => [
         ...prev,
         {
@@ -292,7 +295,7 @@ const Game = (props) => {
           height: 10,
           width: 10,
           left: 9 + playerWidth,
-          top: playerLocation + playerHeight / 2 - 5,
+          top: spawnTop,
         },
       ]);
     }, 10);

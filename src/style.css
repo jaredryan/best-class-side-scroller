@@ -140,6 +140,10 @@ form p {
 .enemyBullet {
     position: absolute;
     border: 1px solid black;
+    -webkit-animation: none;
+            animation: none;
+    background-image: none;
+    background-size: unset;
 }
 
 .enemyBullet.ufo {
@@ -155,6 +159,8 @@ form p {
 .enemyBullet.girl {
     border-radius: 50%;
     background-color: black;
+    background-image: url("images/enemyGirl.png");
+    background-size: 470%;
 }
 
 .formBox {
