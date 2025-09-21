@@ -219,6 +219,8 @@ form p {
         -ms-flex-align: center;
             align-items: center;
     overflow: hidden;
+    background: url("./images/space.png") no-repeat center center;
+    background-size: cover;
 }
 
 .gameScore,

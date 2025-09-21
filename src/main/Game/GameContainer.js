@@ -5,7 +5,7 @@ import Levels from '../Levels';
 
 const GameContainer = (props) => {
     const [timer, setTimer] = useState(0);
-    const [isRunning, setIsRunning] = useState('unstarted');
+    const [isRunning, setIsRunning] = useState(false);
     const [hasWon, setHasWon] = useState(false);
     const [shotsFired, setShotsFired] = useState(0);
     const [score, setScore] = useState(0);

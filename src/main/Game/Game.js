@@ -44,6 +44,29 @@ const Game = (props) => {
     }
   };
 
+  const enterFullscreen = () => {
+    const el = gameRef.current;
+    if (!el) return;
+
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen(); // Safari
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen(); // IE/Edge
+    }
+  };
+
+  // const exitFullscreen = () => {
+  //   if (document.exitFullscreen) {
+  //     document.exitFullscreen();
+  //   } else if (document.webkitExitFullscreen) {
+  //     document.webkitExitFullscreen();
+  //   } else if (document.msExitFullscreen) {
+  //     document.msExitFullscreen();
+  //   }
+  // };
+
   // Update scale on mount and window resize
   useEffect(() => {
     const updateScale = () => {
@@ -61,6 +84,11 @@ const Game = (props) => {
 
     updateScale();
     window.addEventListener("resize", updateScale);
+
+    if (window.innerWidth <= maxHorizontalSize || window.innerHeight <= maxVerticalSize) {
+      enterFullscreen()
+    }
+    
     return () => window.removeEventListener("resize", updateScale);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
