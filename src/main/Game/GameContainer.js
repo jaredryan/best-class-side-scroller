@@ -49,6 +49,9 @@ const GameContainer = (props) => {
     };
 
     const calculateScore = (health) => {
+        // debug: log score calculation inputs
+        // eslint-disable-next-line no-console
+        console.log('calculateScore called', { timer, shotsFired, health });
         let s = 53000 - timer;
         if (s < 0) s = 0;
         s += 30000 + (1000 * health) - (100 * shotsFired);

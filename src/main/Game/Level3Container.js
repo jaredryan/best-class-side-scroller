@@ -75,7 +75,8 @@ class Level3Container extends Component {
 
     useWave(number) {
         const wave = this.state[`wave${number}`];
-        this.setState({[`wave${number}`]: false})
+        // defer setting wave to false to avoid updating parent during child render
+        setTimeout(() => this.setState({[`wave${number}`]: false}), 0);
         return wave;
     }
 

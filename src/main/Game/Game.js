@@ -19,9 +19,23 @@ const Game = (props) => {
 
   const isDragging = useRef(false);
   const shootInterval = useRef(null);
+  const timeoutsRef = useRef([]);
   const delayBetweenShots = useRef(200);
   const lastShotTime = useRef(0);
   const gameRef = useRef(null);
+  const isMountedRef = useRef(true);
+  const timerRef = useRef(props.timer);
+  const currentEnemiesRef = useRef(currentEnemies);
+  const playerBulletsRef = useRef(playerBullets);
+  const enemyBulletsRef = useRef(enemyBullets);
+  const playerHealthRef = useRef(playerHealth);
+  const playerLocationRef = useRef(playerLocation);
+  const idRef = useRef(1);
+  // refs to latest parent callbacks to avoid stale closures inside the loop
+  const calculateScoreRef = useRef(props.calculateScore);
+  const shootRef = useRef(props.shoot);
+  const hasWonRef = useRef(props.hasWon);
+  const hasLostRef = useRef(props.hasLost);
 
   // Helper: focus game div
   const focusDiv = () => {
@@ -51,179 +65,202 @@ const Game = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Game loop: runs every 30ms
+  // keep latest timer in a ref so the loop can read it without recreating the interval
   useEffect(() => {
+    timerRef.current = props.timer;
+  }, [props.timer]);
+
+  useEffect(() => { calculateScoreRef.current = props.calculateScore; }, [props.calculateScore]);
+  useEffect(() => { shootRef.current = props.shoot; }, [props.shoot]);
+  useEffect(() => { hasWonRef.current = props.hasWon; }, [props.hasWon]);
+  useEffect(() => { hasLostRef.current = props.hasLost; }, [props.hasLost]);
+
+  // keep refs in sync with state
+  useEffect(() => { currentEnemiesRef.current = currentEnemies; }, [currentEnemies]);
+  useEffect(() => { playerBulletsRef.current = playerBullets; }, [playerBullets]);
+  useEffect(() => { enemyBulletsRef.current = enemyBullets; }, [enemyBullets]);
+  useEffect(() => { playerHealthRef.current = playerHealth; }, [playerHealth]);
+  useEffect(() => { playerLocationRef.current = playerLocation; }, [playerLocation]);
+
+  // Game loop: runs every 30ms (created once on mount)
+  useEffect(() => {
+    isMountedRef.current = true;
     const loop = setInterval(() => {
-      setPlayerBullets((prevPlayerBullets) => {
-        const newPlayerBullets = [];
-        // Use currentEnemies from ref via function closure; read from state via getter below
-        for (let bullet of prevPlayerBullets) {
-          let newBullet = { ...bullet };
-          newBullet.left += 15;
-          let hit = false;
-          for (let enemy of currentEnemies) {
-            if (
-              newBullet.left + 9 >= enemy.left &&
-              newBullet.left <= enemy.left + enemy.width &&
-              newBullet.top + 9 >= enemy.top &&
-              newBullet.top <= enemy.top + enemy.height - 1
-            ) {
-              enemy.health -= 1;
-              hit = true;
-              break;
-            }
-          }
-          if (!hit && newBullet.left < horizontalSize) {
-            newPlayerBullets.push(newBullet);
-          }
-        }
-        return newPlayerBullets;
-      });
+      // work with refs to avoid stale closures
+      const prevPlayerBullets = playerBulletsRef.current.slice();
+      const prevEnemyBullets = enemyBulletsRef.current.slice();
+      const prevEnemies = currentEnemiesRef.current.slice();
+      let nextPlayerBullets = [];
+      let nextEnemyBullets = [];
+      let nextEnemies = prevEnemies.length !== 0 ? prevEnemies.filter((e) => e.health > 0) : [];
+      let nextPlayerHealth = playerHealthRef.current;
 
-      setEnemyBullets((prevEnemyBullets) => {
-        let playerH = playerHealth;
-        const newEnemyBullets = [];
-        for (let bullet of prevEnemyBullets) {
-          let newBullet = { ...bullet };
-          if (newBullet.type === "ufo") {
-            newBullet.left -= 15;
-          } else if (newBullet.type === "girl") {
-            newBullet.left -= 10;
-            newBullet.top -= 5;
-          } else {
-            newBullet.left -= 10;
-            newBullet.top += 5;
-          }
+      // Move player bullets and handle hits
+      for (let bullet of prevPlayerBullets) {
+        let newBullet = { ...bullet };
+        newBullet.left += 15;
+        let hit = false;
+        for (let enemy of nextEnemies) {
           if (
-            newBullet.left + 9 >= 10 &&
-            newBullet.left <= 10 + playerWidth &&
-            newBullet.top + 9 >= playerLocation &&
-            newBullet.top <= playerLocation + playerHeight - 1
+            newBullet.left + 9 >= enemy.left &&
+            newBullet.left <= enemy.left + enemy.width &&
+            newBullet.top + 9 >= enemy.top &&
+            newBullet.top <= enemy.top + enemy.height - 1
           ) {
-            playerH -= 1;
-            if (playerHealth <= 1) {
-              props.hasLost();
+            enemy.health -= 1;
+            hit = true;
+            break;
+          }
+        }
+        if (!hit && newBullet.left < horizontalSize) nextPlayerBullets.push(newBullet);
+      }
+
+      // Move enemy bullets and handle player collision
+      for (let bullet of prevEnemyBullets) {
+        let newBullet = { ...bullet };
+        if (newBullet.type === "ufo") {
+          newBullet.left -= 15;
+        } else if (newBullet.type === "girl") {
+          newBullet.left -= 10;
+          newBullet.top -= 5;
+        } else {
+          newBullet.left -= 10;
+          newBullet.top += 5;
+        }
+
+        if (
+          newBullet.left + 9 >= 10 &&
+          newBullet.left <= 10 + playerWidth &&
+          newBullet.top + 9 >= playerLocationRef.current &&
+          newBullet.top <= playerLocationRef.current + playerHeight - 1
+        ) {
+          nextPlayerHealth -= 1;
+          if (nextPlayerHealth <= 0) {
+            setTimeout(() => props.hasLost && props.hasLost(), 0);
+          }
+        } else if (
+          newBullet.left > 0 &&
+          newBullet.top > 0 &&
+          newBullet.top < verticalSize - newBullet.height
+        ) {
+          nextEnemyBullets.push(newBullet);
+        }
+      }
+
+      // Add enemies as specified by the waves (only when appropriate)
+      if (timerRef.current > 3000) {
+        let wave = props.useWave(0);
+  if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+
+        if (nextEnemies.length === 0 || timerRef.current >= 13000) {
+          wave = props.useWave(1);
+          if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+        }
+
+        if (nextEnemies.length === 0 || timerRef.current >= 23000) {
+          wave = props.useWave(2);
+          if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+        }
+      }
+
+      // Enemies move and shoot
+      for (let enemy of nextEnemies) {
+        if (timerRef.current % 1000 === 0) {
+          enemy.moveTimer = Math.random() * 1000;
+          enemy.shootTimer = Math.random() * 1000;
+        }
+          if (timerRef.current % 1000 >= enemy.shootTimer) {
+          enemy.shootTimer = 1000;
+          if (enemy.type === "ufo") {
+            nextEnemyBullets.push({ id: idRef.current++, height: 8, width: 20, left: enemy.left - 15, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+          } else if (enemy.type === "ironman") {
+            nextEnemyBullets.push({ id: idRef.current++, height: 8, width: 24, left: enemy.left - 23, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+          } else {
+            nextEnemyBullets.push({ id: idRef.current++, height: 15, width: 15, left: enemy.left - 14, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+          }
+        }
+        if (timerRef.current % 1000 >= enemy.moveTimer) {
+          enemy.moveTimer = 1000;
+          const chance = Math.random();
+          if (enemy.type === "ufo") {
+            if (chance < 0.3333) {
+              enemy.top -= 20;
+              if (enemy.top < 0) enemy.top = 0;
+            } else if (chance < 0.6666) {
+              enemy.top += 20;
+              if (enemy.top > verticalSize - enemy.height) enemy.top = verticalSize - enemy.height;
             }
-          } else if (
-            newBullet.left > 0 &&
-            newBullet.top > 0 &&
-            newBullet.top < verticalSize - newBullet.height
-          ) {
-            newEnemyBullets.push(newBullet);
-          }
-        }
-        if (playerH !== playerHealth) setPlayerHealth(playerH);
-        return newEnemyBullets;
-      });
-
-      // Remove dead enemies and add waves
-      setCurrentEnemies((prevEnemies) => {
-        const alive = prevEnemies.length !== 0 ? prevEnemies.filter((e) => e.health > 0) : [];
-        let current = alive.slice();
-        let wave;
-        if (props.timer > 3000) {
-          wave = props.useWave(0);
-          if (wave !== false) current.push(...wave);
-
-          if (current.length === 0 || props.timer >= 13000) {
-            wave = props.useWave(1);
-            if (wave !== false) current.push(...wave);
-          }
-
-          if (current.length === 0 || props.timer >= 23000) {
-            wave = props.useWave(2);
-            if (wave !== false) current.push(...wave);
-          }
-        }
-
-        // Player wins if no enemies after final wave
-        if (current.length === 0 && props.timer > 23000) {
-          props.calculateScore(playerHealth);
-          props.hasWon();
-        }
-
-        // Enemies actions (move/shoot)
-        for (let enemy of current) {
-          if (props.timer % 1000 === 0) {
-            enemy.moveTimer = Math.random() * 1000;
-            enemy.shootTimer = Math.random() * 1000;
-          }
-          if (props.timer % 1000 >= enemy.shootTimer) {
-            enemy.shootTimer = 1000;
-            if (enemy.type === "ufo") {
-              setEnemyBullets((prev) => [...prev, {
-                height: 8,
-                width: 20,
-                left: enemy.left - 15,
-                top: enemy.top + enemy.height / 2 - 5,
-                type: enemy.type,
-              }]);
-            } else if (enemy.type === "ironman") {
-              setEnemyBullets((prev) => [...prev, {
-                height: 8,
-                width: 24,
-                left: enemy.left - 23,
-                top: enemy.top + enemy.height / 2 - 5,
-                type: enemy.type,
-              }]);
-            } else {
-              setEnemyBullets((prev) => [...prev, {
-                height: 15,
-                width: 15,
-                left: enemy.left - 14,
-                top: enemy.top + enemy.height / 2 - 5,
-                type: enemy.type,
-              }]);
-            }
-          }
-          if (props.timer % 1000 >= enemy.moveTimer) {
-            enemy.moveTimer = 1000;
-            const chance = Math.random();
-            if (enemy.type === "ufo") {
-              if (chance < 0.3333) {
-                enemy.top -= 20;
-                if (enemy.top < 0) enemy.top = 0;
-              } else if (chance < 0.6666) {
-                enemy.top += 20;
-                if (enemy.top > verticalSize - enemy.height) enemy.top = verticalSize - enemy.height;
-              }
-            } else {
-              if (chance < 0.3333) {
-                enemy.left -= 20;
-                if (enemy.left < 0) enemy.left = 0;
-              } else if (chance < 0.6666) {
-                enemy.left += 20;
-                if (enemy.left > horizontalSize - enemy.width) enemy.left = horizontalSize - enemy.width;
-              }
+          } else {
+            if (chance < 0.3333) {
+              enemy.left -= 20;
+              if (enemy.left < 0) enemy.left = 0;
+            } else if (chance < 0.6666) {
+              enemy.left += 20;
+              if (enemy.left > horizontalSize - enemy.width) enemy.left = horizontalSize - enemy.width;
             }
           }
         }
+      }
 
-        props.calculateScore(playerHealth);
-        return current;
-      });
+      // Player wins if no enemies after final wave
+        if (nextEnemies.length === 0 && timerRef.current > 23000) {
+          // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
+          const t1 = setTimeout(() => { if (isMountedRef.current) calculateScoreRef.current && calculateScoreRef.current(nextPlayerHealth); }, 0);
+          const t2 = setTimeout(() => { if (isMountedRef.current) hasWonRef.current && hasWonRef.current(); }, 0);
+          timeoutsRef.current.push(t1, t2);
+        }
+
+        // schedule score update (was previously called each tick)
+  const t3 = setTimeout(() => { if (isMountedRef.current) calculateScoreRef.current && calculateScoreRef.current(nextPlayerHealth); }, 0);
+        timeoutsRef.current.push(t3);
+
+      // commit state updates and update refs
+  setPlayerBullets(nextPlayerBullets);
+      playerBulletsRef.current = nextPlayerBullets;
+
+  setEnemyBullets(nextEnemyBullets);
+      enemyBulletsRef.current = nextEnemyBullets;
+
+  setCurrentEnemies(nextEnemies);
+      currentEnemiesRef.current = nextEnemies;
+
+      setPlayerHealth(nextPlayerHealth);
+      playerHealthRef.current = nextPlayerHealth;
     }, 30);
 
     focusDiv();
-    return () => clearInterval(loop);
+    return () => {
+      clearInterval(loop);
+      // clear any queued timeouts
+      for (let t of timeoutsRef.current) clearTimeout(t);
+      timeoutsRef.current = [];
+      // clear auto-shoot interval if active
+      if (shootInterval.current) {
+        clearInterval(shootInterval.current);
+        shootInterval.current = null;
+      }
+      isMountedRef.current = false;
+    };
   // currentEnemies and playerHealth intentionally not added to deps to mimic original behaviour
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.timer]);
+  }, []);
 
   useEffect(() => {
     if (props.isRunning === true) focusDiv();
   }, [props.isRunning]);
 
   const handleShoot = () => {
-    setTimeout(() => {
+      setTimeout(() => {
       const now = Date.now();
       if (now - lastShotTime.current < delayBetweenShots.current) return;
       lastShotTime.current = now;
 
-      props.shoot();
+      // call parent shoot via ref to ensure parent shot counter updates
+      shootRef.current && shootRef.current();
       setPlayerBullets((prev) => [
         ...prev,
         {
+          id: idRef.current++,
           height: 10,
           width: 10,
           left: 9 + playerWidth,
@@ -231,21 +268,6 @@ const Game = (props) => {
         },
       ]);
     }, 10);
-  };
-
-  const handleEnemyShoot = () => {
-    setEnemyBullets((prev) => {
-      const next = prev.slice();
-      for (let enemy of currentEnemies) {
-        next.push({
-          height: 10,
-          width: 10,
-          left: enemy.left - 9,
-          top: enemy.top + enemy.height / 2 - 5,
-        });
-      }
-      return next;
-    });
   };
 
   const movePlayerTo = (y) => {
@@ -338,7 +360,7 @@ const Game = (props) => {
   const renderPlayerBullets = () =>
     playerBullets.map((bullet, index) => (
       <div
-        key={index + bullet.top.toString()}
+  key={bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`}
         style={{
           height: `${bullet.height - 1}px`,
           width: `${bullet.width - 1}px`,
@@ -352,7 +374,7 @@ const Game = (props) => {
   const renderEnemyBullets = () =>
     enemyBullets.map((bullet, index) => (
       <div
-        key={index + bullet.top.toString()}
+  key={bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`}
         style={{
           height: `${bullet.height - 1}px`,
           width: `${bullet.width - 1}px`,
@@ -373,7 +395,7 @@ const Game = (props) => {
           top: `${enemy.top}px`,
         }}
         className={`enemy ${enemy.type}`}
-        key={index + enemy.left.toString()}
+  key={enemy.id !== undefined && enemy.id !== null ? enemy.id : `${index}-${enemy.left}`}
       ></div>
     ));
 
