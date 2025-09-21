@@ -1,140 +1,112 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Game from './Game';
 import Instructions from '../Instructions';
 import Levels from '../Levels';
 
-class GameContainer extends Component {
-    constructor() {
-        super();
-        this.state = {
-            timer: 0,
-            isRunning: "unstarted",
-            hasWon: false,
-            shotsFired: 0,
-            score: 0
-        }
+const GameContainer = (props) => {
+    const [timer, setTimer] = useState(0);
+    const [isRunning, setIsRunning] = useState('unstarted');
+    const [hasWon, setHasWon] = useState(false);
+    const [shotsFired, setShotsFired] = useState(0);
+    const [score, setScore] = useState(0);
 
-        this.hasWon = this.hasWon.bind(this);
-        this.hasLost = this.hasLost.bind(this);
-        this.startGame = this.startGame.bind(this);
-        this.restartGame = this.restartGame.bind(this);
-        this.calculateScore = this.calculateScore.bind(this);
-        this.shoot = this.shoot.bind(this);
-    }
-
-    componentDidMount() {
-        setInterval(() => {
-            this.setState(prevState => {
-                if (prevState.isRunning === true) {
-                    return {
-                        timer: prevState.timer + 20
-                    }
-                } else {
-                    return {
-                        timer: prevState.timer
-                    }
-                }
+    useEffect(() => {
+        const t = setInterval(() => {
+            setTimer(prev => {
+                if (isRunning === true) return prev + 20;
+                return prev;
             })
-        }, 20)
-    }
+        }, 20);
+        return () => clearInterval(t);
+    }, [isRunning]);
 
-    hasWon() {
-        this.setState({
-            hasWon: true,
-            isRunning: false
-        });
-    }
+    const hasWonHandler = () => {
+        setHasWon(true);
+        setIsRunning(false);
+    };
 
-    hasLost() {
-        this.setState({
-            hasWon: false,
-            isRunning: false
-        });
-    }
+    const hasLostHandler = () => {
+        setHasWon(false);
+        setIsRunning(false);
+    };
 
-    startGame() {
-        this.props.setHasPlayed(true)
-        this.setState({isRunning: true})
-    }
+    const startGame = () => {
+        props.setHasPlayed(true);
+        setIsRunning(true);
+    };
 
-    restartGame() {
-        this.props.resetLevel();
-        this.setState({
-            timer: 0,
-            isRunning: true,
-            hasWon: false,
-            shotsFired: 0,
-            score: 0
-        })
-    }
+    const restartGame = () => {
+        props.resetLevel();
+        setTimer(0);
+        setIsRunning(true);
+        setHasWon(false);
+        setShotsFired(0);
+        setScore(0);
+    };
 
-    shoot() {
-        this.setState(prevState => {
-            return {shotsFired: prevState.shotsFired + 1}
-        })
-    }
+    const shoot = () => {
+        setShotsFired(prev => prev + 1);
+    };
 
-    calculateScore(health) {
-        let score = 53000 - this.state.timer;
-        if (score < 0) score = 0;
-        score += 30000 + (1000 * health) - (100 * this.state.shotsFired)
-        this.setState({score});
-    }
+    const calculateScore = (health) => {
+        let s = 53000 - timer;
+        if (s < 0) s = 0;
+        s += 30000 + (1000 * health) - (100 * shotsFired);
+        setScore(s);
+    };
 
-    render() {
-        let displayComponent
-        if (!this.props.hasPlayed) {
-            displayComponent = (
-                <div className="gameWithInstructions">
-                    <div className="instructionsContainer">
-                        <Instructions />
-                        <Levels setLevel={this.props.setLevel} level={this.props.level} />
-                    </div>
-                    <button onClick={this.startGame} className="start">START GAME</button>
+    let displayComponent;
+    if (!props.hasPlayed) {
+        displayComponent = (
+            <div className="gameWithInstructions">
+                <div className="instructionsContainer">
+                    <Instructions />
+                    <Levels setLevel={props.setLevel} level={props.level} />
                 </div>
-            )
-        } else if (this.state.isRunning === true) {
-            displayComponent = (
-                <Game
-                    timer={this.state.timer}
-                    hasWon={this.hasWon}
-                    hasLost={this.hasLost}
-                    startGame={this.startGame}
-                    useWave={this.props.useWave}
-                    shoot={this.shoot}
-                    calculateScore={this.calculateScore}
-                    level={this.props.level}
-                    currentScore={this.state.score}
-                />
-            )
-        } else if (this.state.hasWon) {
-            displayComponent = (
-                <div className="gameResults">
-                    <h1>You Won!</h1>
-                    <div className="scoreResults">
-                        <h2>Score</h2>
-                        <h3>{this.state.score}</h3>
-                    </div>
-                    <Levels setLevel={this.props.setLevel} level={this.props.level} />
-                    <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
+                <button onClick={startGame} className="start">START GAME</button>
+            </div>
+        )
+    } else if (isRunning === true) {
+        displayComponent = (
+            <Game
+                timer={timer}
+                hasWon={hasWonHandler}
+                hasLost={hasLostHandler}
+                startGame={startGame}
+                useWave={props.useWave}
+                shoot={shoot}
+                calculateScore={calculateScore}
+                level={props.level}
+                currentScore={score}
+            />
+        )
+    } else if (hasWon) {
+        displayComponent = (
+            <div className="gameResults">
+                <h1>You Won!</h1>
+                <div className="scoreResults">
+                    <h2>Score</h2>
+                    <h3>{score}</h3>
                 </div>
-            )
-        } else if (!this.state.hasWon) {
-            displayComponent = (
-                <div className="gameResults">
-                    <h1>Game Over</h1>
-                    <Levels setLevel={this.props.setLevel} level={this.props.level} />
-                    <button onClick={this.restartGame} className="start">PLAY AGAIN</button>
-                </div>
-            )
-        }
-
-        return (
-            <div className="gamePage">
-                {displayComponent}
+                <Levels setLevel={props.setLevel} level={props.level} />
+                <button onClick={restartGame} className="start">PLAY AGAIN</button>
+            </div>
+        )
+    } else if (!hasWon) {
+        displayComponent = (
+            <div className="gameResults">
+                <h1>Game Over</h1>
+                <Levels setLevel={props.setLevel} level={props.level} />
+                <button onClick={restartGame} className="start">PLAY AGAIN</button>
             </div>
         )
     }
+
+    return (
+        <div className="gamePage">
+            {displayComponent}
+        </div>
+    )
 }
 
 export default GameContainer;
