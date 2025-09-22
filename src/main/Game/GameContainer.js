@@ -10,6 +10,7 @@ const GameContainer = (props) => {
     const [isPaused, setIsPaused] = useState(false);
     const [hasWon, setHasWon] = useState(false);
     const [shotsFired, setShotsFired] = useState(0);
+    const [successfulShotsFired, setSuccessfulShotsFired] = useState(0);
     const [score, setScore] = useState(0);
     const [playerLocation, setPlayerLocation] = useState(155);
     const [playerHealth, setPlayerHealth] = useState(10);
@@ -18,6 +19,8 @@ const GameContainer = (props) => {
     const [enemyBullets, setEnemyBullets] = useState([]);
     const pauseFn = useRef(null);
     const resumeFn = useRef(null);
+
+    console.log(score)
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -45,6 +48,7 @@ const GameContainer = (props) => {
         setIsPaused(false);
         setHasWon(false);
         setShotsFired(0);
+        setSuccessfulShotsFired(0);
         setScore(0);
         setPlayerHealth(10);
         setEnemies([]);
@@ -66,11 +70,32 @@ const GameContainer = (props) => {
         setShotsFired(prev => prev + 1);
     };
 
-    const calculateScore = (health) => {
-        let s = 53000 - timer;
-        if (s < 0) s = 0;
-        s += 30000 + (1000 * health) - (100 * shotsFired);
-        setScore(s);
+    const hit = () => {
+        setSuccessfulShotsFired(prev => prev + 1);
+    }
+
+    const calculateCurrentScore = () => {
+        // 50000 starting time bonus, lowers per ms spent in round
+        let timerBonus = 53000 - timer;
+        if (timerBonus < 0) timerBonus = 0;
+
+        // 10000 health bonus, -1000 per hit taken
+        const healthBonus = 10000 - (10 - playerHealth) * 1000 // 
+
+        // 10000 accuracy bonus, -100 per % below 100
+        let accuracyBonus = 10000
+        if (shotsFired) accuracyBonus = 10000 * successfulShotsFired / shotsFired
+
+        return Math.round(timerBonus + healthBonus + accuracyBonus)
+    };
+
+    const calculateFinalScore = () => {
+        let levelBonus = 0
+        if (props.level === 1) levelBonus = 20000
+        if (props.level === 2) levelBonus = 40000
+        if (props.level === 3) levelBonus = 60000
+
+        return levelBonus + calculateCurrentScore()
     };
 
     let displayComponent;
@@ -104,9 +129,9 @@ const GameContainer = (props) => {
                     startGame={startGame}
                     useWave={props.useWave}
                     shoot={shoot}
-                    calculateScore={calculateScore}
+                    hit={hit}
                     level={props.level}
-                    currentScore={score}
+                    currentScore={calculateCurrentScore()}
                     playerLocation={playerLocation}
                     setPlayerLocation={setPlayerLocation}
                     playerHealth={playerHealth}
@@ -126,7 +151,7 @@ const GameContainer = (props) => {
                 <h1>You Won!</h1>
                 <div className="scoreResults">
                     <h2>Score</h2>
-                    <h3>{score}</h3>
+                    <h3>{calculateFinalScore()}</h3>
                 </div>
                 <Levels setLevel={props.setLevel} level={props.level} />
                 <button onClick={restartGame} className="start">PLAY AGAIN</button>

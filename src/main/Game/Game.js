@@ -19,6 +19,8 @@ const Game = (props) => {
   const lastShotTime = useRef(0);
   const gameRef = useRef(null);
   const isMountedRef = useRef(true);
+
+  // refs to latest parent callbacks to avoid stale closures inside the loop
   const timerRef = useRef(props.timer);
   const enemiesRef = useRef(props.enemies);
   const playerBulletsRef = useRef(props.playerBullets);
@@ -26,11 +28,6 @@ const Game = (props) => {
   const playerHealthRef = useRef(props.playerHealth);
   const playerLocationRef = useRef(props.playerLocation);
   const idRef = useRef(1);
-  // refs to latest parent callbacks to avoid stale closures inside the loop
-  const calculateScoreRef = useRef(props.calculateScore);
-  const shootRef = useRef(props.shoot);
-  const hasWonRef = useRef(props.hasWon);
-  const hasLostRef = useRef(props.hasLost);
 
   // Helper: focus game div
   const focusDiv = () => {
@@ -92,24 +89,10 @@ const Game = (props) => {
     return () => window.removeEventListener("resize", updateScale);
   }, []);
 
+  // keep refs in sync with state
   useEffect(() => {
     timerRef.current = props.timer;
   }, [props.timer]);
-
-  useEffect(() => {
-    calculateScoreRef.current = props.calculateScore;
-  }, [props.calculateScore]);
-  useEffect(() => {
-    shootRef.current = props.shoot;
-  }, [props.shoot]);
-  useEffect(() => {
-    hasWonRef.current = props.hasWon;
-  }, [props.hasWon]);
-  useEffect(() => {
-    hasLostRef.current = props.hasLost;
-  }, [props.hasLost]);
-
-  // keep refs in sync with state
   useEffect(() => {
     enemiesRef.current = props.enemies;
   }, [props.enemies]);
@@ -156,6 +139,7 @@ const Game = (props) => {
           ) {
             enemy.health -= 1;
             hit = true;
+            props.hit()
             break;
           }
         }
@@ -297,23 +281,10 @@ const Game = (props) => {
       if (nextEnemies.length === 0 && timerRef.current > 23000) {
         // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
         const t1 = setTimeout(() => {
-          if (isMountedRef.current)
-            calculateScoreRef.current &&
-              calculateScoreRef.current(nextPlayerHealth);
+          if (isMountedRef.current) props.hasWon();
         }, 0);
-        const t2 = setTimeout(() => {
-          if (isMountedRef.current) hasWonRef.current && hasWonRef.current();
-        }, 0);
-        timeoutsRef.current.push(t1, t2);
+        timeoutsRef.current.push(t1);
       }
-
-      // schedule score update (was previously called each tick)
-      const t3 = setTimeout(() => {
-        if (isMountedRef.current)
-          calculateScoreRef.current &&
-            calculateScoreRef.current(nextPlayerHealth);
-      }, 0);
-      timeoutsRef.current.push(t3);
 
       // commit state updates and update refs
       props.setPlayerBullets(nextPlayerBullets);
@@ -356,7 +327,7 @@ const Game = (props) => {
       lastShotTime.current = now;
 
       // call parent shoot via ref to ensure parent shot counter updates
-      shootRef.current && shootRef.current();
+      props.shoot();
       const spawnTop = playerLocationRef.current + playerHeight / 2 - 5;
       props.setPlayerBullets((prev) => [
         ...prev,
