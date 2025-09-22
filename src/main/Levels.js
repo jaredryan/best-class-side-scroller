@@ -1,28 +1,27 @@
 import React from 'react';
-import { Card, CardText } from 'material-ui/Card';
 
 const Levels = (props) => {
-    const numberStyle =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: "rgb(235, 235, 235)"}
+    const numberStyle =  {width: "68px", height: "68px", textAlign: "center", display: "inline-block", paddingBottom: "0px", paddingTop: "2px", backgroundColor: "rgb(60, 60, 60)"}
     const highlightedStyle = { ...numberStyle, backgroundColor: "#F2583E" }
 
-    const textStyle = {color: "black", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
+    const textStyle = {color: "white", fontSize: "30px", paddingTop: "10px", paddingBottom: "4px", fontWeight: 500}
 
     return (
         <div className="levelButtons">
-            <Card style={{width: "204px", height: "136px", textAlign: "center", fontSize: "22px", fontWeight: 500, margin: "auto"}}>
-                <CardText style={{fontSize: "22px", height: "68px", paddingTop: "19px", color: "#F2583E"}}>Select Difficulty</CardText>
+            <div style={{width: "204px", height: "136px", textAlign: "center", fontSize: "22px", fontWeight: 500, margin: "auto"}}>
+                <div style={{fontSize: "22px", height: "68px", paddingTop: "19px", color: "#F2583E", background: 'black'}}>Select Difficulty</div>
                 <div className="buttons">
-                    <Card onClick={() => props.setLevel(1)} style={props.level === 1 ? highlightedStyle : numberStyle}>
-                        <CardText style={textStyle}>1</CardText>
-                    </Card>
-                    <Card onClick={() => props.setLevel(2)} style={props.level === 2 ? highlightedStyle : numberStyle}>
-                        <CardText style={textStyle}>2</CardText>
-                    </Card>
-                    <Card onClick={() => props.setLevel(3)} style={props.level === 3 ? highlightedStyle : numberStyle}>
-                        <CardText style={textStyle}>3</CardText>
-                    </Card>
+                    <div onClick={() => props.setLevel(1)} style={props.level === 1 ? highlightedStyle : numberStyle}>
+                        <div style={textStyle}>1</div>
+                    </div>
+                    <div onClick={() => props.setLevel(2)} style={props.level === 2 ? highlightedStyle : numberStyle}>
+                        <div style={textStyle}>2</div>
+                    </div>
+                    <div onClick={() => props.setLevel(3)} style={props.level === 3 ? highlightedStyle : numberStyle}>
+                        <div style={textStyle}>3</div>
+                    </div>
                 </div>
-            </Card>
+            </div>
         </div>
     )
     

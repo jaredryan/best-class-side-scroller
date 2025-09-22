@@ -1,7 +1,3 @@
-/* ************************************************************ */
-/* ************************** elements ************************ */
-/* ************************************************************ */
-
 * {
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
@@ -18,9 +14,6 @@ body {
     margin: 0;
 }
 
-form p {
-    color: firebrick;
-}
 /* ************************************************************ */
 /* ************************** enemies ************************* */
 /* ************************************************************ */
@@ -29,11 +22,31 @@ form p {
     position: absolute;
 }
 
+/* Per-type sizes moved to CSS for clarity */
+.enemy.ufo {
+    height: 29px;
+    width: 50px;
+}
+.enemy.girl {
+    height: 50px;
+    width: 35px;
+}
+.enemy.ironman {
+    height: 50px;
+    width: 34px;
+}
+
 .ufo {
     background-image: url("images/ufo.gif");
     background-size: 1200%;
     -webkit-animation: ufoMove .8s steps(12) infinite;
             animation: ufoMove .8s steps(12) infinite;
+}
+
+/* High-specificity playing states to force animations when needed */
+.enemy.playing.ufo {
+    -webkit-animation: ufoMove .8s steps(12) infinite !important;
+            animation: ufoMove .8s steps(12) infinite !important;
 }
 
 @-webkit-keyframes ufoMove {
@@ -53,6 +66,11 @@ form p {
             animation: girlMove .4s steps(4) infinite;
 }
 
+.enemy.playing.girl {
+    -webkit-animation: girlMove .4s steps(4) infinite !important;
+            animation: girlMove .4s steps(4) infinite !important;
+}
+
 @-webkit-keyframes girlMove {
     from{ background-position: 0 0; }
     to{ background-position: 1119.2px 0; }
@@ -70,6 +88,33 @@ form p {
     -webkit-animation: ironMove 1s steps(6) infinite;
             animation: ironMove 1s steps(6) infinite;
 }
+
+.enemy.playing.ironman {
+    -webkit-animation: ironMove 1s steps(6) infinite !important;
+            animation: ironMove 1s steps(6) infinite !important;
+}
+
+/* Debug pulse to visually indicate CSS animations applied */
+.debug-pulse {
+    animation: debugPulse 0.4s linear 1;
+}
+
+.debug-border {
+    outline: 2px solid rgba(255, 0, 0, 0.9) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 12px rgba(255,0,0,0.55) !important;
+}
+
+@keyframes debugPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+
+/* Force base animations with !important for diagnosis */
+.enemy.ufo { -webkit-animation: ufoMove .8s steps(12) infinite !important; animation: ufoMove .8s steps(12) infinite !important; }
+.enemy.girl { -webkit-animation: girlMove .4s steps(4) infinite !important; animation: girlMove .4s steps(4) infinite !important; }
+.enemy.ironman { -webkit-animation: ironMove 1s steps(6) infinite !important; animation: ironMove 1s steps(6) infinite !important; }
 
 @-webkit-keyframes ironMove {
     from{ background-position: 0 0; }
@@ -111,10 +156,6 @@ form p {
 /* ************************************************************ */
 /* ************************** classes ************************* */
 /* ************************************************************ */
-
-.app-wrapper{
-    height: 100vh;
-}
 
 .canvas {
     position: relative;
@@ -161,44 +202,6 @@ form p {
     background-color: black;
     background-image: url("images/enemyGirl.png");
     background-size: 470%;
-}
-
-.formBox {
-    text-align: center;
-    padding: 20px;
-    max-width: 400px;
-    width: 90%;
-    margin: auto;
-    background-color: #F7F3E8;
-}
-
-.formDescription {
-    font-weight: 400;
-    font-size: 16px;
-}
-
-.formHeader {
-    margin-top: 0;
-    font-size: 32px;
-    font-weight: 400;
-    margin-bottom: 15px;
-}
-
-.formLink {
-    margin-top: 10px;
-    margin-bottom: 0;
-    color: black;
-}
-
-.formSubHeader {
-    font-size: 22px;
-    font-weight: 400;
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-
-.formLink a {
-    color: rgb(50, 50, 50);
 }
 
 .gameWithInstructions {
@@ -250,8 +253,7 @@ form p {
     left: 0px;
 }
 
-button.start,
-.nav-link h3 {
+button.start {
     font-size: 20px;
     color: white;
     padding: 5px 30px;
@@ -268,6 +270,19 @@ button.start,
     padding-bottom: 0px !important;
 }
 
+.buttons > * {
+    background-color: black;
+    color: white;
+}
+
+.buttons > div:first-of-type {
+    border-right: 1px solid white;
+}
+
+.buttons > div:last-of-type {
+    border-left: 1px solid white;
+}
+
 .buttons:hover {
     cursor: pointer;
 }
@@ -278,40 +293,7 @@ button.start,
     margin: 0;
 }
 
-.nav-links {
-    border-radius: 2px;
-    height: 40px;
-    width: 140px;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.nav-link h3 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-    height: 40px;
-    width: 140px;
-    margin: 0;
-}
-
-.nav-link {
-    background-color: white;
-    margin-top: 12.5px;
-    margin-bottom: 12.5px;
-    border-radius: 2px;
-    height: 40px;
-    width: 140px;
-    position: relative;
-}
-
-button.start:hover,
-.nav-link h3:hover {
+button.start:hover {
     cursor: pointer;
     background-color: rgb(89, 211, 227);
     -webkit-transition-duration: 300ms;
@@ -322,13 +304,6 @@ button.start {
     font-size: 30px;
     display: block;
     border: none;
-}
-
-.errorMessage {
-    font-size: 18px;
-    text-align: center;
-    margin-top: 20px;
-    color: rgb(200, 0, 0);
 }
 
 .gameResults {
@@ -358,8 +333,9 @@ button.start {
     margin: 0;
 }
 
-.hoverH3:hover {
-    cursor: pointer;
+.instructions {
+    background-color: black;
+    color: white;
 }
 
 .instructionsText {
@@ -381,8 +357,8 @@ button.start {
     margin: 0 0 16px;
 }
 
-.instructionHeading.black {
-    color: black;
+.instructionHeading.neutral {
+    color: white;
 }
 
 .controlContainer {
@@ -414,73 +390,10 @@ button.start {
     gap: 50px;
 }
 
-.nav-links {
-    color: white;
-    text-decoration: none;
-}
-
-.navbar-wrapper {
-    margin: auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
-}
-
-.navbar-wrapper-wrapper {
-    width: 100%;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    background-color: #2B3E42;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    height: 65px;
-    -webkit-box-shadow: 0px 0px 2px 2px black;
-            box-shadow: 0px 0px 2px 2px black;
-}
-
-.navbar-wrapper-wrapper .theTitle {
-    color: white;
-    width: 50%;
-    text-align: left;
-    display: inline-block;
-    font-weight: 500;
-    padding-left: 5%;
-    line-height: 24px;
-    font-size: 28px;
-    margin-top: 0;
-    margin-bottom: 0;
-    height: 65px;
-    padding-top: 10px;
-    text-decoration: none;
-}
-
-.navbar-wrapper-wrapper .theTitle:hover {
-    background-color: white;
-    cursor: pointer;
-    color: #2B3E42;
-}
-
-.widthSetter {
-    display: inline-block;
-    width: 50%;
-}
-
 .playerBullet {
     position: absolute;
     border: 1px solid black;
     background-color: grey;
-}
-
-.profileEdit {
-    margin-bottom: 20px;
 }
 
 .score h3 {
@@ -488,23 +401,6 @@ button.start {
     font-weight: 300;
     margin-top: 4px;
     margin-bottom: 4px;
-}
-
-.score span.numberScore {
-    font-size: 20px;
-    font-weight: 500;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: 6px;
-}
-
-.score span.userScore {
-    font-size: 18px;
-    font-weight: 400;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: 10px;
-    color: #F2583E;
 }
 
 .instructionsContainer {
@@ -519,33 +415,6 @@ button.start {
 
 .instructions {
     padding: 20px;
-}
-
-.signUpDiv {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    width: 260px;
-    border: 1px solid black;
-    background-color: white;
-    border-radius: 20px;
-}
-
-.signUpDiv > input {
-    margin-top: 10px;
-    border: .5px solid black;
-    padding: 4px;
-    width: 170px;
 }
 
 .titlePage {
@@ -648,92 +517,6 @@ button.start {
     z-index: -1;
 }
 
-.top-spacing {
-    margin-top: 100px;
-}
-
-.fa-bars,
-.dropdown-content,
-.dropdown-content *,
-.widthSetter.mobile {
-    display: none;
-}
-
-@media (max-width: 1200px) {
-    .navbar-wrapper-wrapper .theTitle {
-        width: 25%;
-    }
-
-    .widthSetter {
-        width: 75%;
-    }
-}
-
-@media (max-width: 700px) {
-    .navbar-wrapper-wrapper {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
-                justify-content: space-between;
-    }
-
-    .navbar-wrapper-wrapper .theTitle {
-        width: 200px;
-    }
-
-    .widthSetter {
-        width: 150px;
-        text-align: center;
-        height: 65px;
-        display: none;
-    }
-
-    .widthSetter:hover {
-        background-color: white;
-        cursor: pointer;
-    }
-
-    .widthSetter:hover .fa-bars {
-        color: #2B3E42;
-    }
-
-    .navbar-wrapper {
-        display: none;
-    }
-
-    .fa-bars {
-        display: inline-block;
-        color: white;
-        font-size: 40px;
-        height: 65px;
-        padding-top: 13px;
-    }
-
-    .dropdown-content * {
-        display: block;
-    }
-
-    .nav-links h3,
-    .nav-link .hoverH3,
-    .nav-links {
-        margin-right: 0;
-        width: 150px;
-    }
-
-    .nav-link {
-        margin-top: 5px;
-        margin-bottom: 0px;
-        margin-right: 0;
-        width: 150px;
-    }
-
-    .widthSetter.mobile {
-        display: inline-block;
-    }
-}
-
 @media (max-width: 555px) {
     .titleText h1 {
         font-size: 50px;
@@ -746,6 +529,5 @@ button.start {
         font-size: 25px;
         font-weight: 500;
         text-shadow: 0px 3px 4px black;
-        /* line-height: 90px; */
     }
 }

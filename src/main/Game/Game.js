@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const Game = (props) => {
-  const [playerLocation, setPlayerLocation] = useState(155);
-  const [verticalSize] = useState(360);
-  const [horizontalSize] = useState(640);
-  const [playerHeight] = useState(35);
-  const [playerWidth] = useState(50);
-  const [playerHealth, setPlayerHealth] = useState(10);
-  const [currentEnemies, setCurrentEnemies] = useState([]);
-  const [playerBullets, setPlayerBullets] = useState([]);
-  const [enemyBullets, setEnemyBullets] = useState([]);
-  const [scale, setScale] = useState(1);
-  const [gameContainerStyleWidth, setGameContainerStyleWidth] = useState({});
-
+  const verticalSize = 360;
+  const horizontalSize = 640;
+  const playerHeight = 35;
+  const playerWidth = 50;
   const maxScale = 1.5;
   const maxVerticalSize = verticalSize * maxScale;
   const maxHorizontalSize = horizontalSize * maxScale;
+
+  const [scale, setScale] = useState(1);
+  const [gameContainerStyleWidth, setGameContainerStyleWidth] = useState({});
 
   const isDragging = useRef(false);
   const shootInterval = useRef(null);
@@ -25,11 +20,11 @@ const Game = (props) => {
   const gameRef = useRef(null);
   const isMountedRef = useRef(true);
   const timerRef = useRef(props.timer);
-  const currentEnemiesRef = useRef(currentEnemies);
-  const playerBulletsRef = useRef(playerBullets);
-  const enemyBulletsRef = useRef(enemyBullets);
-  const playerHealthRef = useRef(playerHealth);
-  const playerLocationRef = useRef(playerLocation);
+  const enemiesRef = useRef(props.enemies);
+  const playerBulletsRef = useRef(props.playerBullets);
+  const enemyBulletsRef = useRef(props.enemyBullets);
+  const playerHealthRef = useRef(props.playerHealth);
+  const playerLocationRef = useRef(props.playerLocation);
   const idRef = useRef(1);
   // refs to latest parent callbacks to avoid stale closures inside the loop
   const calculateScoreRef = useRef(props.calculateScore);
@@ -71,8 +66,10 @@ const Game = (props) => {
   useEffect(() => {
     const updateScale = () => {
       // max scale to fill screen
-      let scaleWidth = Math.min(window.innerWidth, maxHorizontalSize) / horizontalSize;
-      let scaleHeight = Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
+      let scaleWidth =
+        Math.min(window.innerWidth, maxHorizontalSize) / horizontalSize;
+      let scaleHeight =
+        Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
 
       const styleWidth = {
         width: window.innerWidth < horizontalSize ? `100%` : `100vw`,
@@ -85,32 +82,50 @@ const Game = (props) => {
     updateScale();
     window.addEventListener("resize", updateScale);
 
-    if (window.innerWidth <= maxHorizontalSize || window.innerHeight <= maxVerticalSize) {
-      // enterFullscreen()
+    if (
+      window.innerWidth <= maxHorizontalSize ||
+      window.innerHeight <= maxVerticalSize
+    ) {
+      enterFullscreen();
     }
 
-    enterFullscreen()
-    
     return () => window.removeEventListener("resize", updateScale);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // keep latest timer in a ref so the loop can read it without recreating the interval
   useEffect(() => {
     timerRef.current = props.timer;
   }, [props.timer]);
 
-  useEffect(() => { calculateScoreRef.current = props.calculateScore; }, [props.calculateScore]);
-  useEffect(() => { shootRef.current = props.shoot; }, [props.shoot]);
-  useEffect(() => { hasWonRef.current = props.hasWon; }, [props.hasWon]);
-  useEffect(() => { hasLostRef.current = props.hasLost; }, [props.hasLost]);
+  useEffect(() => {
+    calculateScoreRef.current = props.calculateScore;
+  }, [props.calculateScore]);
+  useEffect(() => {
+    shootRef.current = props.shoot;
+  }, [props.shoot]);
+  useEffect(() => {
+    hasWonRef.current = props.hasWon;
+  }, [props.hasWon]);
+  useEffect(() => {
+    hasLostRef.current = props.hasLost;
+  }, [props.hasLost]);
 
   // keep refs in sync with state
-  useEffect(() => { currentEnemiesRef.current = currentEnemies; }, [currentEnemies]);
-  useEffect(() => { playerBulletsRef.current = playerBullets; }, [playerBullets]);
-  useEffect(() => { enemyBulletsRef.current = enemyBullets; }, [enemyBullets]);
-  useEffect(() => { playerHealthRef.current = playerHealth; }, [playerHealth]);
-  useEffect(() => { playerLocationRef.current = playerLocation; }, [playerLocation]);
+  useEffect(() => {
+    enemiesRef.current = props.enemies;
+  }, [props.enemies]);
+  useEffect(() => {
+    playerBulletsRef.current = props.playerBullets;
+  }, [props.playerBullets]);
+  useEffect(() => {
+    enemyBulletsRef.current = props.enemyBullets;
+  }, [props.enemyBullets]);
+  useEffect(() => {
+    playerHealthRef.current = props.playerHealth;
+  }, [props.playerHealth]);
+  useEffect(() => {
+    playerLocationRef.current = props.playerLocation;
+  }, [props.playerLocation]);
 
   // Game loop: runs every 30ms (created once on mount)
   useEffect(() => {
@@ -119,10 +134,11 @@ const Game = (props) => {
       // work with refs to avoid stale closures
       const prevPlayerBullets = playerBulletsRef.current.slice();
       const prevEnemyBullets = enemyBulletsRef.current.slice();
-      const prevEnemies = currentEnemiesRef.current.slice();
+      const prevEnemies = enemiesRef.current.slice();
       let nextPlayerBullets = [];
       let nextEnemyBullets = [];
-      let nextEnemies = prevEnemies.length !== 0 ? prevEnemies.filter((e) => e.health > 0) : [];
+      let nextEnemies =
+        prevEnemies.length !== 0 ? prevEnemies.filter((e) => e.health > 0) : [];
       let nextPlayerHealth = playerHealthRef.current;
 
       // Move player bullets and handle hits
@@ -142,7 +158,8 @@ const Game = (props) => {
             break;
           }
         }
-        if (!hit && newBullet.left < horizontalSize) nextPlayerBullets.push(newBullet);
+        if (!hit && newBullet.left < horizontalSize)
+          nextPlayerBullets.push(newBullet);
       }
 
       // Move enemy bullets and handle player collision
@@ -180,16 +197,36 @@ const Game = (props) => {
       // Add enemies as specified by the waves (only when appropriate)
       if (timerRef.current > 3000) {
         let wave = props.useWave(0);
-  if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+        if (wave !== false)
+          nextEnemies.push(
+            ...wave.map((e) => ({
+              ...e,
+              id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+            }))
+          );
 
         if (nextEnemies.length === 0 || timerRef.current >= 13000) {
           wave = props.useWave(1);
-          if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+          if (wave !== false)
+            nextEnemies.push(
+              ...wave.map((e) => ({
+                ...e,
+                id:
+                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+              }))
+            );
         }
 
         if (nextEnemies.length === 0 || timerRef.current >= 23000) {
           wave = props.useWave(2);
-          if (wave !== false) nextEnemies.push(...wave.map(e => ({ ...e, id: (e.id !== undefined && e.id !== null) ? e.id : idRef.current++ })));
+          if (wave !== false)
+            nextEnemies.push(
+              ...wave.map((e) => ({
+                ...e,
+                id:
+                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+              }))
+            );
         }
       }
 
@@ -199,14 +236,35 @@ const Game = (props) => {
           enemy.moveTimer = Math.random() * 1000;
           enemy.shootTimer = Math.random() * 1000;
         }
-          if (timerRef.current % 1000 >= enemy.shootTimer) {
+        if (timerRef.current % 1000 >= enemy.shootTimer) {
           enemy.shootTimer = 1000;
           if (enemy.type === "ufo") {
-            nextEnemyBullets.push({ id: idRef.current++, height: 8, width: 20, left: enemy.left - 15, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+            nextEnemyBullets.push({
+              id: idRef.current++,
+              height: 8,
+              width: 20,
+              left: enemy.left - 15,
+              top: enemy.top + enemy.height / 2 - 5,
+              type: enemy.type,
+            });
           } else if (enemy.type === "ironman") {
-            nextEnemyBullets.push({ id: idRef.current++, height: 8, width: 24, left: enemy.left - 23, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+            nextEnemyBullets.push({
+              id: idRef.current++,
+              height: 8,
+              width: 24,
+              left: enemy.left - 23,
+              top: enemy.top + enemy.height / 2 - 5,
+              type: enemy.type,
+            });
           } else {
-            nextEnemyBullets.push({ id: idRef.current++, height: 15, width: 15, left: enemy.left - 14, top: enemy.top + enemy.height / 2 - 5, type: enemy.type });
+            nextEnemyBullets.push({
+              id: idRef.current++,
+              height: 15,
+              width: 15,
+              left: enemy.left - 14,
+              top: enemy.top + enemy.height / 2 - 5,
+              type: enemy.type,
+            });
           }
         }
         if (timerRef.current % 1000 >= enemy.moveTimer) {
@@ -218,7 +276,8 @@ const Game = (props) => {
               if (enemy.top < 0) enemy.top = 0;
             } else if (chance < 0.6666) {
               enemy.top += 20;
-              if (enemy.top > verticalSize - enemy.height) enemy.top = verticalSize - enemy.height;
+              if (enemy.top > verticalSize - enemy.height)
+                enemy.top = verticalSize - enemy.height;
             }
           } else {
             if (chance < 0.3333) {
@@ -226,35 +285,46 @@ const Game = (props) => {
               if (enemy.left < 0) enemy.left = 0;
             } else if (chance < 0.6666) {
               enemy.left += 20;
-              if (enemy.left > horizontalSize - enemy.width) enemy.left = horizontalSize - enemy.width;
+              if (enemy.left > horizontalSize - enemy.width)
+                enemy.left = horizontalSize - enemy.width;
             }
           }
         }
       }
 
       // Player wins if no enemies after final wave
-        if (nextEnemies.length === 0 && timerRef.current > 23000) {
-          // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
-          const t1 = setTimeout(() => { if (isMountedRef.current) calculateScoreRef.current && calculateScoreRef.current(nextPlayerHealth); }, 0);
-          const t2 = setTimeout(() => { if (isMountedRef.current) hasWonRef.current && hasWonRef.current(); }, 0);
-          timeoutsRef.current.push(t1, t2);
-        }
+      if (nextEnemies.length === 0 && timerRef.current > 23000) {
+        // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
+        const t1 = setTimeout(() => {
+          if (isMountedRef.current)
+            calculateScoreRef.current &&
+              calculateScoreRef.current(nextPlayerHealth);
+        }, 0);
+        const t2 = setTimeout(() => {
+          if (isMountedRef.current) hasWonRef.current && hasWonRef.current();
+        }, 0);
+        timeoutsRef.current.push(t1, t2);
+      }
 
-        // schedule score update (was previously called each tick)
-  const t3 = setTimeout(() => { if (isMountedRef.current) calculateScoreRef.current && calculateScoreRef.current(nextPlayerHealth); }, 0);
-        timeoutsRef.current.push(t3);
+      // schedule score update (was previously called each tick)
+      const t3 = setTimeout(() => {
+        if (isMountedRef.current)
+          calculateScoreRef.current &&
+            calculateScoreRef.current(nextPlayerHealth);
+      }, 0);
+      timeoutsRef.current.push(t3);
 
       // commit state updates and update refs
-  setPlayerBullets(nextPlayerBullets);
+      props.setPlayerBullets(nextPlayerBullets);
       playerBulletsRef.current = nextPlayerBullets;
 
-  setEnemyBullets(nextEnemyBullets);
+      props.setEnemyBullets(nextEnemyBullets);
       enemyBulletsRef.current = nextEnemyBullets;
 
-  setCurrentEnemies(nextEnemies);
-      currentEnemiesRef.current = nextEnemies;
+      props.setEnemies(nextEnemies);
+      enemiesRef.current = nextEnemies;
 
-      setPlayerHealth(nextPlayerHealth);
+      props.setPlayerHealth(nextPlayerHealth);
       playerHealthRef.current = nextPlayerHealth;
     }, 30);
 
@@ -271,8 +341,8 @@ const Game = (props) => {
       }
       isMountedRef.current = false;
     };
-  // currentEnemies and playerHealth intentionally not added to deps to mimic original behaviour
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // enemies and playerHealth intentionally not added to deps to mimic original behaviour
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -280,7 +350,7 @@ const Game = (props) => {
   }, [props.isRunning]);
 
   const handleShoot = () => {
-      setTimeout(() => {
+    setTimeout(() => {
       const now = Date.now();
       if (now - lastShotTime.current < delayBetweenShots.current) return;
       lastShotTime.current = now;
@@ -288,7 +358,7 @@ const Game = (props) => {
       // call parent shoot via ref to ensure parent shot counter updates
       shootRef.current && shootRef.current();
       const spawnTop = playerLocationRef.current + playerHeight / 2 - 5;
-      setPlayerBullets((prev) => [
+      props.setPlayerBullets((prev) => [
         ...prev,
         {
           id: idRef.current++,
@@ -305,7 +375,7 @@ const Game = (props) => {
     let newY = y - playerHeight / 2; // center bird on touch/click
     if (newY < 0) newY = 0;
     if (newY > verticalSize - playerHeight) newY = verticalSize - playerHeight;
-    setPlayerLocation(newY);
+    props.setPlayerLocation(newY);
   };
 
   const handleTouch = (e) => {
@@ -389,9 +459,13 @@ const Game = (props) => {
   };
 
   const renderPlayerBullets = () =>
-    playerBullets.map((bullet, index) => (
+    props.playerBullets.map((bullet, index) => (
       <div
-  key={bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`}
+        key={
+          bullet.id !== undefined && bullet.id !== null
+            ? bullet.id
+            : `${index}-${bullet.top}`
+        }
         style={{
           height: `${bullet.height - 1}px`,
           width: `${bullet.width - 1}px`,
@@ -403,9 +477,13 @@ const Game = (props) => {
     ));
 
   const renderEnemyBullets = () =>
-    enemyBullets.map((bullet, index) => (
+    props.enemyBullets.map((bullet, index) => (
       <div
-  key={bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`}
+        key={
+          bullet.id !== undefined && bullet.id !== null
+            ? bullet.id
+            : `${index}-${bullet.top}`
+        }
         style={{
           height: `${bullet.height - 1}px`,
           width: `${bullet.width - 1}px`,
@@ -417,7 +495,7 @@ const Game = (props) => {
     ));
 
   const renderEnemies = () =>
-    currentEnemies.map((enemy, index) => (
+    props.enemies.map((enemy, index) => (
       <div
         style={{
           height: `${enemy.height - 1}px`,
@@ -426,7 +504,11 @@ const Game = (props) => {
           top: `${enemy.top}px`,
         }}
         className={`enemy ${enemy.type}`}
-  key={enemy.id !== undefined && enemy.id !== null ? enemy.id : `${index}-${enemy.left}`}
+        key={
+          enemy.id !== undefined && enemy.id !== null
+            ? enemy.id
+            : `${index}-${enemy.left}`
+        }
       ></div>
     ));
 
@@ -439,7 +521,12 @@ const Game = (props) => {
   };
 
   return (
-    <div className="gameDiv" onKeyDown={handleKeyDown} tabIndex="0" ref={gameRef}>
+    <div
+      className="gameDiv"
+      onKeyDown={handleKeyDown}
+      tabIndex="0"
+      ref={gameRef}
+    >
       <div
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -463,7 +550,7 @@ const Game = (props) => {
           <div
             className="player"
             style={{
-              top: `${playerLocation}px`,
+              top: `${props.playerLocation}px`,
               height: `${playerHeight - 1}px`,
               width: `${playerWidth - 1}px`,
             }}
@@ -471,7 +558,7 @@ const Game = (props) => {
           {renderEnemies()}
           {renderPlayerBullets()}
           {renderEnemyBullets()}
-          <div className="gameHealth">HP: {playerHealth}</div>
+          <div className="gameHealth">HP: {props.playerHealth}</div>
           <div className="gameScore">SCORE: {props.currentScore}</div>
         </div>
       </div>

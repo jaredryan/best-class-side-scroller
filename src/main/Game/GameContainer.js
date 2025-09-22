@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Game from './Game';
 import Instructions from '../Instructions';
 import Levels from '../Levels';
+import OrientationWrapper from '../Components/OrientationWrapper'
 
 const GameContainer = (props) => {
     const [timer, setTimer] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [hasWon, setHasWon] = useState(false);
     const [shotsFired, setShotsFired] = useState(0);
     const [score, setScore] = useState(0);
+    const [playerLocation, setPlayerLocation] = useState(155);
+    const [playerHealth, setPlayerHealth] = useState(10);
+    const [enemies, setEnemies] = useState([]);
+    const [playerBullets, setPlayerBullets] = useState([]);
+    const [enemyBullets, setEnemyBullets] = useState([]);
+    const pauseFn = useRef(null);
+    const resumeFn = useRef(null);
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -18,7 +27,7 @@ const GameContainer = (props) => {
             })
         }, 20);
         return () => clearInterval(t);
-    }, [isRunning]);
+    }, [isRunning, isPaused]);
 
     const hasWonHandler = () => {
         setHasWon(true);
@@ -30,18 +39,27 @@ const GameContainer = (props) => {
         setIsRunning(false);
     };
 
+    const resetGameStatus = () => {
+        setTimer(0);
+        setIsRunning(true);
+        setIsPaused(false);
+        setHasWon(false);
+        setShotsFired(0);
+        setScore(0);
+        setPlayerHealth(10);
+        setEnemies([]);
+        setPlayerBullets([]);
+        setEnemyBullets([]);
+    }
+
     const startGame = () => {
         props.setHasPlayed(true);
-        setIsRunning(true);
+        resetGameStatus()
     };
 
     const restartGame = () => {
         props.resetLevel();
-        setTimer(0);
-        setIsRunning(true);
-        setHasWon(false);
-        setShotsFired(0);
-        setScore(0);
+        resetGameStatus();
     };
 
     const shoot = () => {
@@ -49,9 +67,6 @@ const GameContainer = (props) => {
     };
 
     const calculateScore = (health) => {
-        // debug: log score calculation inputs
-        // eslint-disable-next-line no-console
-        console.log('calculateScore called', { timer, shotsFired, health });
         let s = 53000 - timer;
         if (s < 0) s = 0;
         s += 30000 + (1000 * health) - (100 * shotsFired);
@@ -71,17 +86,39 @@ const GameContainer = (props) => {
         )
     } else if (isRunning === true) {
         displayComponent = (
-            <Game
-                timer={timer}
-                hasWon={hasWonHandler}
-                hasLost={hasLostHandler}
-                startGame={startGame}
-                useWave={props.useWave}
-                shoot={shoot}
-                calculateScore={calculateScore}
-                level={props.level}
-                currentScore={score}
-            />
+            <OrientationWrapper
+                onPause={() => {
+                    setIsPaused(true);
+                    if (pauseFn.current) pauseFn.current();
+                }}
+                onResume={() => {
+                    setIsPaused(false);
+                    if (resumeFn.current) resumeFn.current();
+                }}
+            >
+                <Game
+                    isPaused={isPaused}
+                    timer={timer}
+                    hasWon={hasWonHandler}
+                    hasLost={hasLostHandler}
+                    startGame={startGame}
+                    useWave={props.useWave}
+                    shoot={shoot}
+                    calculateScore={calculateScore}
+                    level={props.level}
+                    currentScore={score}
+                    playerLocation={playerLocation}
+                    setPlayerLocation={setPlayerLocation}
+                    playerHealth={playerHealth}
+                    setPlayerHealth={setPlayerHealth}
+                    enemies={enemies}
+                    setEnemies={setEnemies}
+                    playerBullets={playerBullets}
+                    setPlayerBullets={setPlayerBullets}
+                    enemyBullets={enemyBullets}
+                    setEnemyBullets={setEnemyBullets}
+                />
+            </OrientationWrapper>
         )
     } else if (hasWon) {
         displayComponent = (

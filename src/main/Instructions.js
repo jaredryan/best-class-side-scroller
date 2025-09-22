@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card, CardText } from 'material-ui/Card';
 
 const Instructions = () => {
     return (
-        <Card className="instructions">
-            <CardText className="instructionsText">
+        <div className="instructions">
+            <div className="instructionsText">
                 <h4 className="instructionHeading">Controls</h4>
                 <p className="instructionBody">You, the bird on the left, shoot seeds to fight off the invaders coming from the right.</p>
                 <div className="controlContainer">
@@ -32,9 +31,9 @@ const Instructions = () => {
                         <p className="instructionBody standalone"><b>Tip:</b>Tap / Drag / Hold in the middle of the screen will both move and shoot!</p>
                     </div>
                 </div>
-                <h4 className="instructionHeading black">Good luck, soldier.</h4>
-            </CardText>
-        </Card>
+                <h4 className="instructionHeading neutral">Good luck, soldier.</h4>
+            </div>
+        </div>
     )
     
 }
