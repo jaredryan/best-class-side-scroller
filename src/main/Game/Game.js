@@ -130,6 +130,8 @@ const Game = (props) => {
   useEffect(() => {
     isMountedRef.current = true;
     const loop = setInterval(() => {
+      if (props.isPaused) return;
+      
       // work with refs to avoid stale closures
       const prevPlayerBullets = playerBulletsRef.current.slice();
       const prevEnemyBullets = enemyBulletsRef.current.slice();
@@ -341,7 +343,7 @@ const Game = (props) => {
       isMountedRef.current = false;
     };
     // enemies and playerHealth intentionally not added to deps to mimic original behaviour
-  }, []);
+  }, [props.isPaused]);
 
   useEffect(() => {
     if (props.isRunning === true) focusDiv();

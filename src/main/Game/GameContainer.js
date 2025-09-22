@@ -22,7 +22,7 @@ const GameContainer = (props) => {
     useEffect(() => {
         const t = setInterval(() => {
             setTimer(prev => {
-                if (isRunning === true) return prev + 20;
+                if (isRunning && !isPaused) return prev + 20;
                 return prev;
             })
         }, 20);
