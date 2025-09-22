@@ -90,7 +90,6 @@ const Game = (props) => {
     }
 
     return () => window.removeEventListener("resize", updateScale);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -342,7 +341,6 @@ const Game = (props) => {
       isMountedRef.current = false;
     };
     // enemies and playerHealth intentionally not added to deps to mimic original behaviour
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
