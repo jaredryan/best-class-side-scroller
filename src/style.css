@@ -9,6 +9,12 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+    color: white;
+}
+
+
+
 body {
     background-color: black;
     margin: 0;
@@ -204,7 +210,7 @@ body {
     background-size: 470%;
 }
 
-.gameWithInstructions {
+.gameWithInstructions, .gameResults {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -230,6 +236,10 @@ body {
     overflow: hidden;
     background: url("./images/space.png") no-repeat center center;
     background-size: cover;
+}
+
+.gameDiv:focus {
+  outline: none;
 }
 
 .gameScore,
@@ -306,15 +316,6 @@ button.start {
     border: none;
 }
 
-.gameResults {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-    color: white;
-}
-
 .gameResults h1 {
     font-size: 40px;
     font-weight: 600;
@@ -327,7 +328,7 @@ button.start {
     margin-top: 0;
 }
 
-.gameResults h3 {
+h3 {
     font-size: 22px;
     font-weight: 400;
     margin: 0;
@@ -368,9 +369,12 @@ button.start {
     width: 100%;
 }
 
-.instructionBody {
+p {
     font-size: 16px;
     font-weight: 300;
+}
+
+.instructionBody {
     margin-top: 4px;
     margin-bottom: 4px;
 }
@@ -394,13 +398,6 @@ button.start {
     position: absolute;
     border: 1px solid black;
     background-color: grey;
-}
-
-.score h3 {
-    font-size: 18px;
-    font-weight: 300;
-    margin-top: 4px;
-    margin-bottom: 4px;
 }
 
 .instructionsContainer {
@@ -515,6 +512,14 @@ button.start {
 .overlay {
     background-color: black;
     z-index: -1;
+}
+
+.sizeAndOrientationWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
 }
 
 @media (max-width: 555px) {

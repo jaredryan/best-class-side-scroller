@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Game from './Game';
+import Game, { verticalSize, horizontalSize, maxVerticalSize, maxHorizontalSize } from './Game';
 import Instructions from '../Instructions';
 import Levels from '../Levels';
-import OrientationWrapper from '../Components/OrientationWrapper'
+import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 
 const GameContainer = (props) => {
     const [timer, setTimer] = useState(0);
@@ -11,16 +11,15 @@ const GameContainer = (props) => {
     const [hasWon, setHasWon] = useState(false);
     const [shotsFired, setShotsFired] = useState(0);
     const [successfulShotsFired, setSuccessfulShotsFired] = useState(0);
-    const [score, setScore] = useState(0);
     const [playerLocation, setPlayerLocation] = useState(155);
     const [playerHealth, setPlayerHealth] = useState(10);
     const [enemies, setEnemies] = useState([]);
     const [playerBullets, setPlayerBullets] = useState([]);
     const [enemyBullets, setEnemyBullets] = useState([]);
+
+    const wrapperRef = useRef(null);
     const pauseFn = useRef(null);
     const resumeFn = useRef(null);
-
-    console.log(score)
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -32,6 +31,8 @@ const GameContainer = (props) => {
         return () => clearInterval(t);
     }, [isRunning, isPaused]);
 
+    useEffect(() => { window.scrollTo(0, 0) }, [props.hasPlayed, hasWon, isRunning])
+
     const hasWonHandler = () => {
         setHasWon(true);
         setIsRunning(false);
@@ -42,28 +43,28 @@ const GameContainer = (props) => {
         setIsRunning(false);
     };
 
-    const resetGameStatus = () => {
+    const resetGameAndStart = () => {
         setTimer(0);
         setIsRunning(true);
         setIsPaused(false);
         setHasWon(false);
         setShotsFired(0);
         setSuccessfulShotsFired(0);
-        setScore(0);
         setPlayerHealth(10);
         setEnemies([]);
         setPlayerBullets([]);
         setEnemyBullets([]);
+        if (wrapperRef.current) wrapperRef.current.requestFullscreen();
     }
 
     const startGame = () => {
         props.setHasPlayed(true);
-        resetGameStatus()
+        resetGameAndStart()
     };
 
     const restartGame = () => {
         props.resetLevel();
-        resetGameStatus();
+        resetGameAndStart();
     };
 
     const shoot = () => {
@@ -79,8 +80,8 @@ const GameContainer = (props) => {
         let timerBonus = 53000 - timer;
         if (timerBonus < 0) timerBonus = 0;
 
-        // 10000 health bonus, -1000 per hit taken
-        const healthBonus = 10000 - (10 - playerHealth) * 1000 // 
+        // 10 hp * 1000 = 10000 possible health bonus, -1000 per hit taken
+        const healthBonus = playerHealth * 1000
 
         // 10000 accuracy bonus, -100 per % below 100
         let accuracyBonus = 10000
@@ -109,9 +110,14 @@ const GameContainer = (props) => {
                 <button onClick={startGame} className="start">START GAME</button>
             </div>
         )
-    } else if (isRunning === true) {
+    } else if (isRunning) {
         displayComponent = (
-            <OrientationWrapper
+            <SizeAndOrientationWrapper
+                ref={wrapperRef}
+                horizontalSize={horizontalSize}
+                verticalSize={verticalSize}
+                maxHorizontalSize={maxHorizontalSize}
+                maxVerticalSize={maxVerticalSize}
                 onPause={() => {
                     setIsPaused(true);
                     if (pauseFn.current) pauseFn.current();
@@ -121,29 +127,34 @@ const GameContainer = (props) => {
                     if (resumeFn.current) resumeFn.current();
                 }}
             >
-                <Game
-                    isPaused={isPaused}
-                    timer={timer}
-                    hasWon={hasWonHandler}
-                    hasLost={hasLostHandler}
-                    startGame={startGame}
-                    useWave={props.useWave}
-                    shoot={shoot}
-                    hit={hit}
-                    level={props.level}
-                    currentScore={calculateCurrentScore()}
-                    playerLocation={playerLocation}
-                    setPlayerLocation={setPlayerLocation}
-                    playerHealth={playerHealth}
-                    setPlayerHealth={setPlayerHealth}
-                    enemies={enemies}
-                    setEnemies={setEnemies}
-                    playerBullets={playerBullets}
-                    setPlayerBullets={setPlayerBullets}
-                    enemyBullets={enemyBullets}
-                    setEnemyBullets={setEnemyBullets}
-                />
-            </OrientationWrapper>
+                {({ scale, gameContainerStyleWidth, wrapperRef }) => (
+                    <Game
+                        scale={scale}
+                        gameContainerStyleWidth={gameContainerStyleWidth}
+                        wrapperRef={wrapperRef}
+                        isPaused={isPaused}
+                        timer={timer}
+                        hasWon={hasWonHandler}
+                        hasLost={hasLostHandler}
+                        startGame={startGame}
+                        useWave={props.useWave}
+                        shoot={shoot}
+                        hit={hit}
+                        level={props.level}
+                        currentScore={calculateCurrentScore()}
+                        playerLocation={playerLocation}
+                        setPlayerLocation={setPlayerLocation}
+                        playerHealth={playerHealth}
+                        setPlayerHealth={setPlayerHealth}
+                        enemies={enemies}
+                        setEnemies={setEnemies}
+                        playerBullets={playerBullets}
+                        setPlayerBullets={setPlayerBullets}
+                        enemyBullets={enemyBullets}
+                        setEnemyBullets={setEnemyBullets}
+                    />
+                )}
+            </SizeAndOrientationWrapper>
         )
     } else if (hasWon) {
         displayComponent = (

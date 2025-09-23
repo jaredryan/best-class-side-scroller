@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Game from "./Game";
 import Title from "./Title";
 
@@ -11,6 +11,8 @@ const App = () => {
   const [hasPlayed, setHasPlayed] = useState(false);
 
   const setPageAsGame = () => setPage("game");
+
+  useEffect(() => { window.scrollTo(0, 0) }, [page])
 
   return (
     <div

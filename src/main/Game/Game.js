@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+
+import useDisablePageGestures from "../Components/useDisablePageGestures";
+import TouchShield from "../Components/TouchShield";
+
+const playerHeight = 35;
+const playerWidth = 50;
+const maxScale = 1.5;
+const delayBetweenShots = 200
+export const verticalSize = 360;
+export const horizontalSize = 640;
+export const maxVerticalSize = verticalSize * maxScale;
+export const maxHorizontalSize = horizontalSize * maxScale;
+
 
 const Game = (props) => {
-  const verticalSize = 360;
-  const horizontalSize = 640;
-  const playerHeight = 35;
-  const playerWidth = 50;
-  const maxScale = 1.5;
-  const maxVerticalSize = verticalSize * maxScale;
-  const maxHorizontalSize = horizontalSize * maxScale;
-
-  const [scale, setScale] = useState(1);
-  const [gameContainerStyleWidth, setGameContainerStyleWidth] = useState({});
-
   const isDragging = useRef(false);
   const shootInterval = useRef(null);
   const timeoutsRef = useRef([]);
-  const delayBetweenShots = useRef(200);
   const lastShotTime = useRef(0);
-  const gameRef = useRef(null);
   const isMountedRef = useRef(true);
 
   // refs to latest parent callbacks to avoid stale closures inside the loop
@@ -29,65 +29,7 @@ const Game = (props) => {
   const playerLocationRef = useRef(props.playerLocation);
   const idRef = useRef(1);
 
-  // Helper: focus game div
-  const focusDiv = () => {
-    if (gameRef.current) {
-      gameRef.current.focus();
-    }
-  };
-
-  const enterFullscreen = () => {
-    const el = gameRef.current;
-    if (!el) return;
-
-    if (el.requestFullscreen) {
-      el.requestFullscreen();
-    } else if (el.webkitRequestFullscreen) {
-      el.webkitRequestFullscreen(); // Safari
-    } else if (el.msRequestFullscreen) {
-      el.msRequestFullscreen(); // IE/Edge
-    }
-  };
-
-  // const exitFullscreen = () => {
-  //   if (document.exitFullscreen) {
-  //     document.exitFullscreen();
-  //   } else if (document.webkitExitFullscreen) {
-  //     document.webkitExitFullscreen();
-  //   } else if (document.msExitFullscreen) {
-  //     document.msExitFullscreen();
-  //   }
-  // };
-
-  // Update scale on mount and window resize
-  useEffect(() => {
-    const updateScale = () => {
-      // max scale to fill screen
-      let scaleWidth =
-        Math.min(window.innerWidth, maxHorizontalSize) / horizontalSize;
-      let scaleHeight =
-        Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
-
-      const styleWidth = {
-        width: window.innerWidth < horizontalSize ? `100%` : `100vw`,
-      };
-
-      setScale(Math.min(scaleWidth, scaleHeight));
-      setGameContainerStyleWidth(styleWidth);
-    };
-
-    updateScale();
-    window.addEventListener("resize", updateScale);
-
-    if (
-      window.innerWidth <= maxHorizontalSize ||
-      window.innerHeight <= maxVerticalSize
-    ) {
-      enterFullscreen();
-    }
-
-    return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  useDisablePageGestures()
 
   // keep refs in sync with state
   useEffect(() => {
@@ -180,19 +122,22 @@ const Game = (props) => {
       }
 
       // Add enemies as specified by the waves (only when appropriate)
-      if (timerRef.current > 3000) {
+      let waveAdded = false
+      if (timerRef.current >= 3000) {
         let wave = props.useWave(0);
-        if (wave !== false)
+        if (wave !== false) {
           nextEnemies.push(
             ...wave.map((e) => ({
               ...e,
               id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
             }))
           );
+          waveAdded = true
+        }
 
         if (nextEnemies.length === 0 || timerRef.current >= 13000) {
           wave = props.useWave(1);
-          if (wave !== false)
+          if (wave !== false) {
             nextEnemies.push(
               ...wave.map((e) => ({
                 ...e,
@@ -200,11 +145,13 @@ const Game = (props) => {
                   e.id !== undefined && e.id !== null ? e.id : idRef.current++,
               }))
             );
+            waveAdded = true
+          }
         }
 
         if (nextEnemies.length === 0 || timerRef.current >= 23000) {
           wave = props.useWave(2);
-          if (wave !== false)
+          if (wave !== false) {
             nextEnemies.push(
               ...wave.map((e) => ({
                 ...e,
@@ -212,6 +159,8 @@ const Game = (props) => {
                   e.id !== undefined && e.id !== null ? e.id : idRef.current++,
               }))
             );
+            waveAdded = true
+          }
         }
       }
 
@@ -277,8 +226,8 @@ const Game = (props) => {
         }
       }
 
-      // Player wins if no enemies after final wave
-      if (nextEnemies.length === 0 && timerRef.current > 23000) {
+      // Player wins if no enemies and there are no more waves to add
+      if (timerRef.current >= 3000 && nextEnemies.length === 0 && !waveAdded) {
         // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
         const t1 = setTimeout(() => {
           if (isMountedRef.current) props.hasWon();
@@ -300,7 +249,6 @@ const Game = (props) => {
       playerHealthRef.current = nextPlayerHealth;
     }, 30);
 
-    focusDiv();
     return () => {
       clearInterval(loop);
       // clear any queued timeouts
@@ -316,14 +264,10 @@ const Game = (props) => {
     // enemies and playerHealth intentionally not added to deps to mimic original behaviour
   }, [props.isPaused]);
 
-  useEffect(() => {
-    if (props.isRunning === true) focusDiv();
-  }, [props.isRunning]);
-
   const handleShoot = () => {
     setTimeout(() => {
       const now = Date.now();
-      if (now - lastShotTime.current < delayBetweenShots.current) return;
+      if (now - lastShotTime.current < delayBetweenShots) return;
       lastShotTime.current = now;
 
       // call parent shoot via ref to ensure parent shot counter updates
@@ -359,8 +303,8 @@ const Game = (props) => {
 
     for (let i = 0; i < e.touches.length; i++) {
       const touch = e.touches[i];
-      const x = (touch.clientX - canvasRect.left) / scale;
-      const y = (touch.clientY - canvasRect.top) / scale;
+      const x = (touch.clientX - canvasRect.left) / props.scale;
+      const y = (touch.clientY - canvasRect.top) / props.scale;
 
       if (x <= twoThirdsPoint) movePlayerTo(y);
       if (x >= oneThirdPoint) {
@@ -379,7 +323,7 @@ const Game = (props) => {
 
     for (let i = 0; i < e.touches.length; i++) {
       const touch = e.touches[i];
-      const x = (touch.clientX - canvasRect.left) / scale;
+      const x = (touch.clientX - canvasRect.left) / props.scale;
 
       if (x > oneThirdPoint) return;
     }
@@ -402,7 +346,7 @@ const Game = (props) => {
     if (shootInterval.current) return;
     shootInterval.current = setInterval(() => {
       handleShoot();
-    }, delayBetweenShots.current);
+    }, delayBetweenShots);
   };
 
   const stopAutoShoot = () => {
@@ -415,7 +359,7 @@ const Game = (props) => {
   const handleMouseMove = (e) => {
     const canvas = e.currentTarget.querySelector(".canvas");
     const canvasRect = canvas.getBoundingClientRect(); // get actual canvas position
-    const y = (e.clientY - canvasRect.top) / scale; // account for top + scale
+    const y = (e.clientY - canvasRect.top) / props.scale; // account for top + scale
     movePlayerTo(y);
 
     if (isDragging.current) {
@@ -496,8 +440,10 @@ const Game = (props) => {
       className="gameDiv"
       onKeyDown={handleKeyDown}
       tabIndex="0"
-      ref={gameRef}
+      ref={props.wrapperRef}
+      style={{ height: "calc(var(--vh, 1vh) * 100)" }}
     >
+      <TouchShield />
       <div
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -508,14 +454,14 @@ const Game = (props) => {
         onTouchEnd={handleTouchEnd}
         onClick={handleClick}
         className="gameContainer"
-        style={gameContainerStyleWidth}
+        style={props.gameContainerStyleWidth}
       >
         <div
           className="canvas"
           style={{
             width: `${horizontalSize}px`,
             height: `${verticalSize}px`,
-            transform: `scale(${scale})`,
+            transform: `scale(${props.scale})`,
           }}
         >
           <div
