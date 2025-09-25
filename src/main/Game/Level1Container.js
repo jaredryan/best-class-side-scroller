@@ -26,8 +26,8 @@ class Level1Container extends Component {
                 {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
                 {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
             ],
-            wave3: false,
-            wave4: false
+            // wave3: false,
+            // wave4: false
         }
 
         this.useWave = this.useWave.bind(this);

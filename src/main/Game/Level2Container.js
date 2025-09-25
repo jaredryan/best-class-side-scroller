@@ -76,18 +76,18 @@ class Level2Container extends Component {
                 {height: 29, width: 50, left: 530, top: 295, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
                 {height: 29, width: 50, left: 530, top: 15, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()}
             ],
-            wave3: [
-                {height: 29, width: 50, left: 555, top: 35, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 29, width: 50, left: 555, top: 155, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 29, width: 50, left: 555, top: 275, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 29, width: 50, left: 555, top: 320, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 29, width: 50, left: 555, top: 11, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 50, width: 35, left: 480, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 50, width: 34, left: 480, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
-                {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
-            ],
-            wave4: false
+            // wave3: [
+            //     {height: 29, width: 50, left: 555, top: 35, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 29, width: 50, left: 555, top: 155, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 29, width: 50, left: 555, top: 275, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 29, width: 50, left: 555, top: 320, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 29, width: 50, left: 555, top: 11, health: 3, type: "ufo", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 50, width: 35, left: 480, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 50, width: 34, left: 480, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 50, width: 35, left: 530, top: 295, health: 3, type: "girl", moveTimer: Math.random(), shootTimer: Math.random()},
+            //     {height: 50, width: 34, left: 530, top: 15, health: 3, type: "ironman", moveTimer: Math.random(), shootTimer: Math.random()}
+            // ],
+            // wave4: false
         });
     }
 

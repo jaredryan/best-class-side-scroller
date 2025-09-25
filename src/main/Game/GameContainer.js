@@ -4,6 +4,8 @@ import Instructions from '../Instructions';
 import Levels from '../Levels';
 import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 
+const playerMaxHealth = 10
+
 const GameContainer = (props) => {
     const [timer, setTimer] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
@@ -12,7 +14,8 @@ const GameContainer = (props) => {
     const [shotsFired, setShotsFired] = useState(0);
     const [successfulShotsFired, setSuccessfulShotsFired] = useState(0);
     const [playerLocation, setPlayerLocation] = useState(155);
-    const [playerHealth, setPlayerHealth] = useState(10);
+    const [playerHealth, setPlayerHealth] = useState(playerMaxHealth);
+    const [playerState, setPlayerState] = useState([]);
     const [enemies, setEnemies] = useState([]);
     const [playerBullets, setPlayerBullets] = useState([]);
     const [enemyBullets, setEnemyBullets] = useState([]);
@@ -50,7 +53,7 @@ const GameContainer = (props) => {
         setHasWon(false);
         setShotsFired(0);
         setSuccessfulShotsFired(0);
-        setPlayerHealth(10);
+        setPlayerHealth(playerMaxHealth);
         setEnemies([]);
         setPlayerBullets([]);
         setEnemyBullets([]);
@@ -74,6 +77,8 @@ const GameContainer = (props) => {
     const hit = () => {
         setSuccessfulShotsFired(prev => prev + 1);
     }
+
+
 
     const calculateCurrentScore = () => {
         // 50000 starting time bonus, lowers per ms spent in round
@@ -145,6 +150,7 @@ const GameContainer = (props) => {
                         playerLocation={playerLocation}
                         setPlayerLocation={setPlayerLocation}
                         playerHealth={playerHealth}
+                        playerMaxHealth={playerMaxHealth}
                         setPlayerHealth={setPlayerHealth}
                         enemies={enemies}
                         setEnemies={setEnemies}
@@ -152,6 +158,8 @@ const GameContainer = (props) => {
                         setPlayerBullets={setPlayerBullets}
                         enemyBullets={enemyBullets}
                         setEnemyBullets={setEnemyBullets}
+                        playerState={playerState}
+                        setPlayerState={setPlayerState}
                     />
                 )}
             </SizeAndOrientationWrapper>
@@ -162,6 +170,13 @@ const GameContainer = (props) => {
                 <h1>You Won!</h1>
                 <div className="scoreResults">
                     <h2>Score</h2>
+                    <div className="explainScore">
+                        <h3><b>Health:</b>{`1000 * HP = ${playerHealth * 1000}`}</h3>
+                        <h3><b>Accuracy:</b>{`10000 * Hits / Shots = ${Math.round(10000 * successfulShotsFired / shotsFired)}`}</h3>
+                        <h3><b>Time:</b>{`50000 - 1000 * Seconds = ${Math.round(53000 - timer)}`}</h3>
+                        <h3><b>Level:</b>{`20000 * Level # = ${props.level * 20000}`}</h3>
+                    </div>
+                    <h3><b>Total Score</b></h3>
                     <h3>{calculateFinalScore()}</h3>
                 </div>
                 <Levels setLevel={props.setLevel} level={props.level} />

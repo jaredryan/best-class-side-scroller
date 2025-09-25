@@ -5,7 +5,7 @@ const Instructions = () => {
         <div className="instructions">
             <div className="instructionsText">
                 <h4 className="instructionHeading">Controls</h4>
-                <p className="instructionBody">You, the bird on the left, shoot seeds to fight off the invaders coming from the right.</p>
+                <p className="instructionBody standalone">You, the bird on the left, shoot seeds to fight off the invaders coming from the right.</p>
                 <div className="controlContainer">
                     <div>
                         <h5>Keyboard</h5>

@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import useDisablePageGestures from "../Components/useDisablePageGestures";
 import TouchShield from "../Components/TouchShield";
 
+const gameInterval = 30
 const playerHeight = 35;
 const playerWidth = 50;
 const maxScale = 1.5;
@@ -11,6 +12,14 @@ export const verticalSize = 360;
 export const horizontalSize = 640;
 export const maxVerticalSize = verticalSize * maxScale;
 export const maxHorizontalSize = horizontalSize * maxScale;
+const enemySpawnAnimationTimer = 300
+const enemyHitAnimationTimer = 200
+const enemyShootAnimationTimer = 150
+const enemyExplodeAnimationTimer = 600
+
+const playerBulletHeight = 6
+const playerBulletWidth = 12
+
 
 
 const Game = (props) => {
@@ -27,7 +36,33 @@ const Game = (props) => {
   const enemyBulletsRef = useRef(props.enemyBullets);
   const playerHealthRef = useRef(props.playerHealth);
   const playerLocationRef = useRef(props.playerLocation);
+  const playerStateRef = useRef(props.playerState);
+
   const idRef = useRef(1);
+
+  const smoothMove = (current, target, speed = 0.1) => {
+    const next = current + (target - current) * speed;
+    if (Math.abs(next - target) < 1) return target; // snap if close
+    return next;
+  };
+
+  const setEnemyAnimation = (enemy, animationName, animationTimer) => {
+    enemy.state.push(animationName)
+    const timeout = setTimeout(() => {
+      enemy.state = enemy.state.filter((animation) => animation !== animationName)
+    }, animationTimer - gameInterval)
+    timeoutsRef.current.push(timeout);
+  }
+
+  const setPlayerAnimation = (state, animationName, animationTimer) => {
+    state.push(animationName)
+    const timeout = setTimeout(() => {
+      if (playerStateRef.current) {
+        props.setPlayerState(playerStateRef.current.filter((animation) => animation !== animationName))
+      }
+    }, animationTimer - gameInterval)
+    timeoutsRef.current.push(timeout);
+  }
 
   useDisablePageGestures()
 
@@ -50,6 +85,9 @@ const Game = (props) => {
   useEffect(() => {
     playerLocationRef.current = props.playerLocation;
   }, [props.playerLocation]);
+  useEffect(() => {
+    playerStateRef.current = props.playerState;
+  }, [props.playerState]);
 
   // Game loop: runs every 30ms (created once on mount)
   useEffect(() => {
@@ -63,9 +101,11 @@ const Game = (props) => {
       const prevEnemies = enemiesRef.current.slice();
       let nextPlayerBullets = [];
       let nextEnemyBullets = [];
-      let nextEnemies =
-        prevEnemies.length !== 0 ? prevEnemies.filter((e) => e.health > 0) : [];
+      let nextEnemies = prevEnemies.length !== 0
+        ? prevEnemies.filter((e) => e.health > 0 || e.state.includes('dying'))
+        : [];
       let nextPlayerHealth = playerHealthRef.current;
+      let nextPlayerState = playerStateRef.current;
 
       // Move player bullets and handle hits
       for (let bullet of prevPlayerBullets) {
@@ -74,6 +114,7 @@ const Game = (props) => {
         let hit = false;
         for (let enemy of nextEnemies) {
           if (
+            !enemy.state.includes('dying') &&
             newBullet.left + 9 >= enemy.left &&
             newBullet.left <= enemy.left + enemy.width &&
             newBullet.top + 9 >= enemy.top &&
@@ -82,6 +123,30 @@ const Game = (props) => {
             enemy.health -= 1;
             hit = true;
             props.hit()
+
+            if (enemy.health <= 0) {
+              let dieAnimationTimer
+              if (enemy.type === 'girl') {
+                dieAnimationTimer = enemyExplodeAnimationTimer
+              } else {
+                dieAnimationTimer = enemyExplodeAnimationTimer
+
+                const boom = document.createElement("div");
+                boom.className = "explosion";
+                boom.style.left = enemy.left;
+                boom.style.top = enemy.top;
+                boom.style.width = enemy.width;
+                boom.style.height = enemy.height;
+
+                const enemyElement = document.getElementById(enemy.id)
+                enemyElement.appendChild(boom);
+              }
+
+              setEnemyAnimation(enemy, 'dying', dieAnimationTimer)
+            } else {
+              setEnemyAnimation(enemy, 'hit', enemyHitAnimationTimer)
+            }
+            
             break;
           }
         }
@@ -109,8 +174,12 @@ const Game = (props) => {
           newBullet.top <= playerLocationRef.current + playerHeight - 1
         ) {
           nextPlayerHealth -= 1;
+
           if (nextPlayerHealth <= 0) {
-            setTimeout(() => props.hasLost && props.hasLost(), 0);
+            setPlayerAnimation(nextPlayerState, 'dying', enemyExplodeAnimationTimer)
+            setTimeout(props.hasLost, enemyExplodeAnimationTimer)
+          } else {
+            setPlayerAnimation(nextPlayerState, 'hit', enemyHitAnimationTimer)
           }
         } else if (
           newBullet.left > 0 &&
@@ -127,10 +196,17 @@ const Game = (props) => {
         let wave = props.useWave(0);
         if (wave !== false) {
           nextEnemies.push(
-            ...wave.map((e) => ({
-              ...e,
-              id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
-            }))
+            ...wave.map((e) => {
+              const enemy = {
+                ...e,
+                id:
+                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                state: [],
+                maxHealth: e.health,
+              }
+              setEnemyAnimation(enemy, 'spawning', enemySpawnAnimationTimer)
+              return enemy
+            })
           );
           waveAdded = true
         }
@@ -139,11 +215,17 @@ const Game = (props) => {
           wave = props.useWave(1);
           if (wave !== false) {
             nextEnemies.push(
-              ...wave.map((e) => ({
-                ...e,
-                id:
-                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
-              }))
+              ...wave.map((e) => {
+                const enemy = {
+                  ...e,
+                  id:
+                    e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                  state: [],
+                  maxHealth: e.health,
+                }
+                setEnemyAnimation(enemy, 'spawning', enemySpawnAnimationTimer)
+                return enemy
+              })
             );
             waveAdded = true
           }
@@ -152,12 +234,19 @@ const Game = (props) => {
         if (nextEnemies.length === 0 || timerRef.current >= 23000) {
           wave = props.useWave(2);
           if (wave !== false) {
+
             nextEnemies.push(
-              ...wave.map((e) => ({
-                ...e,
-                id:
-                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
-              }))
+              ...wave.map((e) => {
+                const enemy = {
+                  ...e,
+                  id:
+                    e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                  state: [],
+                  maxHealth: e.health,
+                }
+                setEnemyAnimation(enemy, 'spawning', enemySpawnAnimationTimer)
+                return enemy
+              })
             );
             waveAdded = true
           }
@@ -166,61 +255,78 @@ const Game = (props) => {
 
       // Enemies move and shoot
       for (let enemy of nextEnemies) {
+        if (enemy.state.includes('dying')) break;
         if (timerRef.current % 1000 === 0) {
           enemy.moveTimer = Math.random() * 1000;
           enemy.shootTimer = Math.random() * 1000;
         }
         if (timerRef.current % 1000 >= enemy.shootTimer) {
           enemy.shootTimer = 1000;
+
+          let bulletWidth
+          let bulletHeight
           if (enemy.type === "ufo") {
-            nextEnemyBullets.push({
-              id: idRef.current++,
-              height: 8,
-              width: 20,
-              left: enemy.left - 15,
-              top: enemy.top + enemy.height / 2 - 5,
-              type: enemy.type,
-            });
+            bulletWidth = 16
+            bulletHeight = 6
           } else if (enemy.type === "ironman") {
-            nextEnemyBullets.push({
-              id: idRef.current++,
-              height: 8,
-              width: 24,
-              left: enemy.left - 23,
-              top: enemy.top + enemy.height / 2 - 5,
-              type: enemy.type,
-            });
+            bulletWidth = 20
+            bulletHeight = 6
           } else {
-            nextEnemyBullets.push({
-              id: idRef.current++,
-              height: 15,
-              width: 15,
-              left: enemy.left - 14,
-              top: enemy.top + enemy.height / 2 - 5,
-              type: enemy.type,
-            });
+            bulletWidth = 12
+            bulletHeight = 12
           }
+
+          nextEnemyBullets.push({
+            id: idRef.current++,
+            height: bulletHeight,
+            width: bulletWidth,
+            left: enemy.left - bulletWidth,
+            top: enemy.top + enemy.height / 2 - bulletHeight / 2,
+            type: enemy.type,
+          });
         }
+
+        // Randomly assign movement target every 1 second or so
         if (timerRef.current % 1000 >= enemy.moveTimer) {
           enemy.moveTimer = 1000;
           const chance = Math.random();
           if (enemy.type === "ufo") {
+            let target = enemy.top
             if (chance < 0.3333) {
-              enemy.top -= 20;
-              if (enemy.top < 0) enemy.top = 0;
+              target = Math.max(enemy.top - 20, 0)
+              if (target < 0) target = 0;
             } else if (chance < 0.6666) {
-              enemy.top += 20;
-              if (enemy.top > verticalSize - enemy.height)
-                enemy.top = verticalSize - enemy.height;
+              target = Math.min(enemy.top + 20, verticalSize - enemy.height);
+            }
+
+            enemy.target = target
+          } else {
+            let target = enemy.left
+            if (chance < 0.3333) {
+              target = Math.max(enemy.left - 20, 0)
+            } else if (chance < 0.6666) {
+              target = Math.min(enemy.left + 20, horizontalSize - enemy.width);
+            }
+
+            enemy.target = target
+          }
+        }
+
+        // Proceed with movement
+        if (enemy.target) {
+          if (enemy.type === "ufo") {
+            enemy.top = smoothMove(enemy.top, enemy.target, 0.1);
+
+            if (Math.abs(enemy.top - enemy.target) < 1) {
+              enemy.top = enemy.target;
+              delete enemy.target
             }
           } else {
-            if (chance < 0.3333) {
-              enemy.left -= 20;
-              if (enemy.left < 0) enemy.left = 0;
-            } else if (chance < 0.6666) {
-              enemy.left += 20;
-              if (enemy.left > horizontalSize - enemy.width)
-                enemy.left = horizontalSize - enemy.width;
+            enemy.left = smoothMove(enemy.left, enemy.target, 0.1);
+            
+            if (Math.abs(enemy.left - enemy.target) < 1) {
+              enemy.left = enemy.target;
+              delete enemy.target
             }
           }
         }
@@ -228,11 +334,7 @@ const Game = (props) => {
 
       // Player wins if no enemies and there are no more waves to add
       if (timerRef.current >= 3000 && nextEnemies.length === 0 && !waveAdded) {
-        // schedule parent updates asynchronously and track the timeout so it can be cleared on unmount
-        const t1 = setTimeout(() => {
-          if (isMountedRef.current) props.hasWon();
-        }, 0);
-        timeoutsRef.current.push(t1);
+        props.hasWon();
       }
 
       // commit state updates and update refs
@@ -247,7 +349,10 @@ const Game = (props) => {
 
       props.setPlayerHealth(nextPlayerHealth);
       playerHealthRef.current = nextPlayerHealth;
-    }, 30);
+
+      props.setPlayerState(nextPlayerState);
+      playerStateRef.current = nextPlayerState;
+    }, gameInterval);
 
     return () => {
       clearInterval(loop);
@@ -265,25 +370,26 @@ const Game = (props) => {
   }, [props.isPaused]);
 
   const handleShoot = () => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const now = Date.now();
       if (now - lastShotTime.current < delayBetweenShots) return;
       lastShotTime.current = now;
 
       // call parent shoot via ref to ensure parent shot counter updates
       props.shoot();
-      const spawnTop = playerLocationRef.current + playerHeight / 2 - 5;
+      const spawnTop = playerLocationRef.current + playerHeight / 2 - playerBulletWidth / 2;
       props.setPlayerBullets((prev) => [
         ...prev,
         {
           id: idRef.current++,
-          height: 10,
-          width: 10,
-          left: 9 + playerWidth,
+          height: playerBulletHeight,
+          width: playerBulletWidth,
+          left: playerBulletWidth + playerWidth,
           top: spawnTop,
         },
       ]);
     }, 10);
+    timeoutsRef.current.push(timeout);
   };
 
   const movePlayerTo = (y) => {
@@ -373,6 +479,27 @@ const Game = (props) => {
     }
   };
 
+  const renderPlayer = () => (
+    <div
+      className={`playerContainer${playerStateRef.current?.length ? ` ${playerStateRef.current.join(' ')}` : ''}`}
+      style={{
+        top: `${props.playerLocation}px`,
+        height: `${playerHeight - 1}px`,
+        width: `${playerWidth - 1}px`,
+      }}
+    >
+      <div className="healthbar">
+        <div
+          className="health"
+          style={{ width: `${(playerHealthRef?.current / props.playerMaxHealth) * 100}%` }}
+        />
+      </div>
+      <div
+        className={`player`}
+      />
+    </div>
+  )
+
   const renderPlayerBullets = () =>
     props.playerBullets.map((bullet, index) => (
       <div
@@ -382,13 +509,13 @@ const Game = (props) => {
             : `${index}-${bullet.top}`
         }
         style={{
-          height: `${bullet.height - 1}px`,
-          width: `${bullet.width - 1}px`,
+          height: `${bullet.height}px`,
+          width: `${bullet.width}px`,
           left: `${bullet.left}px`,
           top: `${bullet.top}px`,
         }}
         className="playerBullet"
-      ></div>
+      />
     ));
 
   const renderEnemyBullets = () =>
@@ -400,31 +527,40 @@ const Game = (props) => {
             : `${index}-${bullet.top}`
         }
         style={{
-          height: `${bullet.height - 1}px`,
-          width: `${bullet.width - 1}px`,
+          height: `${bullet.height}px`,
+          width: `${bullet.width}px`,
           left: `${bullet.left}px`,
           top: `${bullet.top}px`,
         }}
         className={`enemyBullet ${bullet.type}`}
-      ></div>
+      />
     ));
 
   const renderEnemies = () =>
     props.enemies.map((enemy, index) => (
       <div
+        key={enemy.id ? enemy.id : `${index}-${enemy.left}`}
+        id={enemy.id ? enemy.id : `${index}-${enemy.left}`}
         style={{
           height: `${enemy.height - 1}px`,
           width: `${enemy.width - 1}px`,
           left: `${enemy.left}px`,
           top: `${enemy.top}px`,
         }}
-        className={`enemy ${enemy.type}`}
-        key={
-          enemy.id !== undefined && enemy.id !== null
-            ? enemy.id
-            : `${index}-${enemy.left}`
-        }
-      ></div>
+        className={`enemyContainer${enemy.state.length ? ` ${enemy.state.join(' ')}` : ''}`}
+      >
+        <div className="healthbar">
+          <div
+            className="health"
+            style={{ 
+              width: `${(enemy.health / enemy.maxHealth) * 100}%`,
+            }}
+          />
+        </div>
+        <div
+          className={`enemy ${enemy.type}`}
+        />
+      </div>
     ));
 
   const handleKeyDown = (e) => {
@@ -464,18 +600,11 @@ const Game = (props) => {
             transform: `scale(${props.scale})`,
           }}
         >
-          <div
-            className="player"
-            style={{
-              top: `${props.playerLocation}px`,
-              height: `${playerHeight - 1}px`,
-              width: `${playerWidth - 1}px`,
-            }}
-          />
+          {renderPlayer()}
           {renderEnemies()}
           {renderPlayerBullets()}
           {renderEnemyBullets()}
-          <div className="gameHealth">HP: {props.playerHealth}</div>
+          <div className="gameHealth">HP: {playerHealthRef?.current}</div>
           <div className="gameScore">SCORE: {props.currentScore}</div>
         </div>
       </div>

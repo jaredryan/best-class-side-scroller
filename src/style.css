@@ -24,22 +24,92 @@ body {
 /* ************************** enemies ************************* */
 /* ************************************************************ */
 
-.enemy {
+.enemyContainer {
     position: absolute;
 }
 
-/* Per-type sizes moved to CSS for clarity */
-.enemy.ufo {
-    height: 29px;
-    width: 50px;
+.hit {
+  animation: shakeAndFlashRed 200ms ease;
 }
-.enemy.girl {
-    height: 50px;
-    width: 35px;
+
+@keyframes shakeAndFlashRed {
+  0% { filter: brightness(1) }
+  25% { transform: translateX(-4px) }
+  50% { filter: brightness(2) saturate(2); transform: translateX(4px); }
+  75% { transform: translateX(-4px) }
+  100% { filter: brightness(1) }
 }
-.enemy.ironman {
-    height: 50px;
-    width: 34px;
+
+.dying {
+  animation: shakeFlashAndDisappear 600ms ease;
+}
+
+@keyframes shakeFlashAndDisappear {
+  7.6923076923076925% { filter: brightness(1) }
+  15.384615384615385% { transform: translateX(-4px) }
+  23.076923076923077% { filter: brightness(2) saturate(2); transform: translateX(4px); }
+  30.76923076923077% { transform: translateX(-4px) }
+  38.46153846153846% { filter: brightness(1) }
+  46.15384615384615% { transform: translateX(-4px) }
+  53.84615384615385% { filter: brightness(2) saturate(2); transform: translateX(4px); }
+  61.53846153846154% { transform: translateX(-4px); opacity: 1; }
+  69.23076923076923% { filter: brightness(1); opacity: 0.8; }
+  76.92307692307692% { transform: translateX(-4px); opacity: 0.6; }
+  84.61538461538461% { filter: brightness(2) saturate(2); transform: translateX(4px); opacity: 0.4; }
+  92.3076923076923% { transform: translateX(-4px); opacity: 0.2; }
+  100.0% { filter: brightness(1); opacity: 0.0; }
+}
+
+.enemy {
+    width: 100%;
+    height: 100%;
+}
+
+.explosion {
+  overflow: hidden; /* Important to contain the pseudo-elements */
+}
+
+.explosion::before,
+.explosion::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1); /* Adjust color and opacity */
+  animation: explode-radial 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.explosion::before {
+  animation-delay: 0s;
+}
+
+.explosion::after {
+  animation-delay: 0.1s; /* Stagger the bursts */
+}
+
+@keyframes explode-radial {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 150%; /* Adjust explosion size */
+    height: 150%;
+    opacity: 0.25;
+  }
+}
+
+.spawning {
+  animation: spawnIn 300ms ease;
+}
+
+@keyframes spawnIn {
+  0% { opacity: 0; transform: scale(0.5) }
+  100% { opacity: 1; transform: scale(1) }
 }
 
 .ufo {
@@ -50,7 +120,7 @@ body {
 }
 
 /* High-specificity playing states to force animations when needed */
-.enemy.playing.ufo {
+.enemy.ufo {
     -webkit-animation: ufoMove .8s steps(12) infinite !important;
             animation: ufoMove .8s steps(12) infinite !important;
 }
@@ -72,7 +142,7 @@ body {
             animation: girlMove .4s steps(4) infinite;
 }
 
-.enemy.playing.girl {
+.enemy.girl {
     -webkit-animation: girlMove .4s steps(4) infinite !important;
             animation: girlMove .4s steps(4) infinite !important;
 }
@@ -95,32 +165,10 @@ body {
             animation: ironMove 1s steps(6) infinite;
 }
 
-.enemy.playing.ironman {
+.enemy.ironman {
     -webkit-animation: ironMove 1s steps(6) infinite !important;
             animation: ironMove 1s steps(6) infinite !important;
 }
-
-/* Debug pulse to visually indicate CSS animations applied */
-.debug-pulse {
-    animation: debugPulse 0.4s linear 1;
-}
-
-.debug-border {
-    outline: 2px solid rgba(255, 0, 0, 0.9) !important;
-    outline-offset: 2px !important;
-    box-shadow: 0 0 12px rgba(255,0,0,0.55) !important;
-}
-
-@keyframes debugPulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.2; }
-    100% { opacity: 1; }
-}
-
-/* Force base animations with !important for diagnosis */
-.enemy.ufo { -webkit-animation: ufoMove .8s steps(12) infinite !important; animation: ufoMove .8s steps(12) infinite !important; }
-.enemy.girl { -webkit-animation: girlMove .4s steps(4) infinite !important; animation: girlMove .4s steps(4) infinite !important; }
-.enemy.ironman { -webkit-animation: ironMove 1s steps(6) infinite !important; animation: ironMove 1s steps(6) infinite !important; }
 
 @-webkit-keyframes ironMove {
     from{ background-position: 0 0; }
@@ -135,18 +183,36 @@ body {
 /* ************************** player ************************** */
 /* ************************************************************ */
 
-.player {
-    /* border: 1px solid black; */
-    /* background-color: red; */
+.playerContainer {
     position: absolute;
-    background-image: url("images/birdSprite.png");
-    /* overflow: hidden; */
     background-size: 100%;
     width: 50px;
     height: 35px;
+    left: 10px;
+}
+
+.player {
+    background-image: url("images/birdSprite.png");
+    background-size: 100%;
+    width: 100%;
+    height: 100%;
     -webkit-animation: myMove .5s steps(8) infinite;
             animation: myMove .5s steps(8) infinite;
-    left: 10px;
+}
+
+.healthbar {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 4px;
+  background: gray;
+}
+
+.healthbar .health {
+  height: 100%;
+  background: limegreen;
 }
 
 @-webkit-keyframes myMove {
@@ -186,7 +252,6 @@ body {
 
 .enemyBullet {
     position: absolute;
-    border: 1px solid black;
     -webkit-animation: none;
             animation: none;
     background-image: none;
@@ -377,6 +442,15 @@ p {
 .instructionBody {
     margin-top: 4px;
     margin-bottom: 4px;
+    text-align: center;
+}
+
+.instructionControl .instructionBody:first-of-type {
+    text-align: left;
+}
+
+.instructionControl .instructionBody:last-of-type {
+    text-align: right;
 }
 
 .instructionBody.standalone {
@@ -385,6 +459,7 @@ p {
 
 .instructionBody.standalone b {
     margin-right: 8px;
+    text-align: center;
 }
 
 .instructionControl {
@@ -396,8 +471,8 @@ p {
 
 .playerBullet {
     position: absolute;
-    border: 1px solid black;
-    background-color: grey;
+    background-color: brown;
+    border-radius: 50%;
 }
 
 .instructionsContainer {
@@ -520,6 +595,22 @@ p {
     justify-content: center;
     flex-direction: column;
     gap: 25px;
+}
+
+.explainScore {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.explainScore h3 {
+    text-align: left;
+}
+
+.scoreResults b {
+    font-weight: 600;
+    margin-right: 10px;
 }
 
 @media (max-width: 555px) {
