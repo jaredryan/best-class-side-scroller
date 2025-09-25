@@ -399,9 +399,10 @@ h3 {
     margin: 0;
 }
 
-.instructions {
+.instructions, .scoreResults {
     background-color: black;
     color: white;
+    padding: 20px;
 }
 
 .instructionsText {
@@ -483,10 +484,6 @@ p {
     align-items: center;
     flex-direction: column;
     gap: 50px;
-}
-
-.instructions {
-    padding: 20px;
 }
 
 .titlePage {
@@ -601,11 +598,20 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 25px;
+}
+
+.finalScore {
+    font-weight: 500;
+    font-size: 24px;
 }
 
 .explainScore h3 {
     text-align: left;
+}
+
+.emphasis {
+    color: rgb(0, 188, 212);
 }
 
 .scoreResults b {

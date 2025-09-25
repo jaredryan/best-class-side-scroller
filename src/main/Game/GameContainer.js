@@ -176,8 +176,8 @@ const GameContainer = (props) => {
                         <h3><b>Time:</b>{`50000 - 1000 * Seconds = ${Math.round(53000 - timer)}`}</h3>
                         <h3><b>Level:</b>{`20000 * Level # = ${props.level * 20000}`}</h3>
                     </div>
-                    <h3><b>Total Score</b></h3>
-                    <h3>{calculateFinalScore()}</h3>
+                    <h2 className="emphasis"><b>Total Score</b></h2>
+                    <h3 className="finalScore">{calculateFinalScore()}</h3>
                 </div>
                 <Levels setLevel={props.setLevel} level={props.level} />
                 <button onClick={restartGame} className="start">PLAY AGAIN</button>
