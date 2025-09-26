@@ -313,7 +313,7 @@ body {
     background: url("./images/space.jpg") no-repeat center center;
     background-size: cover;
     height: calc(var(--vh, 1vh) * 100);
-    width: 100%;
+    width: 100vw;
 }
 
 .gameDiv:focus {

@@ -84,7 +84,9 @@ const Game = (props) => {
     const timeout = setTimeout(() => {
       if (playerStateRef.current) {
         props.setPlayerState(
-          playerStateRef.current.filter((animation) => animation !== animationName)
+          playerStateRef.current.filter(
+            (animation) => animation !== animationName
+          )
         );
       }
     }, Math.max(0, animationTimer - gameInterval));
@@ -117,12 +119,21 @@ const Game = (props) => {
   }, [props.playerState]);
 
   // Utility: build snapshot Maps from arrays for interpolation
-  const buildSnapshotFromArrays = (playerLoc, playerBullets, enemyBullets, enemies) => {
+  const buildSnapshotFromArrays = (
+    playerLoc,
+    playerBullets,
+    enemyBullets,
+    enemies
+  ) => {
     const player = { left: 10, top: playerLoc };
     const pMap = new Map();
-    (playerBullets || []).forEach((b) => pMap.set(b.id, { left: b.left, top: b.top }));
+    (playerBullets || []).forEach((b) =>
+      pMap.set(b.id, { left: b.left, top: b.top })
+    );
     const eMap = new Map();
-    (enemyBullets || []).forEach((b) => eMap.set(b.id, { left: b.left, top: b.top }));
+    (enemyBullets || []).forEach((b) =>
+      eMap.set(b.id, { left: b.left, top: b.top })
+    );
     const enMap = new Map();
     (enemies || []).forEach((e) =>
       enMap.set(e.id, { left: e.left, top: e.top })
@@ -161,7 +172,9 @@ const Game = (props) => {
       let nextEnemyBullets = [];
       let nextEnemies =
         prevEnemies.length !== 0
-          ? prevEnemies.filter((e) => e.health > 0 || (e.state && e.state.includes("dying")))
+          ? prevEnemies.filter(
+              (e) => e.health > 0 || (e.state && e.state.includes("dying"))
+            )
           : [];
       let nextPlayerHealth = playerHealthRef.current;
       let nextPlayerState = playerStateRef.current;
@@ -172,7 +185,6 @@ const Game = (props) => {
         newBullet.left += 7.5;
         let hit = false;
         for (let enemy of nextEnemies) {
-
           const playerBulletHeight = 6;
           const playerBulletWidth = 12;
           if (
@@ -214,7 +226,8 @@ const Game = (props) => {
             break;
           }
         }
-        if (!hit && newBullet.left < horizontalSize) nextPlayerBullets.push(newBullet);
+        if (!hit && newBullet.left < horizontalSize - playerBulletWidth)
+          nextPlayerBullets.push(newBullet);
       }
 
       // Move enemy bullets and handle player collision
@@ -239,9 +252,16 @@ const Game = (props) => {
           nextPlayerHealth -= 1;
 
           if (nextPlayerHealth <= 0) {
-            nextPlayerHealth = 0
-            setPlayerAnimation(nextPlayerState, "dying", enemyExplodeAnimationTimer);
-            const t = setTimeout(() => props.hasLost && props.hasLost(), enemyExplodeAnimationTimer);
+            nextPlayerHealth = 0;
+            setPlayerAnimation(
+              nextPlayerState,
+              "dying",
+              enemyExplodeAnimationTimer
+            );
+            const t = setTimeout(
+              () => props.hasLost && props.hasLost(),
+              enemyExplodeAnimationTimer
+            );
             timeoutsRef.current.push(t);
           } else {
             setPlayerAnimation(nextPlayerState, "hit", enemyHitAnimationTimer);
@@ -264,7 +284,8 @@ const Game = (props) => {
             ...wave.map((e) => {
               const enemy = {
                 ...e,
-                id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                id:
+                  e.id !== undefined && e.id !== null ? e.id : idRef.current++,
                 state: [],
                 maxHealth: e.health,
               };
@@ -282,7 +303,10 @@ const Game = (props) => {
               ...wave.map((e) => {
                 const enemy = {
                   ...e,
-                  id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                  id:
+                    e.id !== undefined && e.id !== null
+                      ? e.id
+                      : idRef.current++,
                   state: [],
                   maxHealth: e.health,
                 };
@@ -301,7 +325,10 @@ const Game = (props) => {
               ...wave.map((e) => {
                 const enemy = {
                   ...e,
-                  id: e.id !== undefined && e.id !== null ? e.id : idRef.current++,
+                  id:
+                    e.id !== undefined && e.id !== null
+                      ? e.id
+                      : idRef.current++,
                   state: [],
                   maxHealth: e.health,
                 };
@@ -427,18 +454,25 @@ const Game = (props) => {
     const renderInterpolated = (alpha) => {
       // player
       const playerEl = nodeRefs.current.player;
-      const prevPlayer = prevSnapshotRef.current.player || { left: 10, top: playerLocationRef.current };
+      const prevPlayer = prevSnapshotRef.current.player || {
+        left: 10,
+        top: playerLocationRef.current,
+      };
       const currPlayer = currSnapshotRef.current.player || prevPlayer;
       if (playerEl) {
-        const lerpLeft = prevPlayer.left + (currPlayer.left - prevPlayer.left) * alpha;
-        const lerpTop = prevPlayer.top + (currPlayer.top - prevPlayer.top) * alpha;
+        const lerpLeft =
+          prevPlayer.left + (currPlayer.left - prevPlayer.left) * alpha;
+        const lerpTop =
+          prevPlayer.top + (currPlayer.top - prevPlayer.top) * alpha;
         playerEl.style.transform = `translate3d(${lerpLeft}px, ${lerpTop}px, 0)`;
       }
 
       // enemies
       for (const [id, el] of nodeRefs.current.enemies.entries()) {
         if (!el) continue;
-        const prev = prevSnapshotRef.current.enemies.get(id) || currSnapshotRef.current.enemies.get(id);
+        const prev =
+          prevSnapshotRef.current.enemies.get(id) ||
+          currSnapshotRef.current.enemies.get(id);
         const curr = currSnapshotRef.current.enemies.get(id) || prev;
         if (!prev || !curr) continue;
         const lx = prev.left + (curr.left - prev.left) * alpha;
@@ -449,7 +483,9 @@ const Game = (props) => {
       // player bullets
       for (const [id, el] of nodeRefs.current.playerBullets.entries()) {
         if (!el) continue;
-        const prev = prevSnapshotRef.current.playerBullets.get(id) || currSnapshotRef.current.playerBullets.get(id);
+        const prev =
+          prevSnapshotRef.current.playerBullets.get(id) ||
+          currSnapshotRef.current.playerBullets.get(id);
         const curr = currSnapshotRef.current.playerBullets.get(id) || prev;
         if (!prev || !curr) continue;
         const lx = prev.left + (curr.left - prev.left) * alpha;
@@ -459,14 +495,15 @@ const Game = (props) => {
 
       // enemy bullets
       for (const [id, el] of nodeRefs.current.enemyBullets.entries()) {
-        
         if (!el) continue;
-        const prev = prevSnapshotRef.current.enemyBullets.get(id) || currSnapshotRef.current.enemyBullets.get(id);
+        const prev =
+          prevSnapshotRef.current.enemyBullets.get(id) ||
+          currSnapshotRef.current.enemyBullets.get(id);
         const curr = currSnapshotRef.current.enemyBullets.get(id) || prev;
         if (!prev || !curr) continue;
         const lx = prev.left + (curr.left - prev.left) * alpha;
         const ly = prev.top + (curr.top - prev.top) * alpha;
-        if (el?.classList?.contains('ironman')) {
+        if (el?.classList?.contains("ironman")) {
           el.style.transform = `translate3d(${lx}px, ${ly}px, 0) rotate(-28deg)`;
         } else {
           el.style.transform = `translate3d(${lx}px, ${ly}px, 0)`;
@@ -527,7 +564,8 @@ const Game = (props) => {
       lastShotTime.current = now;
 
       props.shoot && props.shoot();
-      const spawnTop = playerLocationRef.current + playerHeight / 2 - playerBulletWidth / 2;
+      const spawnTop =
+        playerLocationRef.current + playerHeight / 2 - playerBulletWidth / 2;
       props.setPlayerBullets((prev) => [
         ...prev,
         {
@@ -657,20 +695,32 @@ const Game = (props) => {
         <div className="healthbar">
           <div
             className="health"
-            style={{ width: `${(playerHealthRef?.current / props.playerMaxHealth) * 100}%` }}
+            style={{
+              width: `${
+                (playerHealthRef?.current / props.playerMaxHealth) * 100
+              }%`,
+            }}
           />
         </div>
-        <div className={`playerAnimationContainer${playerStateRef.current?.length ? ` ${playerStateRef.current.join(" ")}` : ""}`}>
-          <div className="player"/>
+        <div
+          className={`playerAnimationContainer${
+            playerStateRef.current?.length
+              ? ` ${playerStateRef.current.join(" ")}`
+              : ""
+          }`}
+        >
+          <div className="player" />
         </div>
-        
       </div>
     );
   };
 
   const renderPlayerBullets = () =>
     props.playerBullets.map((bullet, index) => {
-      const id = bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`;
+      const id =
+        bullet.id !== undefined && bullet.id !== null
+          ? bullet.id
+          : `${index}-${bullet.top}`;
       const initialTransform = `translate3d(${bullet.left}px, ${bullet.top}px, 0)`;
       return (
         <div
@@ -693,10 +743,13 @@ const Game = (props) => {
 
   const renderEnemyBullets = () =>
     props.enemyBullets.map((bullet, index) => {
-      const id = bullet.id !== undefined && bullet.id !== null ? bullet.id : `${index}-${bullet.top}`;
+      const id =
+        bullet.id !== undefined && bullet.id !== null
+          ? bullet.id
+          : `${index}-${bullet.top}`;
       let initialTransform = `translate3d(${bullet.left}px, ${bullet.top}px, 0)`;
-      if (bullet.type === 'ironman') {
-        initialTransform += ` rotate(-28deg)`
+      if (bullet.type === "ironman") {
+        initialTransform += ` rotate(-28deg)`;
       }
       return (
         <div
@@ -719,7 +772,10 @@ const Game = (props) => {
 
   const renderEnemies = () =>
     props.enemies.map((enemy, index) => {
-      const idKey = enemy.id !== undefined && enemy.id !== null ? enemy.id : `${index}-${enemy.left}`;
+      const idKey =
+        enemy.id !== undefined && enemy.id !== null
+          ? enemy.id
+          : `${index}-${enemy.left}`;
       const initialTransform = `translate3d(${enemy.left}px, ${enemy.top}px, 0)`;
       return (
         <div
@@ -742,11 +798,17 @@ const Game = (props) => {
             <div
               className="health"
               style={{
-                width: `${(enemy.health / (enemy.maxHealth || enemy.health || 1)) * 100}%`,
+                width: `${
+                  (enemy.health / (enemy.maxHealth || enemy.health || 1)) * 100
+                }%`,
               }}
             />
           </div>
-          <div className={`enemyAnimationContainer${enemy.state?.length ? ` ${enemy.state.join(" ")}` : ""}`}>
+          <div
+            className={`enemyAnimationContainer${
+              enemy.state?.length ? ` ${enemy.state.join(" ")}` : ""
+            }`}
+          >
             <div className={`enemy ${enemy.type}`} />
           </div>
         </div>
@@ -799,7 +861,7 @@ const Game = (props) => {
           <div className="gameHealth">HP: {playerHealthRef?.current}</div>
           <div className="gameScore">SCORE: {props.currentScore}</div>
         </div>
-        {props.addGutters ? <div className="gutter left" /> : null}
+        {props.addGutters ? <div className="gutter right" /> : null}
       </div>
     </div>
   );

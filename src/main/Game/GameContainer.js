@@ -25,7 +25,7 @@ const GameContainer = () => {
     const [playerBullets, setPlayerBullets] = useState([]);
     const [enemyBullets, setEnemyBullets] = useState([]);
 
-    const wrapperRef = useRef(null);
+    const pageWrapperRef = useRef(null);
     const pauseFn = useRef(null);
     const resumeFn = useRef(null);
 
@@ -69,7 +69,7 @@ const GameContainer = () => {
         setPlayerBullets([]);
         setEnemyBullets([]);
 
-        if (wrapperRef.current) wrapperRef.current.requestFullscreen();
+        setTimeout(() => pageWrapperRef?.current?.requestFullscreen(), 200)
     }
 
     const startGame = () => {
@@ -128,7 +128,7 @@ const GameContainer = () => {
     } else if (isRunning) {
         displayComponent = (
             <SizeAndOrientationWrapper
-                ref={wrapperRef}
+                ref={pageWrapperRef}
                 horizontalSize={horizontalSize}
                 verticalSize={verticalSize}
                 maxHorizontalSize={maxHorizontalSize}

@@ -74,12 +74,12 @@ const SizeAndOrientationWrapper = forwardRef(
         setIsLandscape(isLandscape);
         setIsSmall(isSmall);
 
-        let widthForGutters = (isLandscape && isSmall)
+        let addGutters = (isLandscape && isSmall)
           ? 120
           : 0
 
         let scaleWidth =
-          Math.min(window.innerWidth, maxHorizontalSize) / (horizontalSize + widthForGutters);
+          Math.min(window.innerWidth, maxHorizontalSize) / (horizontalSize + addGutters);
         let scaleHeight =
           Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
 
@@ -87,8 +87,6 @@ const SizeAndOrientationWrapper = forwardRef(
         setGameContainerStyleWidth({
           width: window.innerWidth < horizontalSize ? `100%` : `100vw`,
         });
-
-        
       };
 
       updateScale();
