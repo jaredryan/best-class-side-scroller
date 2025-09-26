@@ -74,12 +74,12 @@ const SizeAndOrientationWrapper = forwardRef(
         setIsLandscape(isLandscape);
         setIsSmall(isSmall);
 
-        let addGutters = (isLandscape && isSmall)
+        let widthForGutters = (isLandscape && isSmall)
           ? 120
           : 0
 
         let scaleWidth =
-          Math.min(window.innerWidth, maxHorizontalSize) / (horizontalSize + addGutters);
+          Math.min(window.innerWidth, maxHorizontalSize) / (horizontalSize + widthForGutters);
         let scaleHeight =
           Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
 

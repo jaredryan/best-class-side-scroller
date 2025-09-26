@@ -4,7 +4,7 @@ import Instructions from '../Instructions';
 import Levels from '../Levels';
 import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 
-const playerMaxHealth = 10
+const playerMaxHealth = 10000
 
 const GameContainer = (props) => {
     const [timer, setTimer] = useState(0);

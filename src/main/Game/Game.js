@@ -769,7 +769,6 @@ const Game = (props) => {
       onKeyDown={handleKeyDown}
       tabIndex="0"
       ref={props.wrapperRef}
-      style={{ height: "calc(var(--vh, 1vh) * 100)" }}
     >
       <TouchShield />
       <div
