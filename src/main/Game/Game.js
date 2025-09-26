@@ -3,7 +3,8 @@ import React, { useEffect, useRef } from "react";
 import useDisablePageGestures from "../Components/useDisablePageGestures";
 import TouchShield from "../Components/TouchShield";
 
-const gameInterval = 15; // ms, fixed-step simulation (same as before)
+const gameInterval = 15; // ms, fixed-step simulation
+const healthBarOffset = 6
 const playerHeight = 35;
 const playerWidth = 50;
 const maxScale = 1.5;
@@ -296,7 +297,7 @@ const Game = (props) => {
           waveAdded = true;
         }
 
-        if (nextEnemies.length === 0 || timerRef.current >= 13000) {
+        if (!waveAdded && (nextEnemies.length === 0 || timerRef.current >= 13000)) {
           wave = props.useWave(1);
           if (wave !== false) {
             nextEnemies.push(
@@ -318,7 +319,7 @@ const Game = (props) => {
           }
         }
 
-        if (nextEnemies.length === 0 || timerRef.current >= 23000) {
+        if (!waveAdded && (nextEnemies.length === 0 || timerRef.current >= 23000)) {
           wave = props.useWave(2);
           if (wave !== false) {
             nextEnemies.push(
@@ -381,7 +382,7 @@ const Game = (props) => {
           if (enemy.type === "ufo") {
             let target = enemy.top;
             if (chance < 0.3333) {
-              target = Math.max(enemy.top - 20, 0);
+              target = Math.max(enemy.top - 20, healthBarOffset);
             } else if (chance < 0.6666) {
               target = Math.min(enemy.top + 20, verticalSize - enemy.height);
             }
@@ -582,7 +583,7 @@ const Game = (props) => {
 
   const movePlayerTo = (y) => {
     let newY = y - playerHeight / 2; // center
-    if (newY < 0) newY = 0;
+    if (newY < healthBarOffset) newY = healthBarOffset;
     if (newY > verticalSize - playerHeight) newY = verticalSize - playerHeight;
     props.setPlayerLocation(newY);
   };
