@@ -784,6 +784,7 @@ const Game = (props) => {
         className="gameContainer"
         style={props.gameContainerStyleWidth}
       >
+        {props.addGutters ? <div className="gutter left" /> : null}
         <div
           className="canvas"
           style={{
@@ -801,6 +802,7 @@ const Game = (props) => {
           <div className="gameHealth">HP: {playerHealthRef?.current}</div>
           <div className="gameScore">SCORE: {props.currentScore}</div>
         </div>
+        {props.addGutters ? <div className="gutter left" /> : null}
       </div>
     </div>
   );

@@ -32,10 +32,9 @@ const SizeAndOrientationWrapper = forwardRef(
       window.innerWidth > window.innerHeight
     );
     const [isSmall, setIsSmall] = useState(window.innerWidth < 1024);
-    const [isTouchDevice] = useState(
-      typeof window !== "undefined" &&
-        ("ontouchstart" in window || navigator.maxTouchPoints > 0)
-    );
+
+    const isTouchDevice = typeof window !== "undefined" &&
+        ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
     const [awaitingStart, setAwaitingStart] = useState(false);
 
@@ -69,8 +68,18 @@ const SizeAndOrientationWrapper = forwardRef(
 
     useEffect(() => {
       const updateScale = () => {
+        let isLandscape = window.innerWidth > window.innerHeight
+        let isSmall = window.innerWidth < 1024
+
+        setIsLandscape(isLandscape);
+        setIsSmall(isSmall);
+
+        let addGutters = (isLandscape && isSmall)
+          ? 120
+          : 0
+
         let scaleWidth =
-          Math.min(window.innerWidth, maxHorizontalSize) / horizontalSize;
+          Math.min(window.innerWidth, maxHorizontalSize) / (horizontalSize + addGutters);
         let scaleHeight =
           Math.min(window.innerHeight, maxVerticalSize) / verticalSize;
 
@@ -79,8 +88,7 @@ const SizeAndOrientationWrapper = forwardRef(
           width: window.innerWidth < horizontalSize ? `100%` : `100vw`,
         });
 
-        setIsLandscape(window.innerWidth > window.innerHeight);
-        setIsSmall(window.innerWidth < 1024);
+        
       };
 
       updateScale();
@@ -107,6 +115,9 @@ const SizeAndOrientationWrapper = forwardRef(
       // Detect portrait → landscape rotation
       const justRotatedToLandscape = prevIsLandscapeRef.current === false;
       if (justRotatedToLandscape) {
+        setGameContainerStyleWidth({
+          ...gameContainerStyleWidth,
+        })
         setAwaitingStart(true);
       }
 
@@ -152,6 +163,7 @@ const SizeAndOrientationWrapper = forwardRef(
     }
 
     return children({
+      addGutters: !awaitingStart,
       scale,
       gameContainerStyleWidth,
       wrapperRef,

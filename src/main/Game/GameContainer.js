@@ -132,9 +132,10 @@ const GameContainer = (props) => {
                     if (resumeFn.current) resumeFn.current();
                 }}
             >
-                {({ scale, gameContainerStyleWidth, wrapperRef }) => (
+                {({ scale, gameContainerStyleWidth, wrapperRef, addGutters }) => (
                     <Game
                         scale={scale}
+                        addGutters={addGutters}
                         gameContainerStyleWidth={gameContainerStyleWidth}
                         wrapperRef={wrapperRef}
                         isPaused={isPaused}

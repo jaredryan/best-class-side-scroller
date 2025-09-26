@@ -235,7 +235,8 @@ body {
     margin: 0;
     background-color: black;
     touch-action: none;
-    user-select: none;  
+    user-select: none;
+    flex-grow: 1;
 }
 
 .gamePage {
@@ -245,10 +246,18 @@ body {
 /* Container fills screen, centers the game, fills unused space with black */
 .gameContainer {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  height: 100vh;
+  height: 100%;
+  width: 50px;
+}
+
+.gutter {
+    width: 60px;
+    background: transparent;
+    flex-grow: 0;
 }
 
 .enemyBullet {
