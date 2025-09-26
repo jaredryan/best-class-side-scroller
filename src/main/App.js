@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Game from "./Game";
+import GameContainer from "./Game/GameContainer";
 import Title from "./Title";
 
 import useViewportHeight from "./Components/useViewportHeight";
 
 const App = () => {
   useViewportHeight();
-  const [level, setLevel] = useState(1);
+  
   const [page, setPage] = useState("");
-  const [hasPlayed, setHasPlayed] = useState(false);
-
-  const setPageAsGame = () => setPage("game");
 
   useEffect(() => { window.scrollTo(0, 0) }, [page])
 
@@ -23,15 +20,9 @@ const App = () => {
         <div className="titleImage" />
       </div>
       {page === "game" ? (
-        <Game
-          setPageAsGame={setPageAsGame}
-          setLevel={setLevel}
-          level={level}
-          setHasPlayed={setHasPlayed}
-          hasPlayed={hasPlayed}
-        />
+        <GameContainer />
       ) : (
-        <Title setPageAsGame={setPageAsGame} />
+        <Title setPageAsGame={() => setPage('game')} />
       )}
     </div>
   );

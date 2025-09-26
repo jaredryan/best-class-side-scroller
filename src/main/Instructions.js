@@ -31,7 +31,7 @@ const Instructions = () => {
                         <p className="instructionBody standalone"><b>Tip:</b>Tap / Drag / Hold in the middle of the screen will both move and shoot!</p>
                     </div>
                 </div>
-                <h4 className="instructionHeading neutral">Good luck, soldier.</h4>
+                <h4 className="instructionHeading emphasis">Good luck, soldier.</h4>
             </div>
         </div>
     )

@@ -466,8 +466,6 @@ const Game = (props) => {
         if (!prev || !curr) continue;
         const lx = prev.left + (curr.left - prev.left) * alpha;
         const ly = prev.top + (curr.top - prev.top) * alpha;
-        console.log(el.className)
-        console.log(el.classList)
         if (el?.classList?.contains('ironman')) {
           el.style.transform = `translate3d(${lx}px, ${ly}px, 0) rotate(-28deg)`;
         } else {

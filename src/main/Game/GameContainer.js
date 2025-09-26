@@ -2,11 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import Game, { verticalSize, horizontalSize, maxVerticalSize, maxHorizontalSize } from './Game';
 import Instructions from '../Instructions';
 import Levels from '../Levels';
+import Level1 from '../Data/1'
+import Level2 from '../Data/2'
+import Level3 from '../Data/3'
 import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 
 const playerMaxHealth = 10
 
-const GameContainer = (props) => {
+const GameContainer = () => {
+    const [level, setLevel] = useState(1);
+    const [hasPlayed, setHasPlayed] = useState(false);
     const [timer, setTimer] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -34,7 +39,13 @@ const GameContainer = (props) => {
         return () => clearInterval(t);
     }, [isRunning, isPaused]);
 
-    useEffect(() => { window.scrollTo(0, 0) }, [props.hasPlayed, hasWon, isRunning])
+    useEffect(() => { window.scrollTo(0, 0) }, [hasWon, isRunning])
+
+    const getCurrentLevelData = () => {
+        if (level === 2) return Level2
+        if (level === 3) return Level3
+        return Level1
+    }
 
     const hasWonHandler = () => {
         setHasWon(true);
@@ -57,16 +68,17 @@ const GameContainer = (props) => {
         setEnemies([]);
         setPlayerBullets([]);
         setEnemyBullets([]);
+
         if (wrapperRef.current) wrapperRef.current.requestFullscreen();
     }
 
     const startGame = () => {
-        props.setHasPlayed(true);
+        setHasPlayed(true);
         resetGameAndStart()
     };
 
     const restartGame = () => {
-        props.resetLevel();
+        getCurrentLevelData()?.resetLevel();
         resetGameAndStart();
     };
 
@@ -77,8 +89,6 @@ const GameContainer = (props) => {
     const hit = () => {
         setSuccessfulShotsFired(prev => prev + 1);
     }
-
-
 
     const calculateCurrentScore = () => {
         // 50000 starting time bonus, lowers per ms spent in round
@@ -97,20 +107,20 @@ const GameContainer = (props) => {
 
     const calculateFinalScore = () => {
         let levelBonus = 0
-        if (props.level === 1) levelBonus = 20000
-        if (props.level === 2) levelBonus = 40000
-        if (props.level === 3) levelBonus = 60000
+        if (level === 1) levelBonus = 20000
+        if (level === 2) levelBonus = 40000
+        if (level === 3) levelBonus = 60000
 
         return levelBonus + calculateCurrentScore()
     };
 
     let displayComponent;
-    if (!props.hasPlayed) {
+    if (!hasPlayed) {
         displayComponent = (
             <div className="gameWithInstructions">
                 <div className="instructionsContainer">
                     <Instructions />
-                    <Levels setLevel={props.setLevel} level={props.level} />
+                    <Levels setLevel={setLevel} level={level} />
                 </div>
                 <button onClick={startGame} className="start">START GAME</button>
             </div>
@@ -143,10 +153,10 @@ const GameContainer = (props) => {
                         hasWon={hasWonHandler}
                         hasLost={hasLostHandler}
                         startGame={startGame}
-                        useWave={props.useWave}
+                        useWave={getCurrentLevelData()?.useWave}
                         shoot={shoot}
                         hit={hit}
-                        level={props.level}
+                        level={level}
                         currentScore={calculateCurrentScore()}
                         playerLocation={playerLocation}
                         setPlayerLocation={setPlayerLocation}
@@ -170,17 +180,17 @@ const GameContainer = (props) => {
             <div className="gameResults">
                 <h1>You Won!</h1>
                 <div className="scoreResults">
-                    <h2>Score</h2>
+                    <h2 className="emphasis">Score</h2>
                     <div className="explainScore">
                         <h3><b>Health:</b>{`1000 * HP = ${playerHealth * 1000}`}</h3>
                         <h3><b>Accuracy:</b>{`10000 * Hits / Shots = ${Math.round(10000 * successfulShotsFired / shotsFired)}`}</h3>
                         <h3><b>Time:</b>{`50000 - 1000 * Seconds = ${Math.round(53000 - timer)}`}</h3>
-                        <h3><b>Level:</b>{`20000 * Level # = ${props.level * 20000}`}</h3>
+                        <h3><b>Level:</b>{`20000 * Level # = ${level * 20000}`}</h3>
                     </div>
                     <h2 className="emphasis"><b>Total Score</b></h2>
                     <h3 className="finalScore">{calculateFinalScore()}</h3>
                 </div>
-                <Levels setLevel={props.setLevel} level={props.level} />
+                <Levels setLevel={setLevel} level={level} />
                 <button onClick={restartGame} className="start">PLAY AGAIN</button>
             </div>
         )
@@ -188,7 +198,7 @@ const GameContainer = (props) => {
         displayComponent = (
             <div className="gameResults">
                 <h1>Game Over</h1>
-                <Levels setLevel={props.setLevel} level={props.level} />
+                <Levels setLevel={setLevel} level={level} />
                 <button onClick={restartGame} className="start">PLAY AGAIN</button>
             </div>
         )

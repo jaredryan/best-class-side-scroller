@@ -310,7 +310,7 @@ body {
         -ms-flex-align: center;
             align-items: center;
     overflow: hidden;
-    background: url("./images/space.png") no-repeat center center;
+    background: url("./images/space.jpg") no-repeat center center;
     background-size: cover;
     height: calc(var(--vh, 1vh) * 100);
     width: 100%;
@@ -348,7 +348,7 @@ button.start {
     border-radius: 2px;
     -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
             box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
-    background-color: rgb(0, 188, 212);
+    background-color: limegreen;
     color: white;
     margin: 0;
     font-weight: 300;
@@ -383,7 +383,7 @@ button.start {
 
 button.start:hover {
     cursor: pointer;
-    background-color: rgb(89, 211, 227);
+    background-color: rgb(91, 215, 91);
     -webkit-transition-duration: 300ms;
             transition-duration: 300ms;
 }
@@ -428,17 +428,13 @@ h3 {
 .instructionHeading {
     font-size: 20px;
     font-weight: 600;
-    color: #F2583E;
+    color: limegreen;
 }
 
 .instructionsText h5 {
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 16px;
-}
-
-.instructionHeading.neutral {
-    color: white;
 }
 
 .controlContainer {
@@ -485,7 +481,7 @@ p {
 
 .playerBullet {
     position: absolute;
-    background-color: brown;
+    background-color: burlywood;
     border-radius: 50%;
 }
 
@@ -522,7 +518,7 @@ p {
 }
 
 .titleImage {
-    background: url("./images/space.png") no-repeat center center;
+    background: url("./images/space.jpg") no-repeat center center;
     background-size: cover;
     opacity: 0.6;
     z-index: 3;
@@ -583,13 +579,13 @@ p {
 }
 
 .titleText button {
-    background-color: #F2583E;
+    background-color: green;
     margin: 48px 0 0 0;
 }
 
 .titleText button:hover {
     cursor: pointer;
-    background-color: #F79282;
+    background-color: rgb(91, 215, 91);
     -webkit-transition-duration: 300ms;
             transition-duration: 300ms;
 }
@@ -624,13 +620,64 @@ p {
 }
 
 .emphasis {
-    color: rgb(0, 188, 212);
+    color: limegreen;
 }
 
 .scoreResults b {
     font-weight: 600;
     margin-right: 10px;
 }
+
+.difficultyContainer {
+    width: 204px;
+    height: 136px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 500;
+    margin: auto;
+}
+
+.difficulty {
+    font-size: 22px;
+    height: 68px;
+    padding-top: 19px;
+    color: limegreen;
+    background-color: black;
+}
+
+.levelBox {
+    width: 68px;
+    height: 68px;
+    text-align: center;
+    display: inline-block;
+    padding-bottom: 0px;
+    padding-top: 2px;
+    background-color: rgb(60, 60, 60);
+    -webkit-transition-duration: 300ms;
+            transition-duration: 300ms;
+}
+
+.levelBox:hover {
+    background-color: rgb(90, 90, 90);
+}
+
+.levelBox.highlighted {
+    background-color: limegreen;
+}
+
+.levelBox.highlighted:hover {
+    background-color: rgb(91, 215, 91);
+}
+
+.level {
+    color: white;
+    font-size: 30px;
+    padding-top: 10px;
+    padding-bottom: 4px;
+    font-weight: 500;
+}
+
+
 
 @media (max-width: 555px) {
     .titleText h1 {
