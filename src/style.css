@@ -14,6 +14,12 @@
     --line: rgba(50, 27, 20, 0.22);
     --shadow: rgba(36, 19, 15, 0.32);
 
+    /* commercial-kitchen steel/chrome tones, used inside the play area */
+    --steel-deep: #2c333a;
+    --steel-floor: #8f9ba3;
+    --steel-counter: #cdd6db;
+    --steel-line: rgba(22, 27, 31, 0.28);
+
     --font-display: "Luckiest Guy", cursive;
     --font-body: "Nunito Sans", system-ui, -apple-system, sans-serif;
 }
@@ -143,10 +149,15 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background-color: rgba(255, 201, 71, 0.9); /* cheese-colored food splat */
+  background-color: rgba(255, 201, 71, 0.9); /* fallback: cheese-colored splat */
   animation: explode-radial 0.6s ease-out forwards;
   opacity: 0;
 }
+
+/* soda (blue), hot dog (ketchup red), nacho (cheese yellow) */
+.explosion-ufo::before, .explosion-ufo::after { background-color: rgba(56, 174, 234, 0.9); }
+.explosion-ironman::before, .explosion-ironman::after { background-color: rgba(229, 57, 45, 0.9); }
+.explosion-girl::before, .explosion-girl::after { background-color: rgba(255, 201, 71, 0.9); }
 
 .explosion::before {
   animation-delay: 0s;
@@ -217,16 +228,13 @@ body {
 .dripKetchup,
 .dripMustard,
 .cheeseDrip {
-  animation: foodDrip 1.8s ease-in infinite;
+  animation: foodDrip 1s ease-in infinite;
 }
 
-.dripMustard { animation-delay: 0.9s; }
-.cheeseDripB { animation-delay: 0.7s; }
-
 @keyframes foodDrip {
-  0% { transform: translateY(0); opacity: 0.9; }
-  80% { opacity: 0.6; }
-  100% { transform: translateY(9px); opacity: 0; }
+  0% { transform: translateY(0); opacity: 0.95; }
+  60% { opacity: 0.7; }
+  100% { transform: translateY(18px); opacity: 0; }
 }
 
 /* ************************************************************ */
@@ -235,8 +243,8 @@ body {
 
 .playerContainer {
     position: absolute;
-    width: 50px;
-    height: 35px;
+    width: 30px;
+    height: 36px;
     left: 10px;
 }
 
@@ -258,10 +266,10 @@ body {
   background: gray;
 }
 
-.chefLegFront { transform-origin: 45px 62px; animation: chefLegSwingFront 0.5s ease-in-out infinite; }
-.chefLegBack { transform-origin: 63px 62px; animation: chefLegSwingBack 0.5s ease-in-out infinite; }
-.chefArmFront { transform-origin: 76px 39px; animation: chefArmSwingFront 0.5s ease-in-out infinite; }
-.chefArmBack { transform-origin: 29px 44px; animation: chefArmSwingBack 0.5s ease-in-out infinite; }
+.chefLegFront { transform-origin: 32px 62px; animation: chefLegSwingFront 0.5s ease-in-out infinite; }
+.chefLegBack { transform-origin: 46px 62px; animation: chefLegSwingBack 0.5s ease-in-out infinite; }
+.chefArmFront { transform-origin: 46px 43px; animation: chefArmSwingFront 0.5s ease-in-out infinite; }
+.chefArmBack { transform-origin: 18px 40px; animation: chefArmSwingBack 0.5s ease-in-out infinite; }
 
 @keyframes chefLegSwingFront {
   0%, 100% { transform: rotate(-10deg); }
@@ -295,7 +303,16 @@ body {
 .canvas {
     position: relative;
     margin: 0;
-    background-color: black;
+    background-color: var(--steel-floor);
+    background-image:
+        /* stainless backsplash strip along the top — kept just taller than the player so it never reads as a floor to stand on */
+        linear-gradient(to bottom, var(--steel-counter) 0 9%, var(--steel-line) 9% 9.6%, transparent 9.6%),
+        /* horizontal grout lines stay flat */
+        repeating-linear-gradient(180deg, var(--steel-line) 0 2px, transparent 2px 42px),
+        /* the "vertical" grout lines lean ~25deg down-and-right for a mild floor perspective */
+        repeating-linear-gradient(65deg, var(--steel-line) 0 2px, transparent 2px 50px);
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: no-repeat, repeat, repeat;
     touch-action: none;
     user-select: none;
     border-radius: 10px;
@@ -374,7 +391,13 @@ body {
         -ms-flex-align: center;
             align-items: center;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 0%, var(--bg-warm), var(--bg-deep) 70%);
+    background-color: var(--bg-deep);
+    background-image:
+        linear-gradient(to bottom, var(--bg-warm) 0 18%, rgba(36, 19, 15, 0.4) 18% 19%, transparent 19%),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0 2px, transparent 2px 110px),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 22px, rgba(0, 0, 0, 0.05) 22px 44px);
+    background-size: 100% 100%, 100% 18%, 100% 100%;
+    background-repeat: no-repeat, repeat-x, repeat;
     height: calc(var(--vh, 1vh) * 100);
     width: 100vw;
 }
@@ -385,16 +408,15 @@ body {
 
 .gameHealth {
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
     margin: 0;
-    padding: 4px 12px;
-    color: var(--panel-light);
+    color: var(--ink);
     font-weight: 800;
-    font-size: 15px;
-    background-color: var(--bg-warm);
-    border: 2px solid var(--ink);
-    border-radius: 8px;
+    font-size: 16px;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .levelButtons {
@@ -420,11 +442,13 @@ body {
 }
 
 .loseCopy {
-    max-width: 420px;
+    max-width: 640px;
     text-align: center;
     color: var(--panel-light);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
     font-weight: 600;
-    font-size: 16px;
+    font-size: 19px;
+    opacity: 0.9;
 }
 
 h3 {
@@ -508,10 +532,13 @@ p {
 }
 
 .instructionsContainer > .instructions,
-.instructionsContainer > .scoreResults,
-.instructionsContainer > .levelButtons {
+.instructionsContainer > .scoreResults {
     flex: 1 1 0;
     min-width: 0;
+}
+
+.instructionsContainer > .levelButtons {
+    flex: 0 0 auto;
 }
 
 .instructionsContainer > .instructions {
@@ -554,10 +581,15 @@ p {
 }
 
 .titleImage {
-    background:
-        radial-gradient(circle at 20% 15%, rgba(255, 201, 71, 0.25), transparent 40%),
-        radial-gradient(circle at 80% 85%, rgba(94, 189, 69, 0.18), transparent 45%),
-        linear-gradient(160deg, var(--bg-warm), var(--bg-deep) 65%);
+    background-color: var(--bg-deep);
+    background-image:
+        radial-gradient(circle at 20% 15%, rgba(255, 201, 71, 0.18), transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(94, 189, 69, 0.14), transparent 45%),
+        linear-gradient(to bottom, var(--bg-warm) 0 18%, rgba(36, 19, 15, 0.4) 18% 19%, transparent 19%),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0 2px, transparent 2px 110px),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 22px, rgba(0, 0, 0, 0.05) 22px 44px);
+    background-size: auto, auto, 100% 100%, 100% 18%, 100% 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat-x, repeat;
     z-index: 3;
 }
 
@@ -649,6 +681,12 @@ p {
     text-align: left;
 }
 
+.scoreArrow {
+    vertical-align: middle;
+    margin: 0 2px;
+    color: var(--ketchup);
+}
+
 .emphasis {
     color: var(--ketchup);
 }
@@ -667,8 +705,8 @@ p {
 
 .heroToasterStamp {
     position: absolute;
-    top: -18px;
-    right: -16px;
+    bottom: -24px;
+    right: -8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -720,13 +758,21 @@ p {
 }
 
 .levelBox:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
+    transform: translateY(-4px);
+    filter: brightness(1.3) saturate(1.15);
+    box-shadow: 0 6px 0 var(--shadow);
 }
 
+/* Selected state uses a white-then-red ring so it stays visible regardless
+   of which card color it's drawn on (a same-hue ring would wash out on Mild). */
 .levelBox.highlighted {
-    box-shadow: 0 0 0 4px var(--cheese), 0 4px 0 var(--shadow);
+    box-shadow: 0 0 0 3px var(--panel-light), 0 0 0 6px var(--ketchup), 0 4px 0 var(--shadow);
     transform: translateY(-2px);
+}
+
+.levelBox.highlighted:hover {
+    box-shadow: 0 0 0 3px var(--panel-light), 0 0 0 6px var(--ketchup), 0 6px 0 var(--shadow);
+    transform: translateY(-4px);
 }
 
 /* Mild: warm, muted yellow. Dark ink text keeps contrast high (~10:1). */

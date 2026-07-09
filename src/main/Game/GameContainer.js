@@ -9,6 +9,12 @@ import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 import { calculateFinalScore } from '../scoring'
 import HeroToaster from '../Components/Sprites/HeroToaster'
 
+const ScoreArrow = () => (
+    <svg className="scoreArrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path d="M4 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
 const playerMaxHealth = 10
 
 const GameContainer = () => {
@@ -20,7 +26,7 @@ const GameContainer = () => {
     const [hasWon, setHasWon] = useState(false);
     const [shotsFired, setShotsFired] = useState(0);
     const [successfulShotsFired, setSuccessfulShotsFired] = useState(0);
-    const [playerLocation, setPlayerLocation] = useState(155);
+    const [playerLocation, setPlayerLocation] = useState(162);
     const [playerHealth, setPlayerHealth] = useState(playerMaxHealth);
     const [playerState, setPlayerState] = useState([]);
     const [enemies, setEnemies] = useState([]);
@@ -30,11 +36,6 @@ const GameContainer = () => {
     const pageWrapperRef = useRef(null);
     const pauseFn = useRef(null);
     const resumeFn = useRef(null);
-
-    if (!hasPlayed) {
-        setHasWon(true)
-        setHasPlayed(true)
-    }
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -172,10 +173,10 @@ const GameContainer = () => {
                     <div className="scoreResults card-sticker">
                         <h2 className="emphasis">Kitchen Report</h2>
                         <div className="explainScore">
-                            <h3><b>Health Bonus:</b>{`${playerHealth} HP × 1000 = ${report.healthBonus}`}</h3>
-                            <h3><b>Snack Accuracy:</b>{`${Math.round(report.accuracyPercent * 100)}% = ${report.accuracyBonus}`}</h3>
-                            <h3><b>Rush Bonus:</b>{`${report.elapsedSeconds}s = ${report.rushBonus}`}</h3>
-                            <h3><b>Spice Bonus:</b>{`Level ${level} = ${report.spiceBonus}`}</h3>
+                            <h3><b>Health Bonus:</b>{playerHealth} HP <ScoreArrow /> {report.healthBonus}</h3>
+                            <h3><b>Snack Accuracy:</b>{Math.round(report.accuracyPercent * 100)}% <ScoreArrow /> {report.accuracyBonus}</h3>
+                            <h3><b>Rush Bonus:</b>{report.elapsedSeconds}s <ScoreArrow /> {report.rushBonus}</h3>
+                            <h3><b>Spice Bonus:</b>Level {level} <ScoreArrow /> {report.spiceBonus}</h3>
                         </div>
                         <h2 className="emphasis"><b>Final Tip</b></h2>
                         <h3 className="finalScore">{report.finalScore}</h3>
@@ -195,10 +196,10 @@ const GameContainer = () => {
         displayComponent = (
             <div className="gameResults">
                 <h1>Kitchen Overrun!</h1>
-                <p className="loseCopy">
+                <h3 className="loseCopy">
                     The snacks are getting cocky. Grab another handful of peas and show
                     them who's head chef.
-                </p>
+                </h3>
                 <Levels setLevel={setLevel} level={level} />
                 <button onClick={restartGame} className="btn-chunky start">TRY AGAIN</button>
             </div>

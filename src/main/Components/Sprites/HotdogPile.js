@@ -1,34 +1,56 @@
 import React from 'react';
 
-const hotdogRows = [
-  { y: 2, bun: '#e8b579', sausage: 'var(--ketchup)' },
-  { y: 24, bun: '#e3ab6c', sausage: '#a9432f' },
-  { y: 46, bun: '#e8b579', sausage: 'var(--ketchup)' },
-  { y: 68, bun: '#e3ab6c', sausage: '#a9432f' },
+const dog = (x, y, w, h, bun, sausage) => (
+  <g key={`${x}-${y}`}>
+    <rect x={x} y={y} width={w} height={h} rx={h / 2} fill={bun} stroke="var(--ink)" strokeWidth="3" />
+    <rect x={x + 6} y={y + 3} width={w - 12} height={h - 8} rx={(h - 8) / 2} fill={sausage} stroke="var(--ink)" strokeWidth="1.5" />
+    <path
+      d={`M${x + 10} ${y + h / 2} Q${x + w * 0.3} ${y + 3} ${x + w * 0.5} ${y + h / 2} T${x + w - 10} ${y + h / 2}`}
+      stroke="var(--mustard)"
+      strokeWidth="2.5"
+      fill="none"
+      strokeLinecap="round"
+    />
+  </g>
+);
+
+const drips = [
+  { x: 12, r: 3, cls: 'dripMustard' },
+  { x: 24, r: 3.5, cls: 'dripKetchup' },
+  { x: 36, r: 2.5, cls: 'dripMustard' },
+  { x: 48, r: 4, cls: 'dripKetchup' },
+  { x: 60, r: 3, cls: 'dripMustard' },
+  { x: 72, r: 3.5, cls: 'dripKetchup' },
+  { x: 82, r: 2.5, cls: 'dripMustard' },
 ];
 
 const HotdogPile = () => (
   <svg
-    viewBox="0 0 70 100"
+    viewBox="0 0 104 78"
     width="100%"
     height="100%"
     preserveAspectRatio="xMidYMid meet"
   >
-    {hotdogRows.map((row, i) => (
-      <g key={i}>
-        <rect x="4" y={row.y} width="62" height="18" rx="9" fill={row.bun} stroke="var(--ink)" strokeWidth="3" />
-        <rect x="10" y={row.y + 3} width="50" height="11" rx="5.5" fill={row.sausage} stroke="var(--ink)" strokeWidth="1.5" />
-        <path
-          d={`M14 ${row.y + 9} Q22 ${row.y + 4} 30 ${row.y + 9} T46 ${row.y + 9} T58 ${row.y + 9}`}
-          stroke="var(--mustard)"
-          strokeWidth="2.5"
-          fill="none"
-          strokeLinecap="round"
-        />
-      </g>
+    <ellipse cx="52" cy="56" rx="50" ry="20" fill="var(--panel-light)" stroke="var(--ink)" strokeWidth="3" />
+
+    {dog(18, 28, 80, 22, '#e3ab6c', '#a9432f')}
+    {dog(10, 20, 78, 24, '#e8b579', 'var(--ketchup)')}
+    {dog(4, 40, 80, 22, '#e8b579', 'var(--ketchup)')}
+
+    {drips.map((d, i) => (
+      <ellipse
+        key={i}
+        className={d.cls}
+        cx={d.x}
+        cy="64"
+        rx={d.r}
+        ry={d.r * 1.6}
+        fill={d.cls === 'dripKetchup' ? 'var(--ketchup)' : 'var(--mustard)'}
+        stroke="var(--ink)"
+        strokeWidth="1"
+        style={{ animationDelay: `${i * 0.18}s` }}
+      />
     ))}
-    <ellipse className="dripKetchup" cx="52" cy="90" rx="3" ry="5" fill="var(--ketchup)" stroke="var(--ink)" strokeWidth="1" />
-    <ellipse className="dripMustard" cx="20" cy="92" rx="3" ry="5" fill="var(--mustard)" stroke="var(--ink)" strokeWidth="1" />
   </svg>
 );
 

@@ -30,8 +30,8 @@ const wave0 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 530,
     top: 295,
     health: 2,
@@ -40,8 +40,8 @@ const wave0 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 530,
     top: 15,
     health: 2,
@@ -52,8 +52,8 @@ const wave0 = [
 ];
 const wave1 = [
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 480,
     top: 295,
     health: 3,
@@ -62,8 +62,8 @@ const wave1 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 480,
     top: 15,
     health: 3,
@@ -72,8 +72,8 @@ const wave1 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 430,
     top: 295,
     health: 3,
@@ -82,8 +82,8 @@ const wave1 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 430,
     top: 15,
     health: 3,
@@ -92,8 +92,8 @@ const wave1 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 530,
     top: 295,
     health: 3,
@@ -102,8 +102,8 @@ const wave1 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 530,
     top: 15,
     health: 3,
@@ -216,8 +216,8 @@ const wave3 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 480,
     top: 295,
     health: 3,
@@ -226,8 +226,8 @@ const wave3 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 480,
     top: 15,
     health: 3,
@@ -236,8 +236,8 @@ const wave3 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 35,
+    height: 58,
+    width: 52,
     left: 530,
     top: 295,
     health: 3,
@@ -246,8 +246,8 @@ const wave3 = [
     shootTimer: Math.random(),
   },
   {
-    height: 50,
-    width: 34,
+    height: 34,
+    width: 45,
     left: 530,
     top: 15,
     health: 3,

@@ -9,8 +9,8 @@ import TouchShield from "../Components/TouchShield";
 
 const gameInterval = 15; // ms, fixed-step simulation
 const healthBarOffset = 6
-const playerHeight = 35;
-const playerWidth = 50;
+const playerHeight = 36;
+const playerWidth = 30;
 const maxScale = 1.5;
 const delayBetweenShots = 200;
 export const verticalSize = 360;
@@ -207,20 +207,18 @@ const Game = (props) => {
               let dieAnimationTimer = enemyExplodeAnimationTimer;
 
               // put explosion DOM element if you want (you had it previously)
-              if (enemy.type !== "girl") {
-                const enemyElement = document.getElementById(enemy.id);
-                if (enemyElement) {
-                  const boom = document.createElement("div");
-                  boom.className = "explosion";
-                  // set style px values
-                  boom.style.position = "absolute";
-                  boom.style.left = "0px";
-                  boom.style.top = "0px";
-                  boom.style.width = `${enemy.width}px`;
-                  boom.style.height = `${enemy.height}px`;
-                  enemyElement.appendChild(boom);
-                  // we don't rely on removing this here — your CSS animation can remove itself or we'll clear on unmount
-                }
+              const enemyElement = document.getElementById(enemy.id);
+              if (enemyElement) {
+                const boom = document.createElement("div");
+                boom.className = `explosion explosion-${enemy.type}`;
+                // set style px values
+                boom.style.position = "absolute";
+                boom.style.left = "0px";
+                boom.style.top = "0px";
+                boom.style.width = `${enemy.width}px`;
+                boom.style.height = `${enemy.height}px`;
+                enemyElement.appendChild(boom);
+                // we don't rely on removing this here — your CSS animation can remove itself or we'll clear on unmount
               }
 
               setEnemyAnimation(enemy, "dying", dieAnimationTimer);
@@ -588,7 +586,7 @@ const Game = (props) => {
   const movePlayerTo = (y) => {
     let newY = y - playerHeight / 2; // center
     if (newY < healthBarOffset) newY = healthBarOffset;
-    if (newY > verticalSize - playerHeight) newY = verticalSize - playerHeight;
+    if (newY > verticalSize - playerHeight - healthBarOffset) newY = verticalSize - playerHeight - healthBarOffset;
     props.setPlayerLocation(newY);
   };
 
@@ -871,7 +869,7 @@ const Game = (props) => {
           {renderEnemies()}
           {renderPlayerBullets()}
           {renderEnemyBullets()}
-          <div className="gameHealth">HEALTH: {playerHealthRef?.current}</div>
+          <div className="gameHealth">HP: {playerHealthRef?.current}</div>
         </div>
         {props.addGutters ? <div className="gutter right" /> : null}
       </div>
