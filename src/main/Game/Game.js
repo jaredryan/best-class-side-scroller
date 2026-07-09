@@ -859,8 +859,7 @@ const Game = (props) => {
           {renderEnemies()}
           {renderPlayerBullets()}
           {renderEnemyBullets()}
-          <div className="gameHealth">HP: {playerHealthRef?.current}</div>
-          <div className="gameScore">SCORE: {props.currentScore}</div>
+          <div className="gameHealth">HEALTH: {playerHealthRef?.current}</div>
         </div>
         {props.addGutters ? <div className="gutter right" /> : null}
       </div>
