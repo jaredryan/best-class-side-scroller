@@ -13,14 +13,16 @@ const Levels = (props) => {
                 <div className="difficulty">Select Difficulty</div>
                 <div className="buttons">
                     {difficulties.map(({ level, label, blurb, colorClass }) => (
-                        <div
+                        <button
                             key={level}
+                            type="button"
+                            aria-pressed={props.level === level}
                             onClick={() => props.setLevel(level)}
                             className={`levelBox ${colorClass}${props.level === level ? ' highlighted' : ''}`}
                         >
                             <div className="levelLabel">{label}</div>
                             <div className="levelBlurb">{blurb}</div>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>

@@ -153,8 +153,8 @@ const SizeAndOrientationWrapper = forwardRef(
       return (
         <div className="sizeAndOrientationWrapper">
           <h3>Thanks for rotating!</h3>
-          <button onClick={handleStartClick} className="start">
-            LET'S PLAY
+          <button onClick={handleStartClick} className="btn-chunky start">
+            FOOD FIGHT!
           </button>
         </div>
       );
