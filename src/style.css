@@ -71,6 +71,18 @@ h1, h2, h3, h4, h5, h6, p {
     box-shadow: 0 2px 0 var(--ink);
 }
 
+/* Same white-then-ketchup ring as the selected difficulty card — a single-hue
+   ring (e.g. cheese) washes out on light/yellow-ish backgrounds like Mild. */
+.btn-chunky:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--panel-light), 0 0 0 6px var(--ketchup), 0 5px 0 var(--ink);
+}
+
+.levelBox:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--panel-light), 0 0 0 6px var(--ketchup), 0 4px 0 var(--shadow);
+}
+
 .stamp {
     display: inline-block;
     font-family: var(--font-body);
@@ -393,11 +405,14 @@ body {
     overflow: hidden;
     background-color: var(--bg-deep);
     background-image:
+        /* same soft glows as the title screen, so any leftover gutter past the game's max size reads as framing, not empty wallpaper */
+        radial-gradient(circle at 15% 20%, rgba(255, 201, 71, 0.14), transparent 42%),
+        radial-gradient(circle at 85% 80%, rgba(94, 189, 69, 0.12), transparent 45%),
         linear-gradient(to bottom, var(--bg-warm) 0 18%, rgba(36, 19, 15, 0.4) 18% 19%, transparent 19%),
         repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0 2px, transparent 2px 110px),
         repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 22px, rgba(0, 0, 0, 0.05) 22px 44px);
-    background-size: 100% 100%, 100% 18%, 100% 100%;
-    background-repeat: no-repeat, repeat-x, repeat;
+    background-size: auto, auto, 100% 100%, 100% 18%, 100% 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat-x, repeat;
     height: calc(var(--vh, 1vh) * 100);
     width: 100vw;
 }
@@ -837,4 +852,129 @@ p {
         top: 10px;
         right: 10px;
     }
+}
+
+/* Now that the live game fills large monitors edge to edge, the surrounding
+   menu/results screens should scale up to match instead of staying pinned to
+   a small centered card. */
+@media (min-width: 1400px) {
+    .titleText .displayTitle {
+        font-size: 100px;
+    }
+
+    .titleText h2 {
+        font-size: 28px;
+        max-width: 760px;
+    }
+
+    .titleText .titleSubline {
+        font-size: 22px;
+    }
+
+    .heroToasterCorner {
+        width: 84px;
+        height: 84px;
+        top: 28px;
+        right: 28px;
+    }
+
+    .instructionsContainer {
+        max-width: 960px;
+        gap: 32px;
+    }
+
+    .instructionsContainer > .instructions {
+        min-width: 440px;
+    }
+
+    .instructions,
+    .scoreResults,
+    .levelButtons {
+        padding: 30px;
+    }
+
+    .instructionHeading {
+        font-size: 26px;
+    }
+
+    .instructionBody {
+        font-size: 18px;
+    }
+
+    .gameResults h1 {
+        font-size: 56px;
+    }
+
+    .loseCopy {
+        font-size: 22px;
+        max-width: 760px;
+    }
+
+    .scoreResults {
+        max-width: 480px;
+    }
+
+    .explainScore h3 {
+        font-size: 24px;
+    }
+
+    .finalScore {
+        font-size: 28px;
+    }
+
+    .difficultyContainer {
+        max-width: 380px;
+    }
+
+    .levelLabel {
+        font-size: 21px;
+    }
+
+    .levelBlurb {
+        font-size: 15px;
+    }
+
+    .btn-chunky {
+        font-size: 23px;
+        padding: 16px 42px;
+    }
+}
+
+/* People with vestibular motion sensitivity can ask their OS to reduce
+   motion; we drop the purely decorative/ambient animation (idle bob/wobble,
+   walk cycle, drips) but keep the flash that tells you "you got hit" —
+   just without the shake. */
+@media (prefers-reduced-motion: reduce) {
+    .enemy.ufo,
+    .sodaBubble,
+    .enemy.girl,
+    .dripKetchup,
+    .dripMustard,
+    .cheeseDrip,
+    .chefLegFront,
+    .chefLegBack,
+    .chefArmFront,
+    .chefArmBack {
+        animation: none;
+    }
+
+    .hit {
+        animation: reducedFlashRed 200ms ease;
+    }
+
+    .dying {
+        animation: reducedFlashAndFade 600ms ease;
+    }
+}
+
+@keyframes reducedFlashRed {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2) saturate(2); }
+    100% { filter: brightness(1); }
+}
+
+@keyframes reducedFlashAndFade {
+    0%, 40% { filter: brightness(1); opacity: 1; }
+    50% { filter: brightness(2) saturate(2); }
+    100% { filter: brightness(1); opacity: 0; }
 }

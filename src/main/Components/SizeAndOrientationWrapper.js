@@ -47,9 +47,22 @@ const SizeAndOrientationWrapper = forwardRef(
         window.innerHeight <= maxVerticalSize
       ) {
         if (!el) return;
-        if (el.requestFullscreen) el.requestFullscreen();
-        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-        else if (el.msRequestFullscreen) el.msRequestFullscreen();
+        // Fullscreen is a nice-to-have, not required for gameplay — browsers can
+        // legitimately reject this (e.g. no direct user gesture, since this runs
+        // inside a setTimeout), so swallow that instead of letting it surface as
+        // an unhandled rejection.
+        try {
+          const result = el.requestFullscreen
+            ? el.requestFullscreen()
+            : el.webkitRequestFullscreen
+            ? el.webkitRequestFullscreen()
+            : el.msRequestFullscreen
+            ? el.msRequestFullscreen()
+            : null;
+          result?.catch?.(() => {});
+        } catch (e) {
+          // ignore
+        }
       }
     };
 
