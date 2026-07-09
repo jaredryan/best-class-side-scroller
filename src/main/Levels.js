@@ -10,7 +10,7 @@ const Levels = (props) => {
     return (
         <div className="levelButtons card-sticker">
             <div className="difficultyContainer">
-                <div className="difficulty">Select Difficulty</div>
+                <div className="instructionHeading difficulty">Select Difficulty</div>
                 <div className="buttons">
                     {difficulties.map(({ level, label, blurb, colorClass }) => (
                         <button

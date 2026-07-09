@@ -753,9 +753,6 @@ p {
 }
 
 .difficulty {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--ketchup);
     margin-bottom: 12px;
 }
 
