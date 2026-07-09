@@ -7,7 +7,17 @@ const HeroToaster = () => (
     height="100%"
     preserveAspectRatio="xMidYMid meet"
   >
-    <polygon points="45,18 68,50 45,42 22,50" fill="var(--ketchup)" stroke="var(--ink)" strokeWidth="3" />
+    <polygon
+      points="45,8 62,24 84,80 56,64 45,76 34,64 6,80 28,24"
+      fill="var(--ketchup)"
+      stroke="var(--ink)"
+      strokeWidth="3"
+    />
+    <polygon
+      points="45,16 56,28 70,72 45,58 20,72 34,28"
+      fill="var(--cheese)"
+      opacity="0.35"
+    />
     <rect x="14" y="30" width="62" height="42" rx="10" fill="#d7d0c4" stroke="var(--ink)" strokeWidth="4" />
     <rect x="24" y="20" width="14" height="16" rx="4" fill="var(--ink)" />
     <rect x="52" y="20" width="14" height="16" rx="4" fill="var(--ink)" />

@@ -31,6 +31,11 @@ const GameContainer = () => {
     const pauseFn = useRef(null);
     const resumeFn = useRef(null);
 
+    if (!hasPlayed) {
+        setHasWon(true)
+        setHasPlayed(true)
+    }
+
     useEffect(() => {
         const t = setInterval(() => {
             setTimer(prev => {
@@ -163,24 +168,26 @@ const GameContainer = () => {
         displayComponent = (
             <div className="gameResults">
                 <h1>Kitchen Saved!</h1>
-                <div className="scoreResults card-sticker">
-                    <h2 className="emphasis">Kitchen Report</h2>
-                    <div className="explainScore">
-                        <h3><b>Health Bonus:</b>{`${playerHealth} HP × 1000 = ${report.healthBonus}`}</h3>
-                        <h3><b>Snack Accuracy:</b>{`${Math.round(report.accuracyPercent * 100)}% = ${report.accuracyBonus}`}</h3>
-                        <h3><b>Rush Bonus:</b>{`${report.elapsedSeconds}s = ${report.rushBonus}`}</h3>
-                        <h3><b>Spice Bonus:</b>{`Level ${level} = ${report.spiceBonus}`}</h3>
-                    </div>
-                    <h2 className="emphasis"><b>Final Tip</b></h2>
-                    <h3 className="finalScore">{report.finalScore}</h3>
-                    <div className="heroToasterStamp">
-                        <div className="heroToasterStampIcon">
-                            <HeroToaster />
+                <div className="instructionsContainer">
+                    <div className="scoreResults card-sticker">
+                        <h2 className="emphasis">Kitchen Report</h2>
+                        <div className="explainScore">
+                            <h3><b>Health Bonus:</b>{`${playerHealth} HP × 1000 = ${report.healthBonus}`}</h3>
+                            <h3><b>Snack Accuracy:</b>{`${Math.round(report.accuracyPercent * 100)}% = ${report.accuracyBonus}`}</h3>
+                            <h3><b>Rush Bonus:</b>{`${report.elapsedSeconds}s = ${report.rushBonus}`}</h3>
+                            <h3><b>Spice Bonus:</b>{`Level ${level} = ${report.spiceBonus}`}</h3>
                         </div>
-                        <div className="stamp">Approved by Hero Toaster</div>
+                        <h2 className="emphasis"><b>Final Tip</b></h2>
+                        <h3 className="finalScore">{report.finalScore}</h3>
+                        <div className="heroToasterStamp">
+                            <div className="heroToasterStampIcon">
+                                <HeroToaster />
+                            </div>
+                            <div className="stamp">Approved by Hero Toaster</div>
+                        </div>
                     </div>
+                    <Levels setLevel={setLevel} level={level} />
                 </div>
-                <Levels setLevel={setLevel} level={level} />
                 <button onClick={restartGame} className="btn-chunky start">PLAY AGAIN</button>
             </div>
         )

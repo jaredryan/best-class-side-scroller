@@ -179,6 +179,57 @@ body {
 }
 
 /* ************************************************************ */
+/* ********************* enemy idle motion ********************* */
+/* ************************************************************ */
+
+.enemy.ufo {
+  animation: sodaBob 1.6s ease-in-out infinite;
+}
+
+@keyframes sodaBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(-3deg); }
+}
+
+.sodaBubble {
+  animation: fizzRise 1.3s ease-in infinite;
+}
+
+.sodaBubbleA { animation-delay: 0s; }
+.sodaBubbleB { animation-delay: 0.4s; }
+.sodaBubbleC { animation-delay: 0.8s; }
+
+@keyframes fizzRise {
+  0% { opacity: 0.9; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.enemy.girl {
+  animation: nachoWobble 2.4s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@keyframes nachoWobble {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+
+.dripKetchup,
+.dripMustard,
+.cheeseDrip {
+  animation: foodDrip 1.8s ease-in infinite;
+}
+
+.dripMustard { animation-delay: 0.9s; }
+.cheeseDripB { animation-delay: 0.7s; }
+
+@keyframes foodDrip {
+  0% { transform: translateY(0); opacity: 0.9; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(9px); opacity: 0; }
+}
+
+/* ************************************************************ */
 /* ************************** player ************************** */
 /* ************************************************************ */
 
@@ -205,6 +256,31 @@ body {
   width: 30px;
   height: 4px;
   background: gray;
+}
+
+.chefLegFront { transform-origin: 45px 62px; animation: chefLegSwingFront 0.5s ease-in-out infinite; }
+.chefLegBack { transform-origin: 63px 62px; animation: chefLegSwingBack 0.5s ease-in-out infinite; }
+.chefArmFront { transform-origin: 76px 39px; animation: chefArmSwingFront 0.5s ease-in-out infinite; }
+.chefArmBack { transform-origin: 29px 44px; animation: chefArmSwingBack 0.5s ease-in-out infinite; }
+
+@keyframes chefLegSwingFront {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(12deg); }
+}
+
+@keyframes chefLegSwingBack {
+  0%, 100% { transform: rotate(12deg); }
+  50% { transform: rotate(-10deg); }
+}
+
+@keyframes chefArmSwingFront {
+  0%, 100% { transform: translateY(1px); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes chefArmSwingBack {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(-8deg); }
 }
 
 .healthbar .health {
@@ -401,6 +477,14 @@ p {
     border-bottom: 2px solid var(--line);
 }
 
+.instructionControl .instructionBody:first-child {
+    text-align: left;
+}
+
+.instructionControl .instructionBody:last-child {
+    text-align: right;
+}
+
 .instructionControl:last-child {
     border-bottom: none;
     padding-bottom: 0;
@@ -424,9 +508,14 @@ p {
 }
 
 .instructionsContainer > .instructions,
+.instructionsContainer > .scoreResults,
 .instructionsContainer > .levelButtons {
     flex: 1 1 0;
     min-width: 0;
+}
+
+.instructionsContainer > .instructions {
+    min-width: 360px;
 }
 
 @media (max-width: 555px) {
@@ -434,6 +523,11 @@ p {
         flex-direction: column;
         align-items: center;
         max-width: 400px;
+    }
+
+    .instructionsContainer > .instructions {
+        min-width: 0;
+        width: 100%;
     }
 }
 
@@ -572,16 +666,25 @@ p {
 }
 
 .heroToasterStamp {
+    position: absolute;
+    top: -18px;
+    right: -16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    margin-top: 18px;
+    gap: 4px;
+    transform: rotate(9deg);
 }
 
 .heroToasterStampIcon {
-    width: 40px;
-    height: 40px;
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 3px 0 var(--shadow));
+}
+
+.heroToasterStamp .stamp {
+    font-size: 12px;
+    border-width: 3px;
 }
 
 .difficultyContainer {
@@ -608,40 +711,54 @@ p {
     padding: 12px 16px;
     border: 3px solid var(--ink);
     border-radius: 14px;
-    background-color: var(--panel-light);
     box-shadow: 0 4px 0 var(--shadow);
     cursor: pointer;
     text-align: left;
-    -webkit-transition: transform 120ms ease, background-color 200ms ease;
-            transition: transform 120ms ease, background-color 200ms ease;
+    color: var(--ink);
+    -webkit-transition: transform 120ms ease, filter 150ms ease, box-shadow 150ms ease;
+            transition: transform 120ms ease, filter 150ms ease, box-shadow 150ms ease;
 }
 
 .levelBox:hover {
     transform: translateY(-2px);
+    filter: brightness(1.1);
 }
 
 .levelBox.highlighted {
-    background-color: var(--cheese);
+    box-shadow: 0 0 0 4px var(--cheese), 0 4px 0 var(--shadow);
+    transform: translateY(-2px);
 }
 
-.levelNumber {
-    font-family: var(--font-display);
-    font-size: 14px;
+/* Mild: warm, muted yellow. Dark ink text keeps contrast high (~10:1). */
+.levelBox.mild {
+    background-color: #f3ca4d;
     color: var(--ink);
-    opacity: 0.55;
+}
+
+/* Spicy: burnt orange-red, reads as "hot" without going full-saturation.
+   Panel-light text keeps contrast ~5:1. */
+.levelBox.spicy {
+    background-color: #b8441c;
+    color: var(--panel-light);
+}
+
+/* Extra Crispy: charred dark brown with a red-tinged gradient. */
+.levelBox.extra-crispy {
+    background: linear-gradient(135deg, #3b1f16, #4a1e12);
+    color: var(--panel-light);
 }
 
 .levelLabel {
     font-size: 19px;
     font-weight: 800;
-    color: var(--ink);
+    color: inherit;
 }
 
 .levelBlurb {
     font-size: 14px;
     font-weight: 600;
-    color: var(--ink);
-    opacity: 0.8;
+    color: inherit;
+    opacity: 0.85;
 }
 
 
