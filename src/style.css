@@ -1,21 +1,81 @@
+:root {
+    --bg-deep: #24130f;
+    --bg-warm: #3a2118;
+    --panel-cream: #fff1cf;
+    --panel-light: #fff8e7;
+    --ink: #321b14;
+
+    --ketchup: #e5392d;
+    --mustard: #f5b83b;
+    --cheese: #ffc947;
+    --pea: #5fbd45;
+    --soda-blue: #38aeea;
+
+    --line: rgba(50, 27, 20, 0.22);
+    --shadow: rgba(36, 19, 15, 0.32);
+
+    --font-display: "Luckiest Guy", cursive;
+    --font-body: "Nunito Sans", system-ui, -apple-system, sans-serif;
+}
+
 * {
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
 }
 
 h1, h2, h3, h4, h5, h6 {
     text-align: center;
     margin: 0;
+    font-family: var(--font-body);
 }
 
 h1, h2, h3, h4, h5, h6, p {
-    color: white;
+    color: var(--ink);
 }
 
-.canvas, .levelButtons, button, .instructions, .scoreResults {
-    border-radius: 10px;
-    box-shadow: 0 1px 10px -5px white;
+.card-sticker {
+    background-color: var(--panel-cream);
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 0 6px 0 var(--shadow);
+}
+
+.btn-chunky {
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--panel-light);
+    background-color: var(--ketchup);
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    padding: 14px 36px;
+    box-shadow: 0 5px 0 var(--ink);
+    cursor: pointer;
+    -webkit-transition: transform 120ms ease, box-shadow 120ms ease;
+            transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.btn-chunky:hover {
+    background-color: #ef5445;
+}
+
+.btn-chunky:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 var(--ink);
+}
+
+.stamp {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--ink);
+    background-color: var(--cheese);
+    border: 2px dashed var(--ink);
+    border-radius: 999px;
+    padding: 6px 14px;
+    transform: rotate(-4deg);
 }
 
 .levelButtons {
@@ -25,7 +85,7 @@ h1, h2, h3, h4, h5, h6, p {
 
 
 body {
-    background-color: black;
+    background-color: var(--bg-deep);
     margin: 0;
 }
 
