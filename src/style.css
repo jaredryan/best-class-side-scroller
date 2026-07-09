@@ -143,7 +143,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 1); /* Adjust color and opacity */
+  background-color: rgba(255, 201, 71, 0.9); /* cheese-colored food splat */
   animation: explode-radial 0.6s ease-out forwards;
   opacity: 0;
 }
@@ -178,96 +178,23 @@ body {
   100% { opacity: 1; transform: scale(1) }
 }
 
-.ufo {
-    background-image: url("images/ufo.gif");
-    background-size: 1200%;
-    -webkit-animation: ufoMove .8s steps(12) infinite;
-            animation: ufoMove .8s steps(12) infinite;
-}
-
-/* High-specificity playing states to force animations when needed */
-.enemy.ufo {
-    -webkit-animation: ufoMove .8s steps(12) infinite !important;
-            animation: ufoMove .8s steps(12) infinite !important;
-}
-
-@-webkit-keyframes ufoMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 8232.6px 0; }
-}
-
-@keyframes ufoMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 8232.6px 0; }
-}
-
-.girl {
-    background-image: url("images/enemyGirl.png");
-    background-size: 470%;
-    -webkit-animation: girlMove .4s steps(4) infinite;
-            animation: girlMove .4s steps(4) infinite;
-}
-
-.enemy.girl {
-    -webkit-animation: girlMove .4s steps(4) infinite !important;
-            animation: girlMove .4s steps(4) infinite !important;
-}
-
-@-webkit-keyframes girlMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 1119.2px 0; }
-}
-
-@keyframes girlMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 1119.2px 0; }
-}
-
-.ironman {
-    /* background-color: blue; */
-    background-image: url("images/ironman.png");
-    background-size: 674%;
-    -webkit-animation: ironMove 1s steps(6) infinite;
-            animation: ironMove 1s steps(6) infinite;
-}
-
-.enemy.ironman {
-    -webkit-animation: ironMove 1s steps(6) infinite !important;
-            animation: ironMove 1s steps(6) infinite !important;
-}
-
-@-webkit-keyframes ironMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 1115px 0; }
-}
-
-@keyframes ironMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 1115px 0; }
-}
 /* ************************************************************ */
 /* ************************** player ************************** */
 /* ************************************************************ */
 
 .playerContainer {
     position: absolute;
-    background-size: 100%;
     width: 50px;
     height: 35px;
     left: 10px;
 }
 
 .playerAnimationContainer,
-.player {
+.player,
+.enemy {
     width: 100%;
     height: 100%;
-}
-
-.player {
-    background-image: url("images/birdSprite.png");
-    background-size: 100%;
-    -webkit-animation: myMove .5s steps(8) infinite;
-            animation: myMove .5s steps(8) infinite;
+    display: block;
 }
 
 .healthbar {
@@ -282,17 +209,7 @@ body {
 
 .healthbar .health {
   height: 100%;
-  background: limegreen;
-}
-
-@-webkit-keyframes myMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 0 284px; }
-}
-
-@keyframes myMove {
-    from{ background-position: 0 0; }
-    to{ background-position: 0 284px; }
+  background: var(--pea);
 }
 
 /* ************************************************************ */
@@ -305,6 +222,9 @@ body {
     background-color: black;
     touch-action: none;
     user-select: none;
+    border-radius: 10px;
+    border: 4px solid var(--ink);
+    box-shadow: 0 6px 0 var(--shadow);
 }
 
 .gamePage {
@@ -330,29 +250,28 @@ body {
 
 .enemyBullet {
     position: absolute;
-    -webkit-animation: none;
-            animation: none;
-    background-image: none;
-    background-size: unset;
 }
 
 .enemyBullet.ufo {
-    background-color: green;
+    background: linear-gradient(90deg, var(--soda-blue), #bfe9fb);
     border-radius: 50px;
-
+    border: 2px solid var(--ink);
 }
 
 .enemyBullet.ironman {
-    border-radius: 50px;
-    /* transform: rotate(-28deg); */
-    background-color: gold;
+    background-color: var(--mustard);
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+}
+
+.enemyBullet.ironman.ketchup {
+    background-color: var(--ketchup);
 }
 
 .enemyBullet.girl {
-    border-radius: 50%;
-    background-color: black;
-    background-image: url("images/enemyGirl.png");
-    background-size: 470%;
+    background-color: var(--cheese);
+    border: 2px solid var(--ink);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 .gameWithInstructions, .gameResults {
@@ -379,8 +298,7 @@ body {
         -ms-flex-align: center;
             align-items: center;
     overflow: hidden;
-    background: url("./images/space.jpg") no-repeat center center;
-    background-size: cover;
+    background: radial-gradient(circle at 50% 0%, var(--bg-warm), var(--bg-deep) 70%);
     height: calc(var(--vh, 1vh) * 100);
     width: 100vw;
 }
@@ -389,90 +307,48 @@ body {
   outline: none;
 }
 
-.gameScore,
 .gameHealth {
     position: absolute;
+    top: 8px;
+    left: 8px;
     margin: 0;
-    padding: 0;
-    color: white;
-    width: 160px;
-    display: inline-block;
-    top: 0;
-    margin: auto;
-    text-align: center;
-}
-
-.gameScore {
-    left: 160px;
-}
-
-.gameHealth {
-    left: 0px;
-}
-
-button.start {
-    font-size: 20px;
-    color: white;
-    padding: 5px 30px;
-    /* border-radius: 2px; */
-    /* -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px;
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px, rgba(0, 0, 0, 0.2) 0px 1px 4px; */
-    background-color: limegreen;
-    color: white;
-    margin: 0;
-    font-weight: 300;
-}
-
-.buttons {
-    padding-bottom: 0px !important;
-}
-
-.buttons > * {
-    background-color: black;
-    color: white;
-}
-
-.buttons > div:first-of-type {
-    border-right: 1px solid white;
-}
-
-.buttons > div:last-of-type {
-    border-left: 1px solid white;
-}
-
-.buttons:hover {
-    cursor: pointer;
+    padding: 4px 12px;
+    color: var(--panel-light);
+    font-weight: 800;
+    font-size: 15px;
+    background-color: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
 }
 
 .levelButtons {
     display: block;
     text-align: center;
     margin: 0;
-}
-
-button.start:hover {
-    cursor: pointer;
-    background-color: rgb(91, 215, 91);
-    -webkit-transition-duration: 300ms;
-            transition-duration: 300ms;
-}
-
-button.start {
-    font-size: 30px;
-    display: block;
-    border: none;
+    padding: 20px;
 }
 
 .gameResults h1 {
-    font-size: 40px;
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: 44px;
+    color: var(--cheese);
+    -webkit-text-stroke: 1.5px var(--ink);
+    text-shadow: 0 4px 0 var(--ink);
 }
 
 .gameResults h2 {
-    font-size: 30px;
-    font-weight: 500;
+    font-size: 26px;
+    font-weight: 800;
     margin-bottom: 10px;
     margin-top: 0;
+}
+
+.loseCopy {
+    max-width: 420px;
+    text-align: center;
+    color: var(--panel-light);
+    font-weight: 600;
+    font-size: 16px;
 }
 
 h3 {
@@ -481,9 +357,7 @@ h3 {
     margin: 0;
 }
 
-.instructions, .scoreResults {
-    background-color: black;
-    color: white;
+.instructions {
     padding: 20px;
 }
 
@@ -495,15 +369,9 @@ h3 {
 }
 
 .instructionHeading {
-    font-size: 20px;
-    font-weight: 600;
-    color: limegreen;
-}
-
-.instructionsText h5 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ketchup);
 }
 
 .controlContainer {
@@ -524,44 +392,49 @@ p {
     text-align: center;
 }
 
-.instructionControl .instructionBody:first-of-type {
-    text-align: left;
-}
-
-.instructionControl .instructionBody:last-of-type {
-    text-align: right;
-}
-
-.instructionBody.standalone {
-    margin-top: 12px;
-}
-
-.instructionBody.standalone b {
-    margin-right: 8px;
-    text-align: center;
-}
-
 .instructionControl {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 50px;
+    gap: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--line);
+}
+
+.instructionControl:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .playerBullet {
     position: absolute;
-    background-color: burlywood;
+    background-color: var(--pea);
+    border: 2px solid var(--ink);
     border-radius: 50%;
 }
 
 .instructionsContainer {
     width: 100%;
-    max-width: 550px;
+    max-width: 720px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 50px;
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.instructionsContainer > .instructions,
+.instructionsContainer > .levelButtons {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+@media (max-width: 555px) {
+    .instructionsContainer {
+        flex-direction: column;
+        align-items: center;
+        max-width: 400px;
+    }
 }
 
 .titlePage {
@@ -587,40 +460,45 @@ p {
 }
 
 .titleImage {
-    background: url("./images/space.jpg") no-repeat center center;
-    background-size: cover;
-    opacity: 0.6;
+    background:
+        radial-gradient(circle at 20% 15%, rgba(255, 201, 71, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 85%, rgba(94, 189, 69, 0.18), transparent 45%),
+        linear-gradient(160deg, var(--bg-warm), var(--bg-deep) 65%);
     z-index: 3;
 }
 
 .titleText {
-    color: white;
+    position: relative;
+    color: var(--panel-light);
     padding: 50px;
     max-width: 1200px;
 }
 
-.titleText h1 {
-    font-size: 70px;
-    font-weight: 300;
-    text-shadow: 0px 6px 8px black;
-    line-height: 90px;
-    margin: 0 0 50px 0;
+.titleText .displayTitle {
+    font-family: var(--font-display);
+    font-weight: normal;
+    font-size: 76px;
+    letter-spacing: 2px;
+    color: var(--cheese);
+    -webkit-text-stroke: 2px var(--ink);
+    text-shadow: 0 6px 0 var(--ink);
+    line-height: 1;
+    margin: 0 0 32px 0;
 }
 
 .titleText h2 {
-    font-size: 30px;
-    font-weight: 500;
-    text-shadow: 0px 3px 4px black;
-    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--panel-light);
+    text-shadow: 0 2px 3px rgba(0,0,0,0.5);
+    margin: 0 0 12px 0;
+    max-width: 640px;
 }
 
-.titleText h3 {
-    font-size: 26px;
-    font-weight: 300;
-    text-shadow: 0px 2px 3px black;
-    display: inline-block;
-    margin-top: 0;
-    margin-bottom: 0;
+.titleText .titleSubline {
+    font-weight: 600;
+    font-size: 19px;
+    opacity: 0.9;
 }
 
 .titleDescription {
@@ -635,32 +513,21 @@ p {
             align-items: center;
 }
 
-.titleDescription div {
-    background-color: white;
-    width: 120px;
-    /* border-radius: 2px; */
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
-    position: relative;
-    height: 40px;
-    text-align: center;
-}
-
-.titleText button {
-    background-color: green;
+.titleText .btn-chunky {
     margin: 48px 0 0 0;
 }
 
-.titleText button:hover {
-    cursor: pointer;
-    background-color: rgb(91, 215, 91);
-    -webkit-transition-duration: 300ms;
-            transition-duration: 300ms;
+.heroToasterCorner {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 64px;
+    height: 64px;
+    transform: rotate(-6deg);
 }
 
 .overlay {
-    background-color: black;
+    background-color: var(--bg-deep);
     z-index: -1;
 }
 
@@ -689,7 +556,14 @@ p {
 }
 
 .emphasis {
-    color: limegreen;
+    color: var(--ketchup);
+}
+
+.scoreResults {
+    padding: 24px;
+    position: relative;
+    width: 100%;
+    max-width: 420px;
 }
 
 .scoreResults b {
@@ -697,68 +571,96 @@ p {
     margin-right: 10px;
 }
 
+.heroToasterStamp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+}
+
+.heroToasterStampIcon {
+    width: 40px;
+    height: 40px;
+}
+
 .difficultyContainer {
-    width: 204px;
-    height: 136px;
+    width: 100%;
+    max-width: 340px;
     text-align: center;
-    font-size: 22px;
-    font-weight: 500;
     margin: auto;
 }
 
 .difficulty {
-    font-size: 22px;
-    height: 68px;
-    padding-top: 19px;
-    color: limegreen;
-    background-color: black;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ketchup);
+    margin-bottom: 12px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .levelBox {
-    width: 68px;
-    height: 68px;
-    text-align: center;
-    display: inline-block;
-    padding-bottom: 0px;
-    padding-top: 2px;
-    background-color: rgb(60, 60, 60);
-    -webkit-transition-duration: 300ms;
-            transition-duration: 300ms;
+    padding: 12px 16px;
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    background-color: var(--panel-light);
+    box-shadow: 0 4px 0 var(--shadow);
+    cursor: pointer;
+    text-align: left;
+    -webkit-transition: transform 120ms ease, background-color 200ms ease;
+            transition: transform 120ms ease, background-color 200ms ease;
 }
 
 .levelBox:hover {
-    background-color: rgb(90, 90, 90);
+    transform: translateY(-2px);
 }
 
 .levelBox.highlighted {
-    background-color: limegreen;
+    background-color: var(--cheese);
 }
 
-.levelBox.highlighted:hover {
-    background-color: rgb(91, 215, 91);
+.levelNumber {
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink);
+    opacity: 0.55;
 }
 
-.level {
-    color: white;
-    font-size: 30px;
-    padding-top: 10px;
-    padding-bottom: 4px;
-    font-weight: 500;
+.levelLabel {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.levelBlurb {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    opacity: 0.8;
 }
 
 
 
 @media (max-width: 555px) {
-    .titleText h1 {
-        font-size: 50px;
-        font-weight: 300;
-        text-shadow: 0px 6px 8px black;
-        line-height: 60px;
+    .titleText .displayTitle {
+        font-size: 46px;
+        line-height: 1.1;
+        margin-bottom: 20px;
     }
 
     .titleText h2 {
-        font-size: 25px;
-        font-weight: 500;
-        text-shadow: 0px 3px 4px black;
+        font-size: 18px;
+    }
+
+    .heroToasterCorner {
+        width: 44px;
+        height: 44px;
+        top: 10px;
+        right: 10px;
     }
 }

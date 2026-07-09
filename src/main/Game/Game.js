@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from "react";
 
 import useDisablePageGestures from "../Components/useDisablePageGestures";
+import TinyChef from "../Components/Sprites/TinyChef";
+import SodaBottle from "../Components/Sprites/SodaBottle";
+import HotdogPile from "../Components/Sprites/HotdogPile";
+import NachoPlate from "../Components/Sprites/NachoPlate";
 import TouchShield from "../Components/TouchShield";
 
 const gameInterval = 15; // ms, fixed-step simulation
@@ -710,7 +714,9 @@ const Game = (props) => {
               : ""
           }`}
         >
-          <div className="player" />
+          <div className="player">
+            <TinyChef />
+          </div>
         </div>
       </div>
     );
@@ -766,7 +772,9 @@ const Game = (props) => {
             position: "absolute",
             willChange: "transform",
           }}
-          className={`enemyBullet ${bullet.type}`}
+          className={`enemyBullet ${bullet.type}${
+            bullet.type === "ironman" ? (bullet.id % 2 === 0 ? " ketchup" : "") : ""
+          }`}
         />
       );
     });
@@ -810,7 +818,11 @@ const Game = (props) => {
               enemy.state?.length ? ` ${enemy.state.join(" ")}` : ""
             }`}
           >
-            <div className={`enemy ${enemy.type}`} />
+            <div className={`enemy ${enemy.type}`}>
+              {enemy.type === "ufo" && <SodaBottle />}
+              {enemy.type === "ironman" && <HotdogPile />}
+              {enemy.type === "girl" && <NachoPlate />}
+            </div>
           </div>
         </div>
       );

@@ -7,6 +7,7 @@ import Level2 from '../Data/2'
 import Level3 from '../Data/3'
 import SizeAndOrientationWrapper from '../Components/SizeAndOrientationWrapper'
 import { calculateFinalScore } from '../scoring'
+import HeroToaster from '../Components/Sprites/HeroToaster'
 
 const playerMaxHealth = 10
 
@@ -99,7 +100,7 @@ const GameContainer = () => {
                     <Instructions />
                     <Levels setLevel={setLevel} level={level} />
                 </div>
-                <button onClick={startGame} className="start">START GAME</button>
+                <button onClick={startGame} className="btn-chunky start">ENTER THE KITCHEN</button>
             </div>
         )
     } else if (isRunning) {
@@ -161,28 +162,38 @@ const GameContainer = () => {
         });
         displayComponent = (
             <div className="gameResults">
-                <h1>You Won!</h1>
-                <div className="scoreResults">
-                    <h2 className="emphasis">Score</h2>
+                <h1>Kitchen Saved!</h1>
+                <div className="scoreResults card-sticker">
+                    <h2 className="emphasis">Kitchen Report</h2>
                     <div className="explainScore">
-                        <h3><b>Health:</b>{`1000 * HP = ${report.healthBonus}`}</h3>
-                        <h3><b>Accuracy:</b>{`10000 * Hits / Shots = ${report.accuracyBonus}`}</h3>
-                        <h3><b>Time:</b>{`30000 - 500 * Seconds = ${report.rushBonus}`}</h3>
-                        <h3><b>Level:</b>{`20000 * Level # = ${report.spiceBonus}`}</h3>
+                        <h3><b>Health Bonus:</b>{`${playerHealth} HP × 1000 = ${report.healthBonus}`}</h3>
+                        <h3><b>Snack Accuracy:</b>{`${Math.round(report.accuracyPercent * 100)}% = ${report.accuracyBonus}`}</h3>
+                        <h3><b>Rush Bonus:</b>{`${report.elapsedSeconds}s = ${report.rushBonus}`}</h3>
+                        <h3><b>Spice Bonus:</b>{`Level ${level} = ${report.spiceBonus}`}</h3>
                     </div>
-                    <h2 className="emphasis"><b>Total Score</b></h2>
+                    <h2 className="emphasis"><b>Final Tip</b></h2>
                     <h3 className="finalScore">{report.finalScore}</h3>
+                    <div className="heroToasterStamp">
+                        <div className="heroToasterStampIcon">
+                            <HeroToaster />
+                        </div>
+                        <div className="stamp">Approved by Hero Toaster</div>
+                    </div>
                 </div>
                 <Levels setLevel={setLevel} level={level} />
-                <button onClick={restartGame} className="start">PLAY AGAIN</button>
+                <button onClick={restartGame} className="btn-chunky start">PLAY AGAIN</button>
             </div>
         )
     } else if (!hasWon) {
         displayComponent = (
             <div className="gameResults">
-                <h1>Game Over</h1>
+                <h1>Kitchen Overrun!</h1>
+                <p className="loseCopy">
+                    The snacks are getting cocky. Grab another handful of peas and show
+                    them who's head chef.
+                </p>
                 <Levels setLevel={setLevel} level={level} />
-                <button onClick={restartGame} className="start">PLAY AGAIN</button>
+                <button onClick={restartGame} className="btn-chunky start">TRY AGAIN</button>
             </div>
         )
     }
